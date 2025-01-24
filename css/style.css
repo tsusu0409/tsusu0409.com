@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+header {
+    background-color: black;
+    height: 128px;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}    
+
+.header-right {
+    display: flex;
+    padding-right: 32px;
+    gap: 24px;
+}
+
+.main {
+    padding-left: 48px;
+    padding-right: 48px;
+}
+
+h1 {
+    padding-left: 4px;
+}
+.about {
+    margin-top: 24px;
+    height: 400px;
+}
+.works {
+    height: 400px;
+}
+hr {
+    width: 136px;
+    height: 3px;
+    margin-left: 0;
+    background-color: #56B4C0;
+}
+
+.content {
+    margin-left:24px;
+    font-size: 16px;
+}
+.name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 36px;
+}
+.name-jp {
+    font-size: 32px;
+}
+.name-en {
+    font-size: 20px;
+}
+
+.content p{
+    margin: 16px 0;
+}
+
+li {
+    list-style: none;
+}
+
+footer {
+    height: 128px;
+    background-color: black;
+    color: white;
+    padding: 48px;
+}
