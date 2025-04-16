@@ -1,5 +1,6 @@
 // 動的なサイトを作るわけでもないのにreactを用いる必要ってあるのかな
 // 多分ないよね
+// 練習なので好きにやればいいですよ、好きに
 import React from 'react';
 
 class App extends React.Component {
