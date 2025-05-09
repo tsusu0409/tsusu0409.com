@@ -10,15 +10,18 @@ function Header() {
     return (
         <div>
             <div className="container">
-                <div className="header-profs">
-                    <div className="prof-icon">
-                        <img src={profIcon} alt="プロフィールアイコン" />
+                <a href="/">
+                    <div className="header-profs">
+                        <div className="prof-icon">
+                            <img src={profIcon} alt="プロフィールアイコン" />
+                        </div>
+                        <div className="prof-name">
+                            <p className="handle">Tsusu</p>
+                            <p className="real">Tsubasa KAWAGISHI</p>
+                        </div>
                     </div>
-                    <div className="prof-name">
-                        <p className="handle">Tsusu</p>
-                        <p className="real">Tsubasa KAWAGISHI</p>
-                    </div>
-                </div>
+                </a>
+                
                 <div className="header-links">
                     <a href="https://x.com/tsusu0409" target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faXTwitter} className="icon" />

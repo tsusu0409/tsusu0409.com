@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+a,a:hover,a:visited{
+    color: inherit;
+    text-decoration: none;
+}
+
 .container {
     width: 720px;
     height: 120px;
@@ -13,8 +18,8 @@
 
 .header-profs {
     height: 120px;
-    width: 340px;
-    display: inline-block;
+    width: 520px;
+    float: left;
 }
 
 .prof-icon {
@@ -46,8 +51,9 @@
 .header-links {
     height: 40px;
     width: 200px;
-    float: right;
+    float: left;
     padding-top: 40px;
+    padding-left: 40px;
 }
 
 .icon {
