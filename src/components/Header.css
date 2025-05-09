@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a,a:hover,a:visited{
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    width: 720px;
+    align-items: center;
+    margin: 40px auto;
+}
+
+.header-profs {
+    height: 80px;
+    width: 520px;
+    float: left;
+}
+
+.prof-icon {
+    width: 80px;
+    height: 80px;
+    float: left;
+}
+
+.prof-icon img{
+    height: 80px;
+    border-radius: 16px;
+}
+
+.prof-name {
+    height: 60px;
+    float: left;
+    padding-top: 6px;
+    padding-left: 20px;
+}
+
+.handle {
+    font-size: 24px;
+}
+
+.real {
+    font-size: 16px;
+}
+
+.header-links {
+    height: 24px;
+    width: 200px;
+    float: left;
+    padding-top: 24px;
+    padding-left: 60px;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    float: left;
+    margin-left: 10px;
+    color: black;
+}
