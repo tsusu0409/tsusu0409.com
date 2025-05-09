@@ -11,54 +11,53 @@ a,a:hover,a:visited{
 
 .container {
     width: 720px;
-    height: 120px;
     align-items: center;
-    margin: 60px auto;
+    margin: 40px auto;
 }
 
 .header-profs {
-    height: 120px;
+    height: 80px;
     width: 520px;
     float: left;
 }
 
 .prof-icon {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     float: left;
 }
 
 .prof-icon img{
-    height: 120px;
-    border-radius: 20px;
+    height: 80px;
+    border-radius: 16px;
 }
 
 .prof-name {
-    height: 80px;
+    height: 60px;
     float: left;
-    padding-top: 8px;
-    padding-left: 32px;
+    padding-top: 6px;
+    padding-left: 20px;
 }
 
 .handle {
-    font-size: 40px;
+    font-size: 24px;
 }
 
 .real {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .header-links {
-    height: 40px;
+    height: 24px;
     width: 200px;
     float: left;
-    padding-top: 40px;
-    padding-left: 40px;
+    padding-top: 24px;
+    padding-left: 60px;
 }
 
 .icon {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     float: left;
     margin-left: 10px;
     color: black;
