@@ -1,9 +1,9 @@
-import './Blogs.css';
+import './Works.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 
-function Blogs() {
+function Works() {
     return (
         <div className="page-wrapper">
             <Header />
@@ -20,4 +20,4 @@ function Blogs() {
     );
 }
 
-export default Blogs;
+export default Works;
