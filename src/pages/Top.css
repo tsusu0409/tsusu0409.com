@@ -24,8 +24,15 @@ a,a:hover,a:visited{
 
 .content {
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
 }
+
+.content::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
 
 .cat-title {
     font-size: 20px;
@@ -58,37 +65,45 @@ a,a:hover,a:visited{
     height: 410px;
 }
 
-.article {
+.post {
     border: 1px solid #A3A3A3;
-    border-radius: 20px;
-    height: 120px;
+    border-radius: 10px;
+    height: 100px;
     width: 720px;
     margin-top: 20px;
     padding-top: 10px;
     padding-left: 20px;
 }
 
-.article-title {
+.post-title {
     font-size: 20px;
 }
 
-.article-detail {
-    font-size: 12px;
-    padding-top: 9px;
+.post-description {
+    font-size: 16px;
+    padding-top: 5px;
 }
 
-.article-date {
+.post-date {
     float: left;
     font-size: 10px;
-    padding-top: 6px;
+    padding-top: 3px;
     padding-right: 20px;
 }
 
-.article-tag {
+.post-tag {
     float: left;
     font-size: 10px;
-    padding-top: 5px;
+    padding-top: 3px;
     padding-left: 9px;
+}
+
+.next-btn {
+    float: right;
+    font-size: 12px;
+    padding-top: 10px;
+    padding-right: 10px;
+    text-decoration: underline;
 }
 
 .link-blogs {
@@ -104,7 +119,7 @@ a,a:hover,a:visited{
 
 .work {
     border: 1px solid #A3A3A3;
-    border-radius: 20px;
+    border-radius: 10px;
     height: 160px;
     width: 350px;
     margin-top: 20px;

@@ -38,24 +38,43 @@ li {
     list-style: none;
 }
 
-.list-blog {
-    margin-top: 20px;
-    padding-top: 12px;
-    padding-left: 16px;
-    padding-bottom: 20px;
+.post {
     border: 1px solid #A3A3A3;
-    border-radius: 12px;
+    border-radius: 10px;
+    height: 100px;
+    width: 720px;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-left: 20px;
 }
-.list-blog h2{
+
+.post-title {
+    font-size: 20px;
+}
+
+.post-description {
     font-size: 16px;
+    padding-top: 5px;
 }
-.list-blog p{
-    display: block;
-    font-size: 12px;
+
+.post-date {
+    float: left;
+    font-size: 10px;
+    padding-top: 3px;
+    padding-right: 20px;
 }
-.list-blog a{
-    display: block;
-    font-size: 12px;
+
+.post-tag {
+    float: left;
+    font-size: 10px;
+    padding-top: 3px;
+    padding-left: 9px;
+}
+
+.next-btn {
     float: right;
+    font-size: 12px;
+    padding-top: 10px;
     padding-right: 10px;
+    text-decoration: underline;
 }

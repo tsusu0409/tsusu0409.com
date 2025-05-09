@@ -59,11 +59,18 @@ function Blogs() {
                     <h1 className="cat-title">ブログ一覧</h1>
                     <ul>
                         {posts.map((post) => (
-                        <li key={post.slug} className="list-blog">
-                            <h2>{post.title}</h2>
-                            <p>{post.description}</p>
-                            <p>{post.date}</p>
-                            <a href={`/posts/${post.slug}`}>&raquo;続きを読む</a>
+                        <li key={post.slug} className="post">
+                            <h2 className="post-title">{post.title}</h2>
+                            <p className="post-description">{post.description}</p>
+                            <p className="post-date">{post.date}</p>
+                            {post.tags && (
+                                <ul className="tags">
+                                {post.tags.map((tag) => (
+                                    <li key={tag} className="post-tag">{tag}</li>
+                                ))}
+                                </ul>
+                            )}
+                            <a href={`/posts/${post.slug}`} className="next-btn">&raquo; 続きを読む</a>
                         </li>
                         ))}
                     </ul>
