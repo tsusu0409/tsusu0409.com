@@ -77,7 +77,8 @@ function Top() {
                 <div className="content">
                     <h1 className="cat-title">Works</h1>
                     <div className="work-contents">
-                        <div className="work">
+                        <a href="https://github.com/tsusu0409/Soramame" target="_blank" rel="noopener noreferrer">
+                            <div className="work">
                             <h2 className="work-title">Soramame</h2>
                             <p className="work-detail">
                                 予備校などでの導入を想定した、試験会場用の受付システムを作りました。<br />
@@ -86,7 +87,9 @@ function Top() {
                             <p className="work-tag">#tag1</p>
                             <p className="work-tag">#tag2</p>
                             <p className="work-tag">#tag3</p>
-                        </div>
+                            </div>  
+                        </a>
+                        
                     </div>
                     <div className="link-works">
                         <a href="/works"><p>&raquo; Works</p></a>

@@ -33,3 +33,29 @@ a,a:hover,a:visited{
     padding-bottom: 10px;
     border-bottom: 2px solid #419FAF;
 }
+
+li {
+    list-style: none;
+}
+
+.list-blog {
+    margin-top: 20px;
+    padding-top: 12px;
+    padding-left: 16px;
+    padding-bottom: 20px;
+    border: 1px solid #A3A3A3;
+    border-radius: 12px;
+}
+.list-blog h2{
+    font-size: 16px;
+}
+.list-blog p{
+    display: block;
+    font-size: 12px;
+}
+.list-blog a{
+    display: block;
+    font-size: 12px;
+    float: right;
+    padding-right: 10px;
+}
