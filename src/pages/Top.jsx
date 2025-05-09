@@ -1,11 +1,11 @@
 import './Top.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
-const postFiles = import.meta.glob('../posts/*.md', { as: 'raw' });
+const postFiles = import.meta.glob('../blog/*.md', { query: '?raw', import: 'default' });
 
 function parseFrontMatter(content) {
   const match = /^---\n([\s\S]+?)\n---/.exec(content);
@@ -71,7 +71,7 @@ function Top() {
                         <p>
                             パソコンを狭く浅く細々と勉強しています。<br />
                             AtCoder Beginner ContestやOnlineMathContestにときどきよく参加します。<br />
-                            <a href="https://atcoder.jp/users/tsusu0409">&raquo;AtCoder<span class="brown">茶</span></a> / <a href="https://onlinemathcontest.com/users/tsusu0409">&raquo;OMC<span class="green">緑</span></a>
+                            <a href="https://atcoder.jp/users/tsusu0409">&raquo;AtCoder<span className="brown">茶</span></a> / <a href="https://onlinemathcontest.com/users/tsusu0409">&raquo;OMC<span className="green">緑</span></a>
                         </p>
                     </div>
                 </div>
@@ -81,6 +81,7 @@ function Top() {
                     <ul>
                         {posts.map((post) => (
                         <li key={post.slug} className="post">
+                            <Link to={`/blog/${post.slug}`}>
                             <h2 className="post-title">{post.title}</h2>
                             <p className="post-description">{post.description}</p>
                             <p className="post-date">{post.date}</p>
@@ -91,12 +92,12 @@ function Top() {
                                 ))}
                                 </ul>
                             )}
-                            <a href={`/posts/${post.slug}`} className="next-btn">&raquo; 続きを読む</a>
+                            </Link>
                         </li>
                         ))}
                     </ul>
                     <div className="link-blogs">
-                        <a href="/blogs"><p>&raquo; ブログ一覧へ</p></a>
+                        <a href="/blog"><p>&raquo; ブログ一覧へ</p></a>
                     </div>
                 </div>
 

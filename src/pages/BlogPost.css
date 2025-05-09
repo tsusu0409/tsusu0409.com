@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a,a:hover,a:visited{
+    color: inherit;
+    text-decoration: none;
+}
+
+.post-head {
+    width: 100%;
+    padding-bottom: 40px;
+    margin-bottom: -60px;
+    border-bottom: 2px solid #419FAF;
+}
+
+.content::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.title {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+}
+.author-date {
+    padding-top: 16px;
+    font-size: 16px;
+}
+.tag {
+    float: left;
+    padding-right: 10px;
+    font-size: 16px;
+}
+
+.markdown-body {
+    width: 720px;
+    align-items: center;
+    margin: 60px auto;
+    flex: 1;
+    line-height: 2;
+}
+
+.markdown-body h1{
+    font-size: 20px;
+    padding: 24px 0 8px 0;
+}
+
+.markdown-body h2{
+    padding-top: 4px;
+    font-size: 18px;
+    padding: 20px 0 8px 0;
+}
+
+.markdown-body p {
+    font-size: 16px;
+    padding: 8px 0;
+}
+
+.markdown-body a{
+    text-align: center;
+    text-decoration: underline;
+    margin: 0 auto;
+}
+
+.markdown-body li {
+    list-style: square;
+    margin-left: 24px;
+    padding: 8px 0;
+}
+
+.markdown-body img {
+    width: 100%;
+    padding: 8px 0;
+    text-align: center;
+}

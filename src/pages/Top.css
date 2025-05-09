@@ -73,6 +73,11 @@ a,a:hover,a:visited{
     margin-top: 20px;
     padding-top: 10px;
     padding-left: 20px;
+    transition: all .2s ease-in-out;
+}
+
+.post:hover {
+    box-shadow: 1px 1px 12px rgba(0,0,0,.25);
 }
 
 .post-title {
@@ -128,6 +133,11 @@ a,a:hover,a:visited{
     padding-left: 15px;
     padding-right: 10px;
     padding-top: 10px;
+    transition: all .2s ease-in-out;
+}
+
+.work:hover {
+    box-shadow: 1px 1px 12px rgba(0,0,0,.25);
 }
 
 .work-title {

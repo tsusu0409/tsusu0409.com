@@ -1,10 +1,11 @@
 import './Blogs.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 
-const postFiles = import.meta.glob('../posts/*.md', { as: 'raw' });
+const postFiles = import.meta.glob('../blog/*.md', { query: '?raw', import: 'default' });
 
 function parseFrontMatter(content) {
   const match = /^---\n([\s\S]+?)\n---/.exec(content);
@@ -60,17 +61,18 @@ function Blogs() {
                     <ul>
                         {posts.map((post) => (
                         <li key={post.slug} className="post">
+                            <Link to={`/blog/${post.slug}`}>
                             <h2 className="post-title">{post.title}</h2>
                             <p className="post-description">{post.description}</p>
                             <p className="post-date">{post.date}</p>
                             {post.tags && (
                                 <ul className="tags">
                                 {post.tags.map((tag) => (
-                                    <li key={tag} className="post-tag">{tag}</li>
+                                    <li key={tag} className="post-tag">#{tag}</li>
                                 ))}
                                 </ul>
                             )}
-                            <a href={`/posts/${post.slug}`} className="next-btn">&raquo; 続きを読む</a>
+                            </Link>
                         </li>
                         ))}
                     </ul>

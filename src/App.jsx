@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Top from './pages/Top';
 import Blogs from './pages/Blogs';
 import Works from './pages/Works';
+import BlogPost from './pages/BlogPost';
 import './App.css';
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Top />} />
-        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blog" element={<Blogs />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/works" element={<Works />} />
       </Routes>
     </BrowserRouter>
