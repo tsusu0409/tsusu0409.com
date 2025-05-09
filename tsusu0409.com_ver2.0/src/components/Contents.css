@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 720px;
+    align-items: center;
+    margin: 60px auto;
+}
+
+.content {
+    width: 100%;
+}
+
+.cat-title {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #419FAF;
+}
+
+.about-contents {
+    margin-top: 20px;
+}
+
+.about-contents p {
+    font-size: 16px;
+    line-height: 1.5;
+    padding-bottom: 25px;
+}
