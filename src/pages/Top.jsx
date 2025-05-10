@@ -97,7 +97,7 @@ function Top() {
                         ))}
                     </ul>
                     <div className="link-blogs">
-                        <a href="/blog"><p>&raquo; ブログ一覧へ</p></a>
+                        <Link to="/blog"><p>&raquo; ブログ一覧へ</p></Link>
                     </div>
                 </div>
 
@@ -119,7 +119,7 @@ function Top() {
                         
                     </div>
                     <div className="link-works">
-                        <a href="/works"><p>&raquo; Works</p></a>
+                        <Link to="/works"><p>&raquo; Works</p></Link>
                     </div>
                 </div>
 
