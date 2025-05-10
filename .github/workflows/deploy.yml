@@ -23,11 +23,12 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-      - name: Deploy to FTP server
+          
+      - name: Deploy to Sakura Internet via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
           local-dir: dist/
