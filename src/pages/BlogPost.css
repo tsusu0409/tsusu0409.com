@@ -58,12 +58,12 @@ a,a:hover,a:visited{
 
 .markdown-body h2{
     padding-top: 4px;
-    font-size: 18px;
+    font-size: 16px;
     padding: 20px 0 8px 0;
 }
 
 .markdown-body p {
-    font-size: 16px;
+    font-size: 14px;
     padding: 8px 0;
 }
 
@@ -75,6 +75,7 @@ a,a:hover,a:visited{
 
 .markdown-body li {
     list-style: square;
+    font-size: 14px;
     margin-left: 24px;
     padding: 8px 0;
 }
