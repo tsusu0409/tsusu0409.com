@@ -36,4 +36,4 @@ jobs:
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
-          python tweet_commit.py "${{ steps.check_new_file.outputs.added_file }}"
+          python tweet.py "${{ steps.check_new_file.outputs.added_file }}"
