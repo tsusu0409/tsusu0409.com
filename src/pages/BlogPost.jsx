@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import yaml from 'js-yaml';
+import rehypeRaw from 'rehype-raw';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './BlogPost.css';
@@ -67,7 +68,9 @@ function BlogPost() {
                     )}
                 </div>
                 <div className="markdown-body">
-                    <ReactMarkdown>{content}</ReactMarkdown>
+                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                        {content}
+                    </ReactMarkdown>
                 </div>
             </div>
             <Footer />
