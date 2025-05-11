@@ -2,6 +2,8 @@ name: Tweet on new blog post
 
 on:
   push:
+  branches:
+      - main
     paths:
       - 'src/blog/**'
 
