@@ -26,9 +26,9 @@ def tweet_blog_update(filename):
     try:
         client.create_tweet(text=tweet_text)
         print("✅ ツイート成功:", tweet_text)
-        sys.exit(1)
     except Exception as e:
         print("⚠️ ツイート失敗:", e)
+        sys.exit(1)
 
 if __name__ == "__main__":
     filepath = sys.argv[1]
