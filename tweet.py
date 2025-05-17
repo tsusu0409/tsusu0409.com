@@ -21,7 +21,7 @@ def tweet_blog_update(filename):
     # 拡張子を除いたファイル名
     slug = Path(filename).stem
     url = f"https://tsusu0409.com/blog/{slug}"
-    tweet_text = f"blogが更新されました\n{url}"
+    tweet_text = f"New Post!\n{url}"
 
     try:
         client.create_tweet(text=tweet_text)
