@@ -161,3 +161,64 @@ a,a:hover,a:visited{
     font-size: 14px;
     padding-top: 16px;
 }
+
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        margin: 40px auto;
+    }
+
+    .post, .work {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        margin-right: 0;
+    }
+
+    .blog-contents, .work-contents {
+        height: auto;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-description {
+        font-size: 13px;
+        padding-top: 6px;
+    }
+
+    .post-date,
+    .post-tag,
+    .next-btn,
+    .link-blogs,
+    .link-works {
+        float: none;
+        display: block;
+        padding: 6px 0;
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .work-title {
+        font-size: 18px;
+    }
+
+    .work-detail {
+        font-size: 12px;
+        padding-top: 6px;
+    }
+
+    .work-tag {
+        float: none;
+        display: inline-block;
+        font-size: 10px;
+        margin-right: 5px;
+        padding-top: 4px;
+    }
+
+    .link-blogs, .link-works {
+        text-align: center;
+        padding-top: 12px;
+    }
+}
