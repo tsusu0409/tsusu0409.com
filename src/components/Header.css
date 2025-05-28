@@ -30,10 +30,10 @@
 }
 
 .header-links {
-    height: 1.25em;
-    width: 8.75em;
+    height: 20px;
+    width: 140px;
     float: right;
-    padding-top: 1.25em;
+    padding-top: 20px;
 }
 
 .icon {
@@ -48,5 +48,24 @@
     .header-profs {
         height: 60px;
         font-size: 14px;
+    }
+    .header-links {
+        height: 20px;
+        width: 140px;
+        float: right;
+        padding-top: 20px;
+    }
+}
+
+@media (max-width: 480px){
+    .header-profs {
+        height: 40px;
+        font-size: 10px;
+    }
+    .header-links {
+        height: 12px;
+        width: 100px;
+        float: right;
+        padding-top: 12px;
     }
 }
