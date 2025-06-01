@@ -49,6 +49,10 @@
     font-size: 0.875em;
     padding: 0.5em 0;
 }
+.markdown-body center{
+    font-size: 0.875em;
+    padding: 0.5em 0;
+}
 
 .markdown-body a{
     text-align: center;
