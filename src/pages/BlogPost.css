@@ -80,6 +80,21 @@
     text-align: center;
 }
 
+.markdown-body pre {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.25em;
+  overflow-x: auto;
+}
+
+.markdown-body code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75em;
+  color: #333;
+  background-color: transparent;
+}
+
 @media(max-width: 768px) {
     .post-head {
         width: 100%;
