@@ -124,14 +124,15 @@ a,a:hover,a:visited{
 }
 
 .work-contents {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
 }
 
 .work {
     border: 1px solid #A3A3A3;
     border-radius: 0.625em;
-    width: 49%;
+    width: 47%;
     margin-top: 1.25em;
     margin-right: 1.25em;
     margin-bottom: 1.25em;

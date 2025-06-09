@@ -105,15 +105,26 @@ function Top() {
                     <h1 className="cat-title">Works</h1>
                     <div className="work-contents">
                         <div className="work">
-                            <a href="https://github.com/tsusu0409/Soramame" target="_blank" rel="noopener noreferrer">
+                            <a href="https://tsusu0409.github.io/Soramame/" target="_blank" rel="noopener noreferrer">
                             <h2 className="work-title">Soramame</h2>
                             <p className="work-detail">
                                 予備校などでの導入を想定した、試験会場用の受付システムを作りました。<br />
                                 サーバーに個人情報等をアップロードすることなく利用できます。
                             </p>
-                            <p className="work-tag">#html</p>
-                            <p className="work-tag">#css</p>
-                            <p className="work-tag">#javascript</p>
+                            <p className="work-tag">#React</p>
+                            <p className="work-tag">#TypeScript</p>
+                            </a>
+                        </div>
+
+                        <div className="work">
+                            <a href="https://omoshirokaiwai.com" target="_blank" rel="noopener noreferrer">
+                            <h2 className="work-title">おもしろ界隈</h2>
+                            <p className="work-detail">
+                                長い付き合いの友人らと始めたブログサイトです。記事はtsusu0409.comと同じくマークダウンで簡単に書けるようにしています。<br />
+                                フロントエンドの実装をひとりで行っています。
+                            </p>
+                            <p className="work-tag">#React</p>
+                            <p className="work-tag">#TypeScript</p>
                             </a>
                         </div>
                         
