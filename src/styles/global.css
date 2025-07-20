@@ -1,1 +1,10 @@
+@import url("https://use.typekit.net/ofx3axx.css");
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
 @import "tailwindcss";
+
+/* 全体のスタイル */
+@theme {
+    --color-primary: #7EB2BB;
+    --font-zen: Zen Kaku Gothic New, sans-serif;
+    --font-hel: helvetica-neue-world, sans-serif;
+}

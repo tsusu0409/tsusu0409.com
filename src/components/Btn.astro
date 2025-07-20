@@ -1,0 +1,8 @@
+---
+const { slug } = Astro.props;
+---
+<div class="w-4/5 mx-auto mt-4">
+  <div class="float-right w-30 h-10 bg-black text-center py-2 text-white">
+    <a href={`/${slug}/`}>{slug}</a>
+  </div>
+</div>

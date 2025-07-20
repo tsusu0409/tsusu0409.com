@@ -1,18 +1,68 @@
 ---
 import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Btn from "../components/Btn.astro";
+import BlogThumbnail from '../components/BlogThumbnail.astro';
+
+import posts from '../data/posts.json';
 ---
 
 <html lang="jp">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="https://use.typekit.net/ofx3axx.css">
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Tsusu</title>
 	</head>
 	<body>
-		<h1 class="text-3xl font-bold underline">
-  			Hello world!
-		</h1>
+		<div>
+			<Header />
+
+			<div class="h-100 py-20 bg-primary">
+				<div class="w-4/5 mx-auto relative flex gap-20">
+					<img src="/public/images/prof-icon.png" class="h-60 w-60 rounded-4xl" />
+					<div class="pt-12">
+					<p class="text-2xl font-hel">Tsusu / Tsubasa KAWAGISHI</p>
+					<p class="mt-6 text-xl font-zen">
+						筑波大学に通うただの学生です。<br />
+						ここには僕という人間を簡潔に説明する2行ぐらいのコメントを書きたいです。
+					</p>
+					</div>
+				</div>
+				<Btn slug="About" />
+			</div>
+
+
+			<div class="h-120 mt-6">
+				<div class="w-4/5 mx-auto">
+					<h2 class="text-2xl font-hel">Recent Posts</h2>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-12">
+						{posts.map(post => (
+							<BlogThumbnail 
+							title={post.title}
+							description={post.description}
+							slug={post.slug}
+							pubDate={post.pubDate}
+							webSite={post.webSite}
+							mainImageLink={post.mainImageLink}
+							/>
+						))}
+					</div>
+				</div>
+				<Btn slug="Blogs" />
+			</div>
+
+			<div class="h-120 mt-6 bg-green-600">
+				<div class="w-4/5 mx-auto bg-amber-400">
+					<h2 class="text-2xl font-hel">Recent Activities</h2>
+					
+				</div>
+			</div>
+			
+			<Footer />
+		</div>
 	</body>
 </html>

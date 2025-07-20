@@ -1,0 +1,18 @@
+---
+const { title, description, slug, pubDate, webSite, mainImageLink } = Astro.props;
+const bgColorClass = webSite === 'tsusu0409.com' ? 'bg-primary' : 'bg-fuchsia-600';
+---
+
+<article class="bg-white p-4 max-w-sm">
+    <a href={`/blog/${slug}`} class="block">
+        <img src={mainImageLink} alt={title} class="aspect-16/9 object-cover w-full" />
+        
+        <div class="flex justify-between items-center text-sm mb-2">
+            <span class={`${bgColorClass} text-white px-2 py-1`}>{webSite}</span>
+            <span class="text-gray-500">{pubDate}</span>
+        </div>
+
+        <h2 class="text-base font-semibold mb-1">{title}</h2>
+        <p class="text-sm text-gray-700 leading-snug">{description}</p>
+    </a>
+</article>
