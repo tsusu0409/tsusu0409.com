@@ -46,7 +46,7 @@ const allActivities = await Astro.glob('./activity/*.md')
 							<BlogThumbnail 
 							title={post.title}
 							description={post.description}
-							slug={post.slug}
+							link={`blog/${post.slug}`}
 							pubDate={post.pubDate}
 							webSite={post.webSite}
 							mainImageLink={post.mainImageLink}
