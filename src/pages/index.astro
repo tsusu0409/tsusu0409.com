@@ -7,7 +7,7 @@ import BlogThumbnail from '../components/BlogThumbnail.astro';
 import Activity from '../components/Activity.astro';
 
 import posts from '../data/posts.json';
-const allActivities = await Astro.glob('../content/activity/*.md');
+const allActivities = await Astro.glob('./activity/*.md')
 ---
 
 <html lang="jp">
@@ -25,7 +25,7 @@ const allActivities = await Astro.glob('../content/activity/*.md');
 
 			<div class="py-20 bg-primary">
 				<div class="w-4/5 mx-auto relative flex gap-20">
-					<img src="/public/images/prof-icon.png" class="h-40 w-40 rounded-4xl" />
+					<img src="/images/prof-icon.png" class="h-40 w-40 rounded-4xl" />
 					<div class="pt-4">
 						<p class="text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
 						<p class="mt-6 text-1xl font-zen">
@@ -34,7 +34,7 @@ const allActivities = await Astro.glob('../content/activity/*.md');
 						</p>
 					</div>
 				</div>
-				<Btn slug="About" />
+				<Btn name="About" slug="about" />
 			</div>
 
 
@@ -54,23 +54,24 @@ const allActivities = await Astro.glob('../content/activity/*.md');
 						))}
 					</div>
 				</div>
-				<Btn slug="Blogs" />
+				<Btn name="Blogs" slug="blog"/>
 			</div>
 
-			<div class="my-20 bg-green-600">
-				<div class="w-4/5 mx-auto bg-amber-400">
+			<div class="my-20 pb-8">
+				<div class="w-4/5 mx-auto mb-12">
 					<h2 class="text-2xl font-geo font-thin">Recent Activities</h2>
-					<div>
-						{allActivities.slice().reverse().slice(0, 3).map((activity) => 
+					<div class="mx-6">
+						{allActivities.slice(0, 3).map((activity:any) => (
 							<Activity
-							title = {activity.frontmatter.title}
-							description = {activity.frontmatter.description}
-							startDate = {activity.frontmatter.startDate}
-							endDate = {activity.frontmatter.endDate}
+							title={activity.frontmatter.title}
+							description={activity.frontmatter.description}
+							startDate={activity.frontmatter.startDate}
+							endDate={activity.frontmatter.endDate}
 							/>
-						)}
+						))}
 					</div>
 				</div>
+				<Btn name="Activiies" slug="activity"/>
 			</div>
 			
 			<Footer />

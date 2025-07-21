@@ -1,16 +1,23 @@
 ---
-const { title, description, startDate, endDate} = Astro.props;
-
-const endDateDisplay = endDate === 0 ? "" : endDate;
+const { title, description, startDate, endDate } = Astro.props;
+const showEndDate = endDate && endDate !== 0;
 ---
 
-<article class="p-4 max-w-sm border-b-black">
-    <div>
-        <p>{title}</p>
-        <p>{description}</p>
+<article class="flex w-full items-start justify-between border-b border-neutral-200 py-6">
+    <div class="mx-4">
+        <h3 class="text-base font-normal">{title}</h3>
+        <p class="mt-1 text-sm text-neutral-500">{description}</p>
     </div>
-    <div>
-        <p>{startDate}</p>
-        <p>{endDateDisplay}</p>
-    </div>    
+
+    <div class="flex flex-shrink-0 items-center py-4 whitespace-nowrap text-sm text-neutral-500">
+        <p class="pr-4">{startDate}</p>
+        <div class="w-[6.5em]">
+            {showEndDate && (
+                <div class="flex items-end">
+                <span class="pr-4">-</span>
+                <p>{endDate}</p>
+                </div>
+            )}
+        </div>
+    </div>
 </article>

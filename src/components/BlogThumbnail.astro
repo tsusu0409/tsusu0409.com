@@ -3,7 +3,7 @@ const { title, description, slug, pubDate, webSite, mainImageLink } = Astro.prop
 const bgColorClass = webSite === 'tsusu0409.com' ? 'bg-primary' : 'bg-fuchsia-600';
 ---
 
-<article class="p-4 max-w-sm font-zen">
+<article class="p-4 max-w-108 font-zen">
     <a href={`/blog/${slug}`} class="block">
         <img src={mainImageLink} alt={title} class="aspect-16/9 object-cover w-full" />
         
