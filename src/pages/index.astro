@@ -4,8 +4,10 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Btn from "../components/Btn.astro";
 import BlogThumbnail from '../components/BlogThumbnail.astro';
+import Activity from '../components/Activity.astro';
 
 import posts from '../data/posts.json';
+const allActivities = await Astro.glob('../content/activity/*.md');
 ---
 
 <html lang="jp">
@@ -25,7 +27,7 @@ import posts from '../data/posts.json';
 				<div class="w-4/5 mx-auto relative flex gap-20">
 					<img src="/public/images/prof-icon.png" class="h-40 w-40 rounded-4xl" />
 					<div class="pt-4">
-						<p class="text-2xl font-hel">Tsusu / Tsubasa KAWAGISHI</p>
+						<p class="text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
 						<p class="mt-6 text-1xl font-zen">
 							筑波大学に通うただの学生です。<br />
 							ここには僕という人間を簡潔に説明する2行ぐらいのコメントを書きたいです。
@@ -36,11 +38,11 @@ import posts from '../data/posts.json';
 			</div>
 
 
-			<div class="mt-6">
+			<div class="mt-6 mb-12">
 				<div class="w-4/5 mx-auto">
-					<h2 class="text-2xl font-hel">Recent Posts</h2>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-						{posts.map(post => (
+					<h2 class="text-2xl font-geo font-thin">Recent Posts</h2>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-2 px-4">
+						{posts.slice(0, 3).map(post => (
 							<BlogThumbnail 
 							title={post.title}
 							description={post.description}
@@ -55,10 +57,19 @@ import posts from '../data/posts.json';
 				<Btn slug="Blogs" />
 			</div>
 
-			<div class="h-120 mt-6 bg-green-600">
+			<div class="my-20 bg-green-600">
 				<div class="w-4/5 mx-auto bg-amber-400">
-					<h2 class="text-2xl font-hel">Recent Activities</h2>
-					
+					<h2 class="text-2xl font-geo font-thin">Recent Activities</h2>
+					<div>
+						{allActivities.slice().reverse().slice(0, 3).map((activity) => 
+							<Activity
+							title = {activity.frontmatter.title}
+							description = {activity.frontmatter.description}
+							startDate = {activity.frontmatter.startDate}
+							endDate = {activity.frontmatter.endDate}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 			

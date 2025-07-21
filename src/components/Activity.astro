@@ -1,0 +1,16 @@
+---
+const { title, description, startDate, endDate} = Astro.props;
+
+const endDateDisplay = endDate === 0 ? "" : endDate;
+---
+
+<article class="p-4 max-w-sm border-b-black">
+    <div>
+        <p>{title}</p>
+        <p>{description}</p>
+    </div>
+    <div>
+        <p>{startDate}</p>
+        <p>{endDateDisplay}</p>
+    </div>    
+</article>
