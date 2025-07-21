@@ -7,6 +7,7 @@ interface Article {
   thumb: string | null;
   description: string;
   pubDate: string;
+  source: string;
 }
 
 // RSSフィードを取得してJSONデータに変換する関数
@@ -49,7 +50,7 @@ function extractThumb(item: any): string | null {
 }
 
 // RSSアイテムをArticleインターフェースにパースする関数
-function parseRSSItem(item: any, isAtom: boolean = false): Article {
+function parseRSSItem(item: any, isAtom: boolean = false, source: string): Article {
   return {
     title: item.title,
     link: isAtom ? item.link?.href || item.link : item.link,
@@ -58,23 +59,34 @@ function parseRSSItem(item: any, isAtom: boolean = false): Article {
     pubDate: formatDate(
       new Date(item.pubDate || item.updated || item.published)
     ),
+    source,
   };
 }
 
 // RSS 2.0形式のJSONデータをArticle配列にパースする関数
-function parseRSS2(jsonData: any): Article[] {
+function parseRSS2(jsonData: any, source: string): Article[] {
   const items = Array.isArray(jsonData.rss.channel.item)
     ? jsonData.rss.channel.item
     : [jsonData.rss.channel.item];
-  return items.map((item: any) => parseRSSItem(item));
+  return items.map((item: any) => parseRSSItem(item, false, source));
 }
 
 // Atom形式のJSONデータをArticle配列にパースする関数
-function parseAtom(jsonData: any): Article[] {
+function parseAtom(jsonData: any, source: string): Article[] {
   const entries = Array.isArray(jsonData.feed.entry)
     ? jsonData.feed.entry
     : [jsonData.feed.entry];
-  return entries.map((entry: any) => parseRSSItem(entry, true));
+  return entries.map((entry: any) => parseRSSItem(entry, true, source));
+}
+
+// URLからサイト名を判定する関数
+function getSourceName(url: string): string {
+  if(url.includes("zenn.dev")) return "Zenn";
+  if(url.includes("qiita.com")) return "Qiita";
+  if(url.includes("note.com")) return "note";
+  if(url.includes("tsusu0409.com")) return "tsusu0409.com";
+  if(url.includes("omoshirokaiwai.com")) return "おもしろ界隈";
+  return "Other";
 }
 
 // 複数のRSSフィードURLを処理し、最新の10記事を返す関数
@@ -86,13 +98,15 @@ export async function fetchAndProcessRSS(
   await Promise.all(
     rssURLs.map(async (rssURL) => {
       try {
-        const rssData = await fetchRSS(rssURL); // 各RSSフィードをフェッチ
+        const rssData = await fetchRSS(rssURL);
+        const sourceName = getSourceName(rssURL);
+
         let fetchedArticles: Article[] = [];
 
         if (rssData.rss) {
-          fetchedArticles = parseRSS2(rssData); // RSS 2.0形式を解析
+          fetchedArticles = parseRSS2(rssData, sourceName); // RSS 2.0形式を解析
         } else if (rssData.feed) {
-          fetchedArticles = parseAtom(rssData); // Atom形式を解析
+          fetchedArticles = parseAtom(rssData, sourceName); // Atom形式を解析
         } else {
           console.error(`Unknown feed format for ${rssURL}`, rssData); // 不明なフォーマットのフィード
         }

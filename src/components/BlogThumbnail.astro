@@ -1,10 +1,36 @@
 ---
-const { title, description, slug, pubDate, webSite, mainImageLink } = Astro.props;
-const bgColorClass = webSite === 'tsusu0409.com' ? 'bg-primary' : 'bg-fuchsia-600';
+const { title, description, link, pubDate, webSite, mainImageLink } = Astro.props;
+
+let bgColorClass;
+switch (webSite) {
+  case 'tsusu0409.com':
+    bgColorClass = 'bg-primary';
+    break;
+  case 'おもしろ界隈':
+    bgColorClass = 'bg-fuchsia-600';
+    break;
+  case 'note':
+    bgColorClass = 'bg-stone-600';
+    break;
+  default:
+    bgColorClass = 'bg-gray-400';
+}
+
+let displayDescription;
+switch(webSite){
+  case 'tsusu0409.com':
+    displayDescription = description;
+    break;
+  case 'おもしろ界隈':
+    displayDescription = description;
+    break;
+  default:
+    displayDescription = '';
+}
 ---
 
 <article class="p-4 max-w-108 font-zen">
-    <a href={`/blog/${slug}`} class="block">
+    <a href={link} class="block">
         <img src={mainImageLink} alt={title} class="aspect-16/9 object-cover w-full" />
         
         <div class="flex justify-between items-center text-sm mb-2">
@@ -13,6 +39,6 @@ const bgColorClass = webSite === 'tsusu0409.com' ? 'bg-primary' : 'bg-fuchsia-60
         </div>
 
         <h2 class="text-base font-semibold mb-1">{title}</h2>
-        <p class="text-sm text-gray-700 leading-snug">{description}</p>
+        <p class="text-sm text-gray-700 leading-snug">{displayDescription}</p>
     </a>
 </article>
