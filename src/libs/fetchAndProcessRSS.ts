@@ -40,6 +40,8 @@ function extractThumb(item: any): string | null {
     return item.enclosure.url;
   } else if (item["media:thumbnail"]) {
     return item["media:thumbnail"];
+  } else if (item.thumb) {
+    return item.thumb;
   } else if (Array.isArray(item.link)) {
     const link = item.link.find(
       (l: any) => l.rel === "enclosure" || l.type?.startsWith("image")
@@ -122,7 +124,7 @@ export async function fetchAndProcessRSS(
   articles.sort(
     (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
   );
-  articles = articles.slice(0, 10);
+  articles = articles.slice(0, 100);
 
   return articles; // 最終的な記事リストを返す
 }

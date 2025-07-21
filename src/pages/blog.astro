@@ -7,7 +7,6 @@ import BlogThumbnail from '../components/BlogThumbnail.astro';
 
 // RSSからブログの一覧取得
 import { fetchAndProcessRSS, fetchRSS } from "../libs/fetchAndProcessRSS";
-import { Image } from "astro:assets";
 import noimage from "@/images/noimage.png";
 
 const rssURLs = [
@@ -39,7 +38,7 @@ const posts = await fetchAndProcessRSS(rssURLs);
 				</div>
             </div>
 
-			<div class="mt-6 mb-12">
+			<div class="mt-6 mb-20">
 				<div class="w-4/5 mx-auto">
 					<h2 class="text-2xl font-geo font-thin">All Posts</h2>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-2 px-4">
@@ -50,12 +49,11 @@ const posts = await fetchAndProcessRSS(rssURLs);
 								link={post.link}
 								pubDate={post.pubDate}
 								webSite={post.source}
-								mainImageLink={post.thumb}
+								thumbLink={post.thumb}
 							/>
 						))}
 					</div>
 				</div>
-				<Btn slug="blog" name="Blogs"/>
 			</div>
 			
 			<Footer />

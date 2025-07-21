@@ -6,7 +6,18 @@ import Btn from "../components/Btn.astro";
 import BlogThumbnail from '../components/BlogThumbnail.astro';
 import Activity from '../components/Activity.astro';
 
-import posts from '../data/posts.json';
+import { fetchAndProcessRSS, fetchRSS } from "../libs/fetchAndProcessRSS";
+import noimage from "@/images/noimage.png";
+
+// RSSからブログの一覧取得
+const rssURLs = [
+  "https://note.com/tsusu0409/rss",
+  "https://tsusu0409.com/rss.xml"
+];
+
+const posts = await fetchAndProcessRSS(rssURLs);
+
+// アクティビティの一覧取得
 const allActivities = await Astro.glob('./activity/*.md')
 ---
 
@@ -42,14 +53,14 @@ const allActivities = await Astro.glob('./activity/*.md')
 				<div class="w-4/5 mx-auto">
 					<h2 class="text-2xl font-geo font-thin">Recent Posts</h2>
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-2 px-4">
-						{posts.slice(0, 3).map(post => (
+						{posts.slice(0, 3).map((post:any) => (
 							<BlogThumbnail 
-							title={post.title}
-							description={post.description}
-							link={`blog/${post.slug}`}
-							pubDate={post.pubDate}
-							webSite={post.webSite}
-							mainImageLink={post.mainImageLink}
+								title={post.title}
+								description={post.description}
+								link={post.link}
+								pubDate={post.pubDate}
+								webSite={post.source}
+								thumbLink={post.thumb}
 							/>
 						))}
 					</div>
