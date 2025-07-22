@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Btn from "../components/Btn.astro";
+---
+
+<html lang="jp">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="https://use.typekit.net/ofx3axx.css">
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Tsusu</title>
+	</head>
+	<body>
+		<div>
+			<Header />
+
+			<div class="py-20 bg-primary">
+				<div class="w-4/5 mx-auto relative flex gap-20">
+					<img src="/images/prof-icon.png" class="h-40 w-40 rounded-4xl" />
+					<div class="pt-4">
+						<p class="text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
+						<p class="mt-6 text-1xl font-zen">
+							筑波大学に通うただの学生です。<br />
+							ここには僕という人間を簡潔に説明する2行ぐらいのコメントを書きたいです。
+						</p>
+					</div>
+				</div>
+			</div>
+
+            <div class="mt-6 font-zen">
+                <div class="w-4/5 mx-auto">
+                    <h2>現在の所属</h2>
+                    <h3>筑波大学 2023年度入学</h3>
+                    <ul>
+                        <li>理工学群 応用理工学類 電子・量子工学主専攻 3年</li>
+                        <li>アルティメット同好会 INVERHOUSE #24</li>
+                        <li>学園祭実行委員会 jsys23, jsys24</li>
+                    </ul>
+
+                    <h2>経歴</h2>
+                    <h3>千葉県立東葛飾高等学校95期生(2020.04 ~ 2023.03)</h3>
+                    <ul>
+                        <li>第26代生徒会放送局長</li>
+                        <li>2022年度合唱祭幹部</li>
+                        <li>男子硬式テニス部</li>
+                        <li>新聞部</li>
+                    </ul>
+
+                    <h3>千葉県立東葛飾中学校2期生(2017.04 ~ 2020.03)</h3>
+                    <ul>
+                        <li>テニス部</li>
+                    </ul>
+
+                    <h2>Skills</h2>
+                    <h3>Coding</h3>
+                </div>
+            </div>
+			
+			<Footer />
+		</div>
+	</body>
+</html>
