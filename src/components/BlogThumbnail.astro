@@ -27,12 +27,19 @@ switch(webSite){
   default:
     displayDescription = '';
 }
+
+let displayThumnail;
+if(!thumbLink) {
+  displayThumnail = '/images/noimage.jpg';
+} else {
+  displayThumnail = thumbLink;
+}
 ---
 
 <article class="p-4 max-w-108 font-zen hover:bg-gray-100">
     <a href={link} class="block">
         <img
-          src={thumbLink || "/images/noimage.jpg"}
+          src={displayThumnail}
           alt={title}
           class="aspect-16/9 object-cover w-full"
         />

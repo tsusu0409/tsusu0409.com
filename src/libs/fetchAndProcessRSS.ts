@@ -1,4 +1,7 @@
 import { XMLParser } from "fast-xml-parser";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
 
 // 記事のインターフェースを定義
 interface Article {
@@ -86,9 +89,37 @@ function getSourceName(url: string): string {
   if(url.includes("zenn.dev")) return "Zenn";
   if(url.includes("qiita.com")) return "Qiita";
   if(url.includes("note.com")) return "note";
-  if(url.includes("tsusu0409.com")) return "tsusu0409.com";
   if(url.includes("omoshirokaiwai.com")) return "おもしろ界隈";
   return "Other";
+}
+
+async function fetchLocalArticles(): Promise<Article[]> {
+  // ブログ記事が格納されているディレクトリのパスを指定
+  const postsDirectory = path.join(process.cwd(), "src/pages/blog");
+  const filenames = fs.readdirSync(postsDirectory); // ディレクトリ内のファイル名を同期的に取得
+
+  const articles: Article[] = filenames
+    .filter((filename) => filename.endsWith(".md") || filename.endsWith(".mdx")) // .mdまたは.mdxファイルのみを対象
+    .map((filename) => {
+      const filePath = path.join(postsDirectory, filename);
+      const fileContents = fs.readFileSync(filePath, "utf8"); // ファイル内容を読み込み
+
+      // gray-matterでフロントマターをパース
+      const { data } = matter(fileContents);
+
+      // Articleインターフェースに合わせてデータを整形
+      return {
+        title: data.title,
+        // リンクはファイル名から生成（例: /blog/post-name）
+        link: `/blog/${filename.replace(/\.mdx?$/, "")}`,
+        thumb: data.thumb || null, // フロントマターにthumbがあれば使う
+        description: data.description,
+        pubDate: formatDate(new Date(data.date)), // formatDate関数を再利用
+        source: "tsusu0409.com", // ソース名は固定
+      };
+    });
+
+  return articles;
 }
 
 // 複数のRSSフィードURLを処理し、最新の10記事を返す関数
@@ -96,6 +127,13 @@ export async function fetchAndProcessRSS(
   rssURLs: string[]
 ): Promise<Article[]> {
   let articles: Article[] = [];
+
+  const localIndex = rssURLs.indexOf("local");
+  if (localIndex > -1) {
+    const localArticles = await fetchLocalArticles(); // ローカル記事を取得
+    articles.push(...localArticles);
+    rssURLs.splice(localIndex, 1); // "local"を配列から削除し、残りのURL処理へ
+  }
 
   await Promise.all(
     rssURLs.map(async (rssURL) => {
@@ -120,7 +158,7 @@ export async function fetchAndProcessRSS(
     })
   );
 
-  // 記事を日付でソートし、最新の10記事を取得
+  // 記事を日付でソートし、最新の100記事を取得
   articles.sort(
     (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
   );
