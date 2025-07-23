@@ -6,13 +6,13 @@ import Btn from "../components/Btn.astro";
 import BlogThumbnail from '../components/BlogThumbnail.astro';
 import Activity from '../components/Activity.astro';
 
-import { fetchAndProcessRSS, fetchRSS } from "../libs/fetchAndProcessRSS";
+import { fetchAndProcessRSS } from "../libs/fetchAndProcessRSS";
 import noimage from "@/images/noimage.jpg";
 
 // RSSからブログの一覧取得
 const rssURLs = [
   "https://note.com/tsusu0409/rss",
-  "https://tsusu0409.com/rss.xml"
+  "local"
 ];
 
 const posts = await fetchAndProcessRSS(rssURLs);
