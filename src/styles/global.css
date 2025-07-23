@@ -11,7 +11,7 @@
 .blogPostBody {
     width: 60%;
     max-width: 1080px;
-    min-width: 480px;
+    min-width: 720px;
     margin: 0 auto 120px auto;
 
     * {
@@ -38,6 +38,11 @@
         margin-right: auto;
         margin-left: auto;
         font-size: 16px;
+    }
+    a {
+        color: #0586a0;
+        font-weight: 500;
+        text-decoration: underline;
     }
 
     
