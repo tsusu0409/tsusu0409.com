@@ -73,7 +73,15 @@ function parseRSS2(jsonData: any, source: string): Article[] {
   const items = Array.isArray(jsonData.rss.channel.item)
     ? jsonData.rss.channel.item
     : [jsonData.rss.channel.item];
-  return items.map((item: any) => parseRSSItem(item, false, source));
+
+    const filteredItems = items.filter((item: any) => {
+    if (source === "おもしろ界隈") {
+      return item["dc:creator"] === "Tsusu";
+    }
+    return true; // それ以外のソースはすべて通す
+  });
+
+  return filteredItems.map((item: any) => parseRSSItem(item, false, source));
 }
 
 // Atom形式のJSONデータをArticle配列にパースする関数
@@ -81,7 +89,16 @@ function parseAtom(jsonData: any, source: string): Article[] {
   const entries = Array.isArray(jsonData.feed.entry)
     ? jsonData.feed.entry
     : [jsonData.feed.entry];
-  return entries.map((entry: any) => parseRSSItem(entry, true, source));
+
+    const filteredEntries = entries.filter((entry: any) => {
+    if (source === "おもしろ界隈") {
+      // Atom形式では著者が entry.author.name に格納されている場合がある
+      return entry.author?.name === "Tsusu";
+    }
+    return true; // それ以外のソースはすべて通す
+  });
+
+  return filteredEntries.map((entry: any) => parseRSSItem(entry, true, source));
 }
 
 // URLからサイト名を判定する関数
