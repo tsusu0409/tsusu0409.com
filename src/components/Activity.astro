@@ -3,7 +3,7 @@ const { title, description, startDate, endDate } = Astro.props;
 const showEndDate = endDate && endDate !== 0;
 ---
 
-<article class="flex w-full items-start justify-between border-b border-neutral-200 py-6">
+<article class="flex w-full items-start justify-between border-b border-neutral-200 py-6 hover:bg-gray-100">
     <div class="mx-4">
         <h3 class="text-base font-normal">{title}</h3>
         <p class="mt-1 text-sm text-neutral-500">{description}</p>
