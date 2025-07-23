@@ -7,3 +7,48 @@
     --font-zen: "Zen Kaku Gothic New", sans-serif;
     --font-geo: "Geologica", sans-serif;
 }
+
+.blogPostBody {
+    width: 60%;
+    max-width: 1080px;
+    min-width: 480px;
+    margin: 0 auto 120px auto;
+
+    * {
+        margin-bottom: 12px;
+        padding-bottom: 4px;
+    }
+    h2 {
+        font-size: 24px;
+        font-weight: 500;
+        border-bottom: 2px solid #85BCC7;
+        padding-top: 20px;
+    }
+    h3 {
+        font-size: 20px;
+        font-weight: 500;
+        padding-top: 16px;
+    }
+    h3:before {
+        content: "｜";
+        color: #0586a0;
+    }
+    p, li {
+        width: 95%;
+        margin-right: auto;
+        margin-left: auto;
+        font-size: 16px;
+    }
+
+    
+    img {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    iframe {
+        width: 80%;
+        aspect-ratio: 16 / 9;
+        margin: 0 auto 20px auto;
+    }
+}

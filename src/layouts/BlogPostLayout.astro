@@ -15,12 +15,14 @@ const { pageTitle } = Astro.props;
     <Header />
     <div class="content w-4/5 mx-auto font-zen font-mefium">
       <h1>{pageTitle}</h1>
-      <slot />
+      <div class="blogPostBody">
+        <slot />
+      </div>
     </div>
     <Footer />
   </body>
 </html>
 
 <style>
-  
+
 </style>
