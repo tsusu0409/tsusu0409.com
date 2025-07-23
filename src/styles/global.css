@@ -61,10 +61,20 @@
         color: #0586a0;
     }
     p, li {
-        width: 95%;
-        margin-right: auto;
+        width: 98%;
+        margin-right: 0;
         margin-left: auto;
         font-size: 16px;
+    }
+    li:before {
+        content: "- "
+    }
+    ul {
+        padding-top: 12px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        width: 95%;
+        margin: 0 auto 8px auto;
     }
     a {
         color: #0586a0;
@@ -72,8 +82,10 @@
         text-decoration: underline;
     }    
     img {
-        max-width: 90%;
+        width: 100%;
         margin: 0 auto;
+        padding: 12px;
+        border: 2px solid #e2e2e2;
     }
 
     iframe {
