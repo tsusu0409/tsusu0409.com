@@ -7,7 +7,6 @@ import BlogThumbnail from '../components/BlogThumbnail.astro';
 
 // RSSからブログの一覧取得
 import { fetchAndProcessRSS, fetchRSS } from "../libs/fetchAndProcessRSS";
-import noimage from "@/images/noimage.png";
 
 const rssURLs = [
   "https://note.com/tsusu0409/rss",
@@ -21,8 +20,7 @@ const posts = await fetchAndProcessRSS(rssURLs);
 <html lang="jp">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="stylesheet" href="https://use.typekit.net/ofx3axx.css">
+		<link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Tsusu</title>

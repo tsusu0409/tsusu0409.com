@@ -2,19 +2,26 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-const { pageTitle } = Astro.props;
+const { frontmatter } = Astro.props;
 ---
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
+    <title>Tsusu | {frontmatter.title}</title>
   </head>
   <body>
     <Header />
     <div class="content w-4/5 mx-auto font-zen font-mefium">
-      <h1>{pageTitle}</h1>
+        <div class="blogPostTitle">
+          <h1>{frontmatter.title}</h1>
+          <p>公開日: {frontmatter.date}</p>
+          <div class="tags">
+            {frontmatter.tags.map((tag) => (
+              <p class="tag">#{tag}</p>
+            ))}
+          </div>
+        </div>
       <div class="blogPostBody">
         <slot />
       </div>
@@ -22,7 +29,3 @@ const { pageTitle } = Astro.props;
     <Footer />
   </body>
 </html>
-
-<style>
-
-</style>

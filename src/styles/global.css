@@ -8,6 +8,33 @@
     --font-geo: "Geologica", sans-serif;
 }
 
+.blogPostTitle {
+    width: 60%;
+    max-width: 1080px;
+    min-width: 720px;
+    margin: 0 auto 60px auto;
+    padding-top: 40px;
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+    }
+    p {
+        margin-top: 16px;
+    }
+    .tags {
+        margin-top: -8px;
+    }
+    .tag {
+        margin-right: 12px;
+        float: left;
+        background-color: #e2e2e2;
+        border-radius: 4px;
+        padding: 0 8px;
+        font-size: 14px;
+    }
+}
+
 .blogPostBody {
     width: 60%;
     max-width: 1080px;
@@ -43,9 +70,7 @@
         color: #0586a0;
         font-weight: 500;
         text-decoration: underline;
-    }
-
-    
+    }    
     img {
         max-width: 90%;
         margin: 0 auto;
@@ -55,5 +80,9 @@
         width: 80%;
         aspect-ratio: 16 / 9;
         margin: 0 auto 20px auto;
+    }
+    .twitter-tweet {
+        max-width: 100%;
+        margin: 0 auto;
     }
 }

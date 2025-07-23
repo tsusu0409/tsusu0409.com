@@ -7,7 +7,6 @@ import BlogThumbnail from '../components/BlogThumbnail.astro';
 import Activity from '../components/Activity.astro';
 
 import { fetchAndProcessRSS } from "../libs/fetchAndProcessRSS";
-import noimage from "@/images/noimage.jpg";
 
 // RSSからブログの一覧取得
 const rssURLs = [
@@ -24,8 +23,7 @@ const allActivities = await Astro.glob('./activity/*.md')
 <html lang="jp">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="stylesheet" href="https://use.typekit.net/ofx3axx.css">
+		<link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Tsusu</title>
@@ -40,8 +38,8 @@ const allActivities = await Astro.glob('./activity/*.md')
 					<div class="pt-4">
 						<p class="text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
 						<p class="mt-6 text-1xl font-zen">
-							筑波大学に通うただの学生です。<br />
-							ここには僕という人間を簡潔に説明する2行ぐらいのコメントを書きたいです。
+							筑波大学に通う学生です。<br />
+							趣味でWebを触り始めています。AtCoder Beginner ContestやOnlineMathContestに時々参加しています。
 						</p>
 					</div>
 				</div>
