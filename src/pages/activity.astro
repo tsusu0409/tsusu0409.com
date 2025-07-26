@@ -34,7 +34,7 @@ const allActivities = await Astro.glob('./activity/*.md')
 
 			<div class="my-20 pb-8">
 				<div class="w-4/5 mx-auto mb-12">
-					<h2 class="text-2xl font-geo font-thin">Recent Activities</h2>
+					<h2 class="text-2xl font-geo font-thin">All Activities</h2>
 					<div class="mx-6">
 						{[...allActivities].reverse().map((activity:any) => (
 							<Activity
