@@ -9,10 +9,11 @@ const { frontmatter } = Astro.props;
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
     <title>Tsusu | {frontmatter.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <Header />
-    <div class="content w-4/5 mx-auto font-zen font-mefium">
+    <div class="content px-2 mx-auto font-zen font-mefium">
         <div class="blogPostTitle">
           <h1>{frontmatter.title}</h1>
           <p>公開日: {frontmatter.date}</p>
