@@ -106,3 +106,45 @@
         font-size: 14px;
     }
 }
+
+@media screen and (max-width: 480px) {
+    .blogPostTitle,
+    .blogPostBody {
+        width: 95%;
+        min-width: auto;
+        margin: 0 auto 60px auto;
+        padding-top: 20px;
+    }
+
+    .blogPostTitle h1 {
+        font-size: 18px;
+    }
+
+    .blogPostBody h2 {
+        font-size: 16px;
+    }
+
+    .blogPostBody h3 {
+        font-size: 14px;
+    }
+
+    .blogPostTitle p,
+    .blogPostBody p,
+    .blogPostBody li {
+        font-size: 14px;
+    }
+
+    .blogPostBody img {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px;
+        border: 1px solid #e2e2e2;
+    }
+
+    .blogPostBody ul {
+        padding-top: 12px;
+        padding-right: 2px;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+    }
+}
