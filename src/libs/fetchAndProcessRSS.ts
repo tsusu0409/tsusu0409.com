@@ -39,18 +39,24 @@ function formatDate(date: Date): string {
 
 // アイテムからサムネイルURLを抽出する関数
 function extractThumb(item: any): string | null {
-  if (item.enclosure && item.enclosure.url) {
-    return item.enclosure.url;
-  } else if (item["media:thumbnail"]) {
-    return item["media:thumbnail"];
-  } else if (item.thumb) {
-    return item.thumb;
-  } else if (Array.isArray(item.link)) {
+  // ZennなどRSS2.0形式（enclosureタグのurl属性）
+  if (item.enclosure) {
+    // fast-xml-parserは属性を @_url として保持する
+    if (item.enclosure["@_url"]) return item.enclosure["@_url"];
+    if (item.enclosure.url) return item.enclosure.url;
+  }
+
+  // カスタムthumbプロパティ（ローカル記事やnote）
+  if (item.thumb) return item.thumb;
+
+  // Atom系フィード（link配列内のimage typeを探す）
+  if (Array.isArray(item.link)) {
     const link = item.link.find(
       (l: any) => l.rel === "enclosure" || l.type?.startsWith("image")
     );
     return link ? link.href : null;
   }
+
   return null;
 }
 
@@ -139,7 +145,7 @@ async function fetchLocalArticles(): Promise<Article[]> {
   return articles;
 }
 
-// 複数のRSSフィードURLを処理し、最新の10記事を返す関数
+// 複数のRSSフィードURLを処理し、最新の100記事を返す関数
 export async function fetchAndProcessRSS(
   rssURLs: string[]
 ): Promise<Article[]> {
