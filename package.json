@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^4.4.0",
     "@astrojs/rss": "^4.0.12",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -16,10 +17,18 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.11.0",
+    "astro-seo": "^0.8.4",
     "fontawesome": "^5.6.3",
     "gray-matter": "^4.0.3",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "satori": "^0.18.3",
+    "sharp": "^0.34.4",
     "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/sharp": "^0.31.1"
   }
 }
