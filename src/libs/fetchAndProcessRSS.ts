@@ -41,12 +41,23 @@ function formatDate(date: Date): string {
 function extractThumb(item: any): string | null {
   // ZennなどRSS2.0形式（enclosureタグのurl属性）
   if (item.enclosure) {
-    // fast-xml-parserは属性を @_url として保持する
     if (item.enclosure["@_url"]) return item.enclosure["@_url"];
     if (item.enclosure.url) return item.enclosure.url;
   }
 
-  // カスタムthumbプロパティ（ローカル記事やnote）
+  // noteの <media:thumbnail>
+  if (item["media:thumbnail"]) {
+    // noteの場合、タグ内容がURL文字列そのもの
+    if (typeof item["media:thumbnail"] === "string") {
+      return item["media:thumbnail"];
+    }
+    // もし属性形式の場合も考慮（念のため）
+    if (item["media:thumbnail"]["@_url"]) {
+      return item["media:thumbnail"]["@_url"];
+    }
+  }
+
+  // カスタムthumbプロパティ（ローカル記事など）
   if (item.thumb) return item.thumb;
 
   // Atom系フィード（link配列内のimage typeを探す）
@@ -59,6 +70,7 @@ function extractThumb(item: any): string | null {
 
   return null;
 }
+
 
 // RSSアイテムをArticleインターフェースにパースする関数
 function parseRSSItem(item: any, isAtom: boolean = false, source: string): Article {
