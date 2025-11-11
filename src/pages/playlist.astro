@@ -1,0 +1,180 @@
+---
+// src/components/SpotifyPlaylistViewer.astro
+import playlistsData from '../data/spotify-playlists.json';
+import "../styles/global.css";
+
+// プレイリストデータの型定義
+interface Playlist {
+  id: string;
+  name: string;
+  description: string;
+  images: { url: string }[];
+  tracks: {
+    total: number;
+    items: Array<{
+      added_at: string;
+      track: {
+        id: string;
+        name: string;
+        duration_ms: number;
+        explicit: boolean;
+        external_urls: { spotify: string };
+        artists: Array<{ name: string; external_urls: { spotify: string } }>;
+        album: {
+          name: string;
+          images: { url: string }[];
+          external_urls: { spotify: string };
+        };
+      };
+    }>;
+  };
+}
+
+const playlists = playlistsData as Playlist[];
+
+// 再生時間をフォーマット
+function formatDuration(ms: number): string {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// プレイリストの合計時間を計算
+function getTotalDuration(playlist: Playlist): string {
+  const totalMs = playlist.tracks.items.reduce(
+    (sum, item) => sum + item.track.duration_ms,
+    0
+  );
+  const hours = Math.floor(totalMs / 3600000);
+  const minutes = Math.floor((totalMs % 3600000) / 60000);
+  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+}
+---
+
+<div class="flex h-screen bg-neutral-950 text-white">
+  <!-- 左メニュー: プレイリスト名のみ -->
+  <aside class="w-64 border-r border-neutral-800 overflow-y-auto">
+    <div class="p-6">
+      <h2 class="text-xl font-bold mb-6 text-neutral-400">Playlist</h2>
+      <nav class="space-y-1">
+        {playlists.map((playlist) => (
+          <button
+            data-playlist-id={playlist.id}
+            class="playlist-item w-full text-left px-4 py-3 rounded hover:bg-neutral-900 transition-colors duration-200 border-l-2 border-transparent hover:border-green-500"
+          >
+            <h3 class="font-medium">{playlist.name}</h3>
+          </button>
+        ))}
+      </nav>
+    </div>
+  </aside>
+
+  <!-- 右パネル: 選択されたプレイリストの詳細 -->
+  <main class="flex-1 overflow-y-auto">
+    <div id="playlist-detail" class="hidden">
+      {playlists.map((playlist) => (
+        <div
+          data-playlist-content={playlist.id}
+          class="playlist-content hidden p-8"
+        >
+          <!-- ヘッダー -->
+          <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">{playlist.name}</h1>
+            <div class="flex gap-4 text-sm text-neutral-400">
+              <span>{playlist.tracks.total} tracks</span>
+              <span>•</span>
+              <span>{getTotalDuration(playlist)}</span>
+            </div>
+          </div>
+
+          <!-- トラックリスト（120x120pxグリッド表示） -->
+          <div class="grid gap-3" style="grid-template-columns: repeat(auto-fill, minmax(120px, 120px));">
+            {playlist.tracks.items.map((item) => (
+              <a
+                href={item.track.external_urls.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group block hover:opacity-80 transition-opacity duration-200"
+                title={`${item.track.name} - ${item.track.artists.map((a) => a.name).join(', ')}`}
+              >
+                <img
+                  src={item.track.album.images[0]?.url}
+                  alt={item.track.album.name}
+                  class="w-[120px] h-[120px] object-cover shadow-lg"
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- 初期状態のメッセージ -->
+    <div id="empty-state" class="flex items-center justify-center h-full text-neutral-500">
+      <div class="text-center">
+        <svg class="w-20 h-20 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+        </svg>
+        <p class="text-lg">Select a playlist to view tracks</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // プレイリスト選択時の処理
+  const playlistItems = document.querySelectorAll('.playlist-item');
+  const playlistDetail = document.getElementById('playlist-detail');
+  const emptyState = document.getElementById('empty-state');
+
+  playlistItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const playlistId = item.getAttribute('data-playlist-id');
+      
+      // 全てのプレイリストコンテンツを非表示
+      document.querySelectorAll('.playlist-content').forEach((content) => {
+        content.classList.add('hidden');
+      });
+
+      // アクティブ状態を更新
+      playlistItems.forEach((i) => {
+        i.classList.remove('bg-neutral-900', 'border-green-500');
+      });
+      item.classList.add('bg-neutral-900', 'border-green-500');
+
+      // 選択されたプレイリストを表示
+      const selectedContent = document.querySelector(
+        `[data-playlist-content="${playlistId}"]`
+      );
+      if (selectedContent) {
+        emptyState?.classList.add('hidden');
+        playlistDetail?.classList.remove('hidden');
+        selectedContent.classList.remove('hidden');
+      }
+    });
+  });
+</script>
+
+<style>
+  /* スクロールバーのスタイリング */
+  aside::-webkit-scrollbar,
+  main::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  aside::-webkit-scrollbar-track,
+  main::-webkit-scrollbar-track {
+    background: rgb(10, 10, 10);
+  }
+
+  aside::-webkit-scrollbar-thumb,
+  main::-webkit-scrollbar-thumb {
+    background: rgb(64, 64, 64);
+    border-radius: 4px;
+  }
+
+  aside::-webkit-scrollbar-thumb:hover,
+  main::-webkit-scrollbar-thumb:hover {
+    background: rgb(82, 82, 82);
+  }
+</style>

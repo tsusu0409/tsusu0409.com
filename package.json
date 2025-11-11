@@ -3,10 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "fetch-spotify": "tsx src/libs/fetchSpotifyPlaylists.ts",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run fetch-spotify && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "start": "tsx src/libs/getSpotifyToken.ts"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.0",
@@ -18,13 +20,15 @@
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.11.0",
     "astro-seo": "^0.8.4",
+    "dotenv": "^17.2.3",
     "fontawesome": "^5.6.3",
     "gray-matter": "^4.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "satori": "^0.18.3",
     "sharp": "^0.34.4",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "tsx": "^4.20.6"
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
