@@ -36,11 +36,25 @@ const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const SPOTIFY_REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
 
 if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
-  throw new Error('SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, and SPOTIFY_REFRESH_TOKEN are required');
+  console.error('❌ 環境変数が不足しています');
+  console.error('');
+  console.error('以下を .env ファイルに設定してください:');
+  console.error('  SPOTIFY_CLIENT_ID=...');
+  console.error('  SPOTIFY_CLIENT_SECRET=...');
+  console.error('  SPOTIFY_REFRESH_TOKEN=...');
+  console.error('');
+  console.error('💡 リフレッシュトークンの取得方法:');
+  console.error('   node get-spotify-token.js を実行してください');
+  process.exit(1);
 }
 
-// アクセストークンを取得する関数
+/**
+ * リフレッシュトークンから新しいアクセストークンを自動取得
+ * これが自動化の要！
+ */
 async function getAccessToken(): Promise<string> {
+  console.log('🔄 アクセストークンを取得中...');
+  
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
@@ -49,7 +63,10 @@ async function getAccessToken(): Promise<string> {
         `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
       ).toString('base64')}`
     },
-    body: `grant_type=refresh_token&refresh_token=${SPOTIFY_REFRESH_TOKEN}`
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token: SPOTIFY_REFRESH_TOKEN as string
+    })
   });
 
   if (!response.ok) {
@@ -58,6 +75,7 @@ async function getAccessToken(): Promise<string> {
   }
 
   const data = await response.json();
+  console.log('✅ アクセストークン取得成功');
   return data.access_token;
 }
 
@@ -79,13 +97,16 @@ async function fetchPlaylist(playlistId: string, accessToken: string): Promise<S
 }
 
 async function fetchAllPlaylists(playlistIds: string[]) {
-  // 新しいアクセストークンを取得
+  // 毎回自動で新しいアクセストークンを取得
   const accessToken = await getAccessToken();
-  console.log('✅ アクセストークン取得成功');
 
+  console.log(`📝 ${playlistIds.length}個のプレイリストを取得中...`);
+  
   const playlists = await Promise.all(
     playlistIds.map((id) => fetchPlaylist(id, accessToken))
   );
+
+  console.log('✅ 全プレイリスト取得完了');
 
   // プレイリスト名でソート（新しい順）
   return playlists.sort((a, b) => b.name.localeCompare(a.name));

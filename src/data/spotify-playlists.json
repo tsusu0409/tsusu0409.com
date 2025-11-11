@@ -1303,7 +1303,7 @@
             "href": "https://api.spotify.com/v1/tracks/5EFsxswJGYvcenuEa6a60r",
             "id": "5EFsxswJGYvcenuEa6a60r",
             "name": "Starduster",
-            "popularity": 21,
+            "popularity": 22,
             "uri": "spotify:track:5EFsxswJGYvcenuEa6a60r",
             "is_local": false
           },
@@ -5251,7 +5251,7 @@
             "href": "https://api.spotify.com/v1/tracks/1xBkp4iUkC3XM9DT34bBVS",
             "id": "1xBkp4iUkC3XM9DT34bBVS",
             "name": "ナンセコンナセンス (feat. 初音ミク)",
-            "popularity": 20,
+            "popularity": 21,
             "uri": "spotify:track:1xBkp4iUkC3XM9DT34bBVS",
             "is_local": false
           },
@@ -5361,7 +5361,7 @@
             "href": "https://api.spotify.com/v1/tracks/1h8wPYHIuhrO1q52ph7VXb",
             "id": "1h8wPYHIuhrO1q52ph7VXb",
             "name": "地球最後の告白を feat.GUMI",
-            "popularity": 39,
+            "popularity": 40,
             "uri": "spotify:track:1h8wPYHIuhrO1q52ph7VXb",
             "is_local": false
           },
@@ -11473,7 +11473,7 @@
             "href": "https://api.spotify.com/v1/tracks/5DWB6lfR4GHgbMQIAr2e7K",
             "id": "5DWB6lfR4GHgbMQIAr2e7K",
             "name": "Future Sign",
-            "popularity": 1,
+            "popularity": 2,
             "uri": "spotify:track:5DWB6lfR4GHgbMQIAr2e7K",
             "is_local": false
           },
@@ -14587,7 +14587,7 @@
             "href": "https://api.spotify.com/v1/tracks/0FRK4o76n79CYUVtcLApS3",
             "id": "0FRK4o76n79CYUVtcLApS3",
             "name": "グリーンライツ・セレナーデ",
-            "popularity": 33,
+            "popularity": 34,
             "uri": "spotify:track:0FRK4o76n79CYUVtcLApS3",
             "is_local": false
           },
@@ -15689,7 +15689,7 @@
             "href": "https://api.spotify.com/v1/tracks/0FRK4o76n79CYUVtcLApS3",
             "id": "0FRK4o76n79CYUVtcLApS3",
             "name": "グリーンライツ・セレナーデ",
-            "popularity": 33,
+            "popularity": 34,
             "uri": "spotify:track:0FRK4o76n79CYUVtcLApS3",
             "is_local": false
           },
@@ -24475,7 +24475,7 @@
             "href": "https://api.spotify.com/v1/tracks/43oSdS0TKTePqTpjushq0u",
             "id": "43oSdS0TKTePqTpjushq0u",
             "name": "ぼうけんのしょがきえました！",
-            "popularity": 35,
+            "popularity": 36,
             "uri": "spotify:track:43oSdS0TKTePqTpjushq0u",
             "is_local": false
           },
@@ -26553,7 +26553,7 @@
             "href": "https://api.spotify.com/v1/tracks/0FRK4o76n79CYUVtcLApS3",
             "id": "0FRK4o76n79CYUVtcLApS3",
             "name": "グリーンライツ・セレナーデ",
-            "popularity": 33,
+            "popularity": 34,
             "uri": "spotify:track:0FRK4o76n79CYUVtcLApS3",
             "is_local": false
           },
@@ -28941,7 +28941,7 @@
             "href": "https://api.spotify.com/v1/tracks/5EG0O4u54pn4hG3aqkPWcM",
             "id": "5EG0O4u54pn4hG3aqkPWcM",
             "name": "恋愛裁判",
-            "popularity": 41,
+            "popularity": 42,
             "uri": "spotify:track:5EG0O4u54pn4hG3aqkPWcM",
             "is_local": false
           },
