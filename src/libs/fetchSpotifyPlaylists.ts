@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 interface SpotifyPlaylist {
   id: string;
   name: string;
