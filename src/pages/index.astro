@@ -105,6 +105,35 @@ const allActivities = await Astro.glob('./activity/*.md')
 				</div>
 				<Btn name="Activiies" slug="activity"/>
 			</div>
+
+			<!-- Favorite Songs セクション -->
+			<div class="my-20 pb-8">
+				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
+					<h2 class="text-xl sm:text-2xl font-geo font-thin">Contents</h2>
+					<div class="mx-2 sm:mx-6 mt-4">
+					<a 
+						href="/playlist" 
+						class="block p-4 sm:p-6 text-neutral-800 transition-colors hover:bg-neutral-100"
+					>
+						<div class="flex items-center gap-4">
+						<img 
+							src="/images/music.svg" 
+							alt="Spotify Icon" 
+							class="w-6 h-6"
+						/>
+						<div>
+							<h3 class="text-lg sm:text-xl font-semibold">Favorite Songs</h3>
+							<p class="text-sm text-neutral-600 mt-1">
+							1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストを公開しています。
+							</p>
+						</div>
+						</div>
+					</a>
+					</div>
+				</div>
+			</div>
+
+
 			
 			<Footer />
 		</div>
