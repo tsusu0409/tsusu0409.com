@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 interface SpotifyPlaylist {
   id: string;
   name: string;
@@ -31,9 +28,7 @@ interface SpotifyTrackItem {
   };
 }
 
-const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const SPOTIFY_REFRESH_TOKEN = process.env.SPOTIFY_REFRESH_TOKEN;
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } = process.env;
 
 if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
   console.error('❌ 環境変数が不足しています');
