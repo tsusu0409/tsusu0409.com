@@ -5,8 +5,15 @@ import Footer from "../components/Footer.astro";
 import Btn from "../components/Btn.astro";
 import BlogThumbnail from '../components/BlogThumbnail.astro';
 import Activity from '../components/Activity.astro';
+import { Image } from 'astro:assets';
 
 import { fetchAndProcessRSS } from "../libs/fetchAndProcessRSS";
+
+// 画像のインポート
+import profIcon from '../../public/images/prof-icon.png';
+import musicIcon from '../../public/images/music.svg';
+import tsukubaLove from '../../public/images/tsukuba-love2.png';
+import noTime from '../../public/images/no-time.png';
 
 // RSSからブログの一覧取得
 const rssURLs = [
@@ -58,17 +65,24 @@ const allActivities = await Astro.glob('./activity/*.md')
 
 			<div class="py-20 bg-primary">
                 <div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto relative flex flex-col sm:flex-row items-center sm:items-start gap-10 sm:gap-20">
-                    <img src="/images/prof-icon.png" class="h-30 w-30 sm:h-40 sm:w-40 rounded-2xl sm:rounded-4xl" />
+                    <Image 
+                        src={profIcon} 
+                        alt="Tsusuのプロフィール画像"
+                        width={160}
+                        height={160}
+                        class="h-30 w-30 sm:h-40 sm:w-40 rounded-2xl sm:rounded-4xl"
+                        loading="eager"
+                        format="webp"
+                    />
                     <div class="pt-4 text-center sm:text-left">
-                    <p class="text-xl sm:text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
-                    <p class="mt-6 text-sm sm:text-lg font-zen">
-                        筑波大学に通う学生です。<br />
-                        趣味でWebを触り始めています。AtCoder Beginner ContestやOnlineMathContestに時々参加しています。
-                    </p>
+                        <p class="text-xl sm:text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
+                        <p class="mt-6 text-sm sm:text-lg font-zen">
+                            筑波大学に通う学生です。<br />
+                            趣味でWebを触り始めています。AtCoder Beginner ContestやOnlineMathContestに時々参加しています。
+                        </p>
                     </div>
                 </div>
             </div>
-
 
 			<div class="mt-6 mb-12">
 				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
@@ -106,7 +120,6 @@ const allActivities = await Astro.glob('./activity/*.md')
 				<Btn name="Activiies" slug="activity"/>
 			</div>
 
-			<!-- Favorite Songs セクション -->
 			<div class="my-20 pb-8">
 				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
 					<h2 class="text-xl sm:text-2xl font-geo font-thin">Contents</h2>
@@ -116,11 +129,13 @@ const allActivities = await Astro.glob('./activity/*.md')
 						class="block p-4 sm:p-6 text-neutral-800 transition-colors hover:bg-neutral-100"
 					>
 						<div class="flex items-center gap-4">
-						<img 
-							src="/images/music.svg" 
-							alt="Spotify Icon" 
-							class="w-6 h-6"
-						/>
+						<Image 
+                            src={musicIcon}
+                            alt="Music Icon"
+                            width={24}
+                            height={24}
+                            class="w-6 h-6"
+                        />
 						<div>
 							<h3 class="text-lg sm:text-xl font-semibold">Favorite Songs</h3>
 							<p class="text-sm text-neutral-600 mt-1">
@@ -133,7 +148,30 @@ const allActivities = await Astro.glob('./activity/*.md')
 				</div>
 			</div>
 
-
+			<div class="my-20">
+				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
+					<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+						<Image 
+                            src={tsukubaLove} 
+                            alt="Tsukuba Love"
+                            width={400}
+                            height={400}
+                            class="w-full h-auto object-contain"
+                            loading="lazy"
+                            format="webp"
+                        />
+						<Image 
+                            src={noTime} 
+                            alt="No Time"
+                            width={400}
+                            height={400}
+                            class="w-full h-auto object-contain"
+                            loading="lazy"
+                            format="webp"
+                        />
+					</div>
+				</div>
+			</div>
 			
 			<Footer />
 		</div>
