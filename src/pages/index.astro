@@ -4,10 +4,10 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Btn from "../components/Btn.astro";
 import BlogThumbnail from '../components/BlogThumbnail.astro';
-import Activity from '../components/Activity.astro';
+import { ActivityDialog } from '../components/ActivityDialog';
 import { Image } from 'astro:assets';
 
-import { fetchAndProcessRSS } from "../libs/fetchAndProcessRSS";
+import { fetchAndProcessRSS } from "../lib/fetchAndProcessRSS";
 
 // 画像のインポート
 import profIcon from '../../public/images/prof-icon.png';
@@ -27,7 +27,7 @@ const rssURLs = [
 const posts = await fetchAndProcessRSS(rssURLs);
 
 // アクティビティの一覧取得
-const allActivities = await Astro.glob('./activity/*.md')
+const allActivities = await Astro.glob('../content/activity/*.md');
 ---
 
 <html lang="ja">
@@ -106,14 +106,17 @@ const allActivities = await Astro.glob('./activity/*.md')
 			<div class="my-20 pb-8">
 				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
 					<h2 class="text-xl sm:text-2xl font-geo font-thin">Recent Activities</h2>
-					<div class="mx-2 sm:mx-6">
+					<div class="mx-6">
 						{[...allActivities].reverse().slice(0, 3).map((activity:any) => (
-							<Activity
+							<ActivityDialog
+							client:load
 							title={activity.frontmatter.title}
 							description={activity.frontmatter.description}
 							startDate={activity.frontmatter.startDate}
 							endDate={activity.frontmatter.endDate}
-							/>
+							>
+								<activity.Content />
+							</ActivityDialog>
 						))}
 					</div>
 				</div>
@@ -151,7 +154,7 @@ const allActivities = await Astro.glob('./activity/*.md')
 			<div class="my-20">
 				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
 					<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-						<Image 
+						<a href="https://love.tsukuba-ac.net/"><Image 
                             src={tsukubaLove} 
                             alt="Tsukuba Love"
                             width={400}
@@ -159,8 +162,8 @@ const allActivities = await Astro.glob('./activity/*.md')
                             class="w-full h-auto object-contain"
                             loading="lazy"
                             format="webp"
-                        />
-						<Image 
+                        /></a>
+						<a href="https://sites.google.com/view/happy-busy/"><Image 
                             src={noTime} 
                             alt="No Time"
                             width={400}
@@ -168,7 +171,7 @@ const allActivities = await Astro.glob('./activity/*.md')
                             class="w-full h-auto object-contain"
                             loading="lazy"
                             format="webp"
-                        />
+                        /></a>
 					</div>
 				</div>
 			</div>

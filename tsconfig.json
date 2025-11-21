@@ -9,11 +9,15 @@
     "src/pages/rss.xml.js"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "isolatedModules": true,
     "esModuleInterop": true,
     "strict": true,
