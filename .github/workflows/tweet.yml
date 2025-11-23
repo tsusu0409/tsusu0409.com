@@ -29,7 +29,7 @@ jobs:
         id: check_new_file
         run: |
           ADDED_FILE=$(git diff --name-status ${{ github.event.before }} ${{ github.sha }} \
-            | awk '$1 == "A" && $2 ~ /^src\/blog\/.*\.md$/ {print $2}' | head -n 1)
+            | awk '$1 == "A" && $2 ~ /^src\/pages\/blog\/.*\.md$/ {print $2}' | head -n 1)
           echo "added_file=$ADDED_FILE" >> $GITHUB_OUTPUT
 
       - name: Tweet about blog update
@@ -40,4 +40,4 @@ jobs:
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
-          python tweet.py "${{ steps.check_new_file.outputs.added_file }}"
+          python .github/scripts/tweet.py "${{ steps.check_new_file.outputs.added_file }}"
