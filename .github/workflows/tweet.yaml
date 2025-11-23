@@ -1,0 +1,43 @@
+name: Tweet on new blog post
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/pages/blog/**'
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install tweepy
+
+      - name: Detect new blog file
+        id: check_new_file
+        run: |
+          ADDED_FILE=$(git diff --name-status ${{ github.event.before }} ${{ github.sha }} \
+            | awk '$1 == "A" && $2 ~ /^src\/blog\/.*\.md$/ {print $2}' | head -n 1)
+          echo "added_file=$ADDED_FILE" >> $GITHUB_OUTPUT
+
+      - name: Tweet about blog update
+        if: steps.check_new_file.outputs.added_file != ''
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+        run: |
+          python tweet.py "${{ steps.check_new_file.outputs.added_file }}"
