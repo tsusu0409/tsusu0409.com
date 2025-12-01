@@ -5,7 +5,7 @@ const activityCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     startDate: z.string(), // "YYYY.MM" 形式
-    endDate: z.string(),   // "YYYY.MM" 形式
+    endDate: z.string().nullable(),   // "YYYY.MM" 形式
     description: z.string(),
   }),
 });
