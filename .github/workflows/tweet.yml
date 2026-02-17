@@ -23,7 +23,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install tweepy
+        run: pip install tweepy atproto
 
       - name: Detect new blog file
         id: check_new_file
@@ -41,3 +41,11 @@ jobs:
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
           python .github/scripts/tweet.py "${{ steps.check_new_file.outputs.added_file }}"
+
+      - name: Post to Bluesky
+        if: steps.check_new_file.outputs.added_file != ''
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+        run: |
+          python .github/scripts/bluesky.py "${{ steps.check_new_file.outputs.added_file }}"
