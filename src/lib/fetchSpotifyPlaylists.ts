@@ -113,6 +113,9 @@ async function fetchAllPlaylists(playlistIds: string[]) {
 }
 
 const PLAYLIST_IDS = [
+  '2vpIXIMzsTVtrebSZ0JG7a', // 2026.04
+  '188TRljEPx043UgNRLxZ7s', // 2026.03
+  '2OoxJQHRlxsRUitUWGfEIx', // 2026.02
   '5cTWIvkaXJgRpy7gcvMGzT', // 2026.01
   '5V02xkYfmeoZ230oBI1oD2', // 2025.12
   '2VdSLva4LVAzaeAC1GHK41', // 2025.11
