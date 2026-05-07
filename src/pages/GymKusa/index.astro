@@ -1,0 +1,51 @@
+---
+import "../../styles/global.css";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import GymKusa from "@/components/GymKusa.astro";
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Tsusu</title>
+
+		<!-- OGPタグ -->
+		<meta property="og:title" content="Tsusu" />
+		<meta property="og:description" content="Tsusuの個人サイト" />
+		<meta property="og:image" content="https://tsusu0409.com/images/ogp.png" />
+		<meta property="og:url" content="https://tsusu0409.com/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Tsusu" />
+
+		<!-- Twitterカード -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Tsusu" />
+		<meta name="twitter:description" content="Tsusuの個人サイト" />
+		<meta name="twitter:image" content="https://tsusu0409.com/images/ogp.png" />
+		<meta name="twitter:url" content="https://tsusu0409.com/" />
+
+		<!-- アドセンス -->
+		<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8366184314757569"
+		crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div>
+			<Header />
+
+			<div class="my-20 pb-8">
+				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
+					<h2 class="text-xl sm:text-2xl font-geo font-thin">Gym Kusa</h2>
+					<div class="mx-6">
+						<GymKusa />
+					</div>
+				</div>
+			</div>
+
+			<Footer />
+		</div>
+	</body>
+</html>
