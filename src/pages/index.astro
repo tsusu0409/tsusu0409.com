@@ -9,6 +9,8 @@ import { Image } from 'astro:assets';
 
 import { fetchAndProcessRSS } from "../lib/fetchAndProcessRSS";
 
+import GymKusa from "@/components/GymKusa.astro";
+
 // 画像のインポート
 import profIcon from '../../public/images/prof-icon.png';
 import musicIcon from '../../public/images/music.svg';
@@ -103,25 +105,14 @@ const allActivities = await Astro.glob('../content/activity/*.md');
 				<Btn name="Blogs" slug="blog"/>
 			</div>
 
-			<div class="my-20 pb-8">
-				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
-					<h2 class="text-xl sm:text-2xl font-geo font-thin">Recent Activities</h2>
-					<div class="mx-6">
-						{[...allActivities].reverse().slice(0, 3).map((activity:any) => (
-							<ActivityDialog
-							client:load
-							title={activity.frontmatter.title}
-							description={activity.frontmatter.description}
-							startDate={activity.frontmatter.startDate}
-							endDate={activity.frontmatter.endDate}
-							>
-								<activity.Content />
-							</ActivityDialog>
-						))}
-					</div>
-				</div>
-				<Btn name="Activiies" slug="activity"/>
-			</div>
+      <div class="my-20 pb-8">
+        <div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
+          <h2 class="text-xl sm:text-2xl font-geo font-thin">Gym Kusa</h2>
+          <div class="mx-6">
+            <GymKusa />
+          </div>
+        </div>
+      </div>
 
 			<div class="my-20 pb-8">
 				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
