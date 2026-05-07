@@ -6,11 +6,9 @@ interface Entry {
   treadmill_km: number;
 }
 
-// 同一日は合算 午前4時までは前日扱い
 const kmByDate: Record<string, number> = {};
 (gymStats as Entry[]).forEach((entry) => {
   const utc = new Date(entry.date);
-  // JST = UTC+9、さらに4時間前にずらして「4時未満は前日」を実現
   const jstShifted = new Date(utc.getTime() + (9 - 4) * 60 * 60 * 1000);
   const key = jstShifted.toISOString().slice(0, 10);
   kmByDate[key] = Math.round(((kmByDate[key] ?? 0) + entry.treadmill_km) * 10) / 10;
@@ -72,11 +70,11 @@ const maxKm = allKm.length > 0 ? Math.max(...allKm) : 0;
 function kmToColorClass(km: number, isFuture: boolean): string {
   if (isFuture) return 'bg-neutral-100';
   if (km === 0)  return 'bg-neutral-200';
-  if (km < 2.5)  return 'bg-green-200';  // ~3.0km
-  if (km < 3.5)    return 'bg-green-300';  // ~4.5km
-  if (km < 5)  return 'bg-green-500';  // ~6.0km
-  if (km < 6.5)    return 'bg-green-700';  // ~7.5km
-  return           'bg-green-900';        // 9km~
+  if (km < 3.5)  return 'bg-green-200';
+  if (km < 5)    return 'bg-green-300';
+  if (km < 6.5)  return 'bg-green-500';
+  if (km < 9)    return 'bg-green-700';
+  return           'bg-green-900';
 }
 
 const DAYS_JA = ['日','月','火','水','木','金','土'];
@@ -84,93 +82,101 @@ const CELL_SIZE = 13;
 const CELL_GAP  = 3;
 ---
 
-<section class="py-6 font-mono">
+<section class="py-4 sm:py-6 font-mono w-full">
 
-  <div class="flex gap-8 mb-5">
+  <div class="grid grid-cols-2 gap-3 mb-5 sm:flex sm:gap-8">
     <div>
-      <p class="text-2xl font-medium text-neutral-900 leading-none">
-        {totalKm.toFixed(1)}<span class="text-sm font-normal text-neutral-400 ml-1">km</span>
+      <p class="text-xl sm:text-2xl font-medium text-neutral-900 leading-none">
+        {totalKm.toFixed(1)}<span class="text-xs sm:text-sm font-normal text-neutral-400 ml-1">km</span>
       </p>
-      <p class="text-xs text-neutral-400 mt-1">過去1年の走行距離</p>
+      <p class="text-[10px] sm:text-xs text-neutral-400 mt-1">過去1年の走行距離</p>
     </div>
     <div>
-      <p class="text-2xl font-medium text-neutral-900 leading-none">{activeDays}</p>
-      <p class="text-xs text-neutral-400 mt-1">ジム訪問日数</p>
+      <p class="text-xl sm:text-2xl font-medium text-neutral-900 leading-none">{activeDays}</p>
+      <p class="text-[10px] sm:text-xs text-neutral-400 mt-1">ジム訪問日数</p>
     </div>
     <div>
-      <p class="text-2xl font-medium text-neutral-900 leading-none">
-        {maxKm.toFixed(1)}<span class="text-sm font-normal text-neutral-400 ml-1">km</span>
+      <p class="text-xl sm:text-2xl font-medium text-neutral-900 leading-none">
+        {maxKm.toFixed(1)}<span class="text-xs sm:text-sm font-normal text-neutral-400 ml-1">km</span>
       </p>
-      <p class="text-xs text-neutral-400 mt-1">最長距離 / 日</p>
+      <p class="text-[10px] sm:text-xs text-neutral-400 mt-1">最長距離 / 日</p>
     </div>
   </div>
 
-  <div class="overflow-x-auto">
+  <div id="gym-kusa-wrapper" class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+    <div class="min-w-max">
 
-    <div class="flex mb-1 pl-[22px]">
-      {monthLabels.map((ml) => {
-        const width = ml.spanWeeks * (CELL_SIZE + CELL_GAP) - CELL_GAP;
-        return (
-          <div
-            style={`width:${width}px; flex-shrink:0;`}
-            class="text-[10px] text-neutral-400 overflow-hidden"
-          >
-            {ml.label}
-          </div>
-        );
-      })}
-    </div>
-
-    <div class="flex">
-
-      <div class="flex flex-col gap-[3px] mr-1 shrink-0">
-        {DAYS_JA.map((d, i) => (
-          <div class="text-[10px] text-neutral-400 h-[13px] leading-[13px] w-[18px] text-right pr-1">
-            {i % 2 === 1 ? d : ''}
-          </div>
-        ))}
+      <div class="flex mb-1 pl-[22px]">
+        {monthLabels.map((ml) => {
+          const width = ml.spanWeeks * (CELL_SIZE + CELL_GAP) - CELL_GAP;
+          return (
+            <div
+              style={`width:${width}px; flex-shrink:0;`}
+              class="text-[10px] text-neutral-400 overflow-hidden"
+            >
+              {ml.label}
+            </div>
+          );
+        })}
       </div>
 
-      <div class="flex gap-[3px]" id="gym-kusa-grid">
-        {weeks.map((week) => (
-          <div class="flex flex-col gap-[3px]">
-            {week.map((day) => (
-              <div
-                class={[
-                  'w-[13px] h-[13px] rounded-sm cursor-pointer transition-opacity hover:opacity-70',
-                  kmToColorClass(day.km, day.isFuture),
-                ].join(' ')}
-                data-date={day.key}
-                data-km={day.km}
-                aria-label={day.km > 0 ? `${day.key}: ${day.km.toFixed(1)}km` : `${day.key}: rest`}
-              />
-            ))}
-          </div>
-        ))}
+      <div class="flex">
+        <div class="flex flex-col gap-[3px] mr-1 shrink-0">
+          {DAYS_JA.map((d, i) => (
+            <div class="text-[10px] text-neutral-400 h-[13px] leading-[13px] w-[18px] text-right pr-1">
+              {i % 2 === 1 ? d : ''}
+            </div>
+          ))}
+        </div>
+
+        <div class="flex gap-[3px]" id="gym-kusa-grid">
+          {weeks.map((week) => (
+            <div class="flex flex-col gap-[3px]">
+              {week.map((day) => (
+                <div
+                  class={[
+                    'w-[13px] h-[13px] rounded-sm cursor-pointer transition-opacity hover:opacity-70',
+                    kmToColorClass(day.km, day.isFuture),
+                  ].join(' ')}
+                  data-date={day.key}
+                  data-km={day.km}
+                  aria-label={day.km > 0 ? `${day.key}: ${day.km.toFixed(1)}km` : `${day.key}: rest`}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
+
     </div>
   </div>
 
-  <div class="flex items-center gap-1.5 mt-3 text-[11px] text-neutral-400">
+  <div class="flex items-center gap-1.5 mt-3 text-[10px] sm:text-[11px] text-neutral-400">
     <span>少ない</span>
-    <div class="w-[13px] h-[13px] rounded-sm bg-neutral-200" />
-    <div class="w-[13px] h-[13px] rounded-sm bg-green-200" />
-    <div class="w-[13px] h-[13px] rounded-sm bg-green-400" />
-    <div class="w-[13px] h-[13px] rounded-sm bg-green-600" />
-    <div class="w-[13px] h-[13px] rounded-sm bg-green-800" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-neutral-200" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-green-200" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-green-300" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-green-500" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-green-700" />
+    <div class="w-[11px] h-[11px] sm:w-[13px] sm:h-[13px] rounded-sm bg-green-900" />
     <span>多い</span>
     <span class="ml-2 text-neutral-300">km / day</span>
   </div>
 
 </section>
 
-<!-- ツールチップはsectionの外・fixed配置で常に最前面 -->
 <div
   id="gym-kusa-tooltip"
   class="fixed hidden z-50 pointer-events-none bg-white border border-neutral-200 rounded-md px-3 py-1.5 text-xs text-neutral-700 whitespace-nowrap shadow-sm"
 />
 
 <script>
+  // 初期表示を右端（最新日）にスクロール
+  const wrapper = document.getElementById('gym-kusa-wrapper');
+  if (wrapper) {
+    wrapper.scrollLeft = wrapper.scrollWidth;
+  }
+
   const grid = document.getElementById('gym-kusa-grid');
   const tooltip = document.getElementById('gym-kusa-tooltip');
 
