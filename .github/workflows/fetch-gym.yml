@@ -1,0 +1,32 @@
+name: Fetch Gym Checkins
+
+on:
+  schedule:
+    - cron: '0 19 * * *'  # UTC 19:00 = JST 04:00
+  workflow_dispatch:       # 手動実行も可能
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch gym checkins
+        run: node src/scripts/fetch-gym.mjs
+        env:
+          FSQ_OAUTH_TOKEN: ${{ secrets.FSQ_OAUTH_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/gym-checkins.json
+          git diff --cached --quiet || git commit -m "chore: update gym checkins [skip ci]"
+          git push
