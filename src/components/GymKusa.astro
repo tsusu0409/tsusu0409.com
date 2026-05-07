@@ -70,10 +70,10 @@ const maxKm = allKm.length > 0 ? Math.max(...allKm) : 0;
 function kmToColorClass(km: number, isFuture: boolean): string {
   if (isFuture) return 'bg-neutral-100';
   if (km === 0)  return 'bg-neutral-200';
-  if (km < 3.5)  return 'bg-green-200';
-  if (km < 5)    return 'bg-green-300';
-  if (km < 6.5)  return 'bg-green-500';
-  if (km < 9)    return 'bg-green-700';
+  if (km < 2)  return 'bg-green-200';
+  if (km < 3.5)    return 'bg-green-300';
+  if (km < 5)  return 'bg-green-500';
+  if (km < 6.5)    return 'bg-green-700';
   return           'bg-green-900';
 }
 
