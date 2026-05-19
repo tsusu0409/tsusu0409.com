@@ -48,10 +48,9 @@ if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
   process.exit(1);
 }
 
-/**
- * リフレッシュトークンから新しいアクセストークンを自動取得
- * これが自動化の要！
- */
+// 追加: 指定ミリ秒待機するヘルパー関数
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 async function getAccessToken(): Promise<string> {
   console.log('🔄 アクセストークンを取得中...');
   
@@ -79,36 +78,68 @@ async function getAccessToken(): Promise<string> {
   return data.access_token;
 }
 
-async function fetchPlaylist(playlistId: string, accessToken: string): Promise<SpotifyPlaylist> {
-  const response = await fetch(
-    `https://api.spotify.com/v1/playlists/${playlistId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+// 修正: リトライ処理を追加
+async function fetchPlaylist(playlistId: string, accessToken: string, retries = 3): Promise<SpotifyPlaylist> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
+    if (response.ok) {
+      return response.json();
+    }
+
+    // 429 Too Many Requests の場合は Retry-After ヘッダーを見て待機する
+    if (response.status === 429) {
+      const retryAfter = response.headers.get('Retry-After');
+      const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : 2000;
+      console.warn(`⚠️ [${playlistId}] レート制限(429)に達しました。${waitTime / 1000}秒待機します...`);
+      await delay(waitTime);
+      continue;
+    }
+
+    // それ以外のエラーで、まだリトライ回数が残っている場合
+    if (attempt < retries) {
+      console.warn(`⚠️ [${playlistId}] 取得失敗 (${response.status} ${response.statusText})。1秒後に再試行します (${attempt}/${retries})...`);
+      await delay(1000);
+      continue;
+    }
+
+    // 全てのリトライに失敗した場合
     throw new Error(`プレイリスト取得失敗 ${playlistId}: ${response.statusText}`);
   }
-
-  return response.json();
+  
+  throw new Error('予期せぬエラー');
 }
 
+// 修正: Promise.allを廃止し、直列（for...of）に変更
 async function fetchAllPlaylists(playlistIds: string[]) {
-  // 毎回自動で新しいアクセストークンを取得
   const accessToken = await getAccessToken();
 
-  console.log(`📝 ${playlistIds.length}個のプレイリストを取得中...`);
+  console.log(`📝 ${playlistIds.length}個のプレイリストを順番に取得中...`);
   
-  const playlists = await Promise.all(
-    playlistIds.map((id) => fetchPlaylist(id, accessToken))
-  );
+  const playlists: SpotifyPlaylist[] = [];
+  
+  for (let i = 0; i < playlistIds.length; i++) {
+    const id = playlistIds[i];
+    console.log(`⬇️  (${i + 1}/${playlistIds.length}) 取得中: ${id}`);
+    
+    const playlist = await fetchPlaylist(id, accessToken);
+    playlists.push(playlist);
+    
+    // サーバー負荷軽減のため、次のリクエストまで少し待機（最後のリクエスト後は不要）
+    if (i < playlistIds.length - 1) {
+      await delay(300);
+    }
+  }
 
   console.log('✅ 全プレイリスト取得完了');
 
-  // プレイリスト名でソート（新しい順）
   return playlists.sort((a, b) => b.name.localeCompare(a.name));
 }
 
