@@ -51,31 +51,55 @@ if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
 // 追加: 指定ミリ秒待機するヘルパー関数
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getAccessToken(): Promise<string> {
+async function getAccessToken(retries = 3): Promise<string> {
   console.log('🔄 アクセストークンを取得中...');
   
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${Buffer.from(
-        `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
-      ).toString('base64')}`
-    },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: SPOTIFY_REFRESH_TOKEN as string
-    })
-  });
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${Buffer.from(
+            `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
+          ).toString('base64')}`
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: SPOTIFY_REFRESH_TOKEN as string
+        })
+      });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`アクセストークン取得失敗: ${response.statusText} - ${error}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ アクセストークン取得成功');
+        return data.access_token;
+      }
+
+      // 失敗した場合のエラーハンドリング
+      const errorText = await response.text();
+      
+      // まだリトライできる場合
+      if (attempt < retries) {
+        console.warn(`⚠️ アクセストークン取得失敗 (${response.status})。2秒後に再試行します (${attempt}/${retries})...`);
+        await delay(2000); // 2秒待機して再試行
+        continue;
+      }
+
+      // リトライ上限に達した場合
+      throw new Error(`アクセストークン取得失敗: ${response.statusText} - ${errorText}`);
+
+    } catch (error) {
+      if (attempt < retries) {
+        console.warn(`⚠️ ネットワークエラー発生。2秒後に再試行します (${attempt}/${retries})...`);
+        await delay(2000);
+        continue;
+      }
+      throw error;
+    }
   }
-
-  const data = await response.json();
-  console.log('✅ アクセストークン取得成功');
-  return data.access_token;
+  
+  throw new Error('予期せぬエラー: トークンを取得できませんでした');
 }
 
 // 修正: リトライ処理を追加
