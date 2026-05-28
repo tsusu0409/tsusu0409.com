@@ -3,6 +3,9 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { config } from "dotenv";
+
+config({ path: new URL("../../.env", import.meta.url) });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TOKEN = process.env.FSQ_OAUTH_TOKEN;

@@ -4,8 +4,9 @@
   "version": "0.0.1",
   "scripts": {
     "fetch-spotify": "tsx src/lib/fetchSpotifyPlaylists.ts",
+    "fetch-gym": "node src/scripts/fetch-gym.mjs",
     "dev": "astro dev",
-    "build": "npm run fetch-spotify && astro build",
+    "build": "npm run fetch-spotify && npm run fetch-gym && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "start": "tsx src/lib/getSpotifyToken.ts"

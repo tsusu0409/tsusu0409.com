@@ -90,7 +90,9 @@ function parseRSSItem(item: any, isAtom: boolean = false, source: string): Artic
 function parseRSS2(jsonData: any, source: string): Article[] {
   const items = Array.isArray(jsonData.rss.channel.item)
     ? jsonData.rss.channel.item
-    : [jsonData.rss.channel.item];
+    : jsonData.rss.channel.item
+    ? [jsonData.rss.channel.item]
+    : [];
 
     const filteredItems = items.filter((item: any) => {
     if (source === "おもしろ界隈") {
@@ -106,7 +108,9 @@ function parseRSS2(jsonData: any, source: string): Article[] {
 function parseAtom(jsonData: any, source: string): Article[] {
   const entries = Array.isArray(jsonData.feed.entry)
     ? jsonData.feed.entry
-    : [jsonData.feed.entry];
+    : jsonData.feed.entry
+    ? [jsonData.feed.entry]
+    : [];
 
     const filteredEntries = entries.filter((entry: any) => {
     if (source === "おもしろ界隈") {
