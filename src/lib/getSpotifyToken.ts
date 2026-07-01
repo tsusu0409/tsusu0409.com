@@ -52,7 +52,7 @@ async function getSpotifyToken() {
     return data.access_token;
   } catch (error) {
     console.error('\n❌ エラーが発生しました:');
-    console.error(error.message);
+    console.error(error instanceof Error ? error.message : String(error));
     console.error('\n💡 確認事項:');
     console.error('  1. CLIENT_IDとCLIENT_SECRETが正しく設定されているか');
     console.error('  2. Spotify Developer Dashboardでアプリが作成されているか');

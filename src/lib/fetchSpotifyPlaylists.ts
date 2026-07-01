@@ -5,11 +5,29 @@ interface SpotifyPlaylist {
   id: string;
   name: string;
   description: string;
+  external_urls?: { spotify: string };
   images: { url: string; height: number; width: number }[];
   tracks: {
     total: number;
     items: SpotifyTrackItem[];
   };
+}
+
+interface SpotifyPlaylistSummary {
+  id: string;
+  name: string;
+  owner: {
+    id: string;
+  };
+}
+
+interface SpotifyPaging<T> {
+  items: T[];
+  next: string | null;
+}
+
+interface SpotifyCurrentUser {
+  id: string;
 }
 
 interface SpotifyTrackItem {
@@ -50,6 +68,7 @@ if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
 
 // 追加: 指定ミリ秒待機するヘルパー関数
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const MONTHLY_PLAYLIST_NAME_PATTERN = /^\d{4}\.(0[1-9]|1[0-2])$/;
 
 async function getAccessToken(retries = 3): Promise<string> {
   console.log('🔄 アクセストークンを取得中...');
@@ -102,17 +121,13 @@ async function getAccessToken(retries = 3): Promise<string> {
   throw new Error('予期せぬエラー: トークンを取得できませんでした');
 }
 
-// 修正: リトライ処理を追加
-async function fetchPlaylist(playlistId: string, accessToken: string, retries = 3): Promise<SpotifyPlaylist> {
+async function fetchSpotifyJson<T>(url: string, accessToken: string, label: string, retries = 3): Promise<T> {
   for (let attempt = 1; attempt <= retries; attempt++) {
-    const response = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     if (response.ok) {
       return response.json();
@@ -122,28 +137,89 @@ async function fetchPlaylist(playlistId: string, accessToken: string, retries = 
     if (response.status === 429) {
       const retryAfter = response.headers.get('Retry-After');
       const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : 2000;
-      console.warn(`⚠️ [${playlistId}] レート制限(429)に達しました。${waitTime / 1000}秒待機します...`);
+      console.warn(`⚠️ [${label}] レート制限(429)に達しました。${waitTime / 1000}秒待機します...`);
       await delay(waitTime);
       continue;
     }
 
     // それ以外のエラーで、まだリトライ回数が残っている場合
     if (attempt < retries) {
-      console.warn(`⚠️ [${playlistId}] 取得失敗 (${response.status} ${response.statusText})。1秒後に再試行します (${attempt}/${retries})...`);
+      console.warn(`⚠️ [${label}] 取得失敗 (${response.status} ${response.statusText})。1秒後に再試行します (${attempt}/${retries})...`);
       await delay(1000);
       continue;
     }
 
     // 全てのリトライに失敗した場合
-    throw new Error(`プレイリスト取得失敗 ${playlistId}: ${response.statusText}`);
+    const errorText = await response.text();
+    throw new Error(`Spotify API取得失敗 ${label}: ${response.status} ${response.statusText} - ${errorText}`);
   }
   
   throw new Error('予期せぬエラー');
 }
 
+// 修正: リトライ処理を追加
+async function fetchPlaylist(playlistId: string, accessToken: string): Promise<SpotifyPlaylist> {
+  return fetchSpotifyJson<SpotifyPlaylist>(
+    `https://api.spotify.com/v1/playlists/${playlistId}`,
+    accessToken,
+    playlistId
+  );
+}
+
+async function fetchCurrentUser(accessToken: string): Promise<SpotifyCurrentUser> {
+  return fetchSpotifyJson<SpotifyCurrentUser>(
+    'https://api.spotify.com/v1/me',
+    accessToken,
+    'current user'
+  );
+}
+
+async function fetchMonthlyPlaylistIds(accessToken: string): Promise<string[]> {
+  const currentUser = await fetchCurrentUser(accessToken);
+  const matchedPlaylists: SpotifyPlaylistSummary[] = [];
+  let url: string | null = 'https://api.spotify.com/v1/me/playlists?limit=50';
+
+  console.log('🔎 自分のプレイリスト一覧から YYYY.MM 形式のものを検索中...');
+
+  while (url) {
+    const page: SpotifyPaging<SpotifyPlaylistSummary> = await fetchSpotifyJson(
+      url,
+      accessToken,
+      'playlists'
+    );
+
+    matchedPlaylists.push(
+      ...page.items.filter((playlist: SpotifyPlaylistSummary) =>
+        playlist.owner.id === currentUser.id &&
+        MONTHLY_PLAYLIST_NAME_PATTERN.test(playlist.name)
+      )
+    );
+
+    url = page.next;
+
+    if (url) {
+      await delay(300);
+    }
+  }
+
+  const sortedPlaylists = matchedPlaylists.sort((a, b) => b.name.localeCompare(a.name));
+
+  console.log(`✅ 対象プレイリスト検出完了: ${sortedPlaylists.length}件`);
+  sortedPlaylists.forEach((playlist) => {
+    console.log(`   - ${playlist.name} (${playlist.id})`);
+  });
+
+  return sortedPlaylists.map((playlist) => playlist.id);
+}
+
 // 修正: Promise.allを廃止し、直列（for...of）に変更
-async function fetchAllPlaylists(playlistIds: string[]) {
+async function fetchAllPlaylists() {
   const accessToken = await getAccessToken();
+  const playlistIds = await fetchMonthlyPlaylistIds(accessToken);
+
+  if (playlistIds.length === 0) {
+    throw new Error('YYYY.MM 形式の自分のプレイリストが見つかりませんでした');
+  }
 
   console.log(`📝 ${playlistIds.length}個のプレイリストを順番に取得中...`);
   
@@ -167,26 +243,8 @@ async function fetchAllPlaylists(playlistIds: string[]) {
   return playlists.sort((a, b) => b.name.localeCompare(a.name));
 }
 
-const PLAYLIST_IDS = [
-  '1RecDsW9VByr3mXHzyPo3O', // 2026.05
-  '2vpIXIMzsTVtrebSZ0JG7a', // 2026.04
-  '188TRljEPx043UgNRLxZ7s', // 2026.03
-  '2OoxJQHRlxsRUitUWGfEIx', // 2026.02
-  '5cTWIvkaXJgRpy7gcvMGzT', // 2026.01
-  '5V02xkYfmeoZ230oBI1oD2', // 2025.12
-  '2VdSLva4LVAzaeAC1GHK41', // 2025.11
-  '32DyphXHyhasqHxCh09uXw', // 2025.10
-  '00XhZfXV3F8e7ibsAFmw1C', // 2025.09
-  '5jw4FqzOmqxbAXTn7bIRMc', // 2021.07
-  '1T6EU6r6uz2RPZ9tXXVKQz', // 2021.06
-  '6VNSAff97arK3yTM5qYYKU', // 2021.05
-  '0WyYabUSqfSF4bAJDLIYS4', // 2021.04
-  '5hz4IzS85De3x5h1SJWWaS', // 2021.03
-  '6fFEvumv15aiVVwlG6gRyP', // 2021.02
-];
-
 export async function getSpotifyData() {
-  return await fetchAllPlaylists(PLAYLIST_IDS);
+  return await fetchAllPlaylists();
 }
 
 // ビルド時に実行してJSONファイルに保存
