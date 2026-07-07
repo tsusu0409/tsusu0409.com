@@ -17,9 +17,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Fetch gym checkins
-        run: node src/scripts/fetch-gym.mjs
+        run: npm run fetch-gym
         env:
           FSQ_OAUTH_TOKEN: ${{ secrets.FSQ_OAUTH_TOKEN }}
 
