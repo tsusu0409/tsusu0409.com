@@ -183,6 +183,8 @@ function getTotalDuration(playlist: Playlist): string {
       const playlistItems = document.querySelectorAll('.playlist-item');
       const playlistDetail = document.getElementById('playlist-detail');
       const emptyState = document.getElementById('empty-state');
+      const sidebar = document.querySelector('aside');
+      let sidebarScrollTimer: number | undefined;
 
       playlistItems.forEach((item) => {
         item.addEventListener('click', () => {
@@ -210,26 +212,52 @@ function getTotalDuration(playlist: Playlist): string {
           }
         });
       });
+
+      sidebar?.addEventListener('scroll', () => {
+        sidebar.classList.add('is-scrolling');
+        window.clearTimeout(sidebarScrollTimer);
+        sidebarScrollTimer = window.setTimeout(() => {
+          sidebar.classList.remove('is-scrolling');
+        }, 700);
+      });
     </script>
 
     <style>
-      aside::-webkit-scrollbar,
       main::-webkit-scrollbar {
         width: 8px;
       }
 
-      aside::-webkit-scrollbar-track,
+      aside {
+        scrollbar-width: none;
+      }
+
+      aside.is-scrolling {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(192, 192, 192) rgb(250, 250, 250);
+      }
+
+      aside::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      aside.is-scrolling::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      aside.is-scrolling::-webkit-scrollbar-track,
       main::-webkit-scrollbar-track {
         background: rgb(250, 250, 250);
       }
 
-      aside::-webkit-scrollbar-thumb,
+      aside.is-scrolling::-webkit-scrollbar-thumb,
       main::-webkit-scrollbar-thumb {
         background: rgb(192, 192, 192);
         border-radius: 4px;
       }
 
-      aside::-webkit-scrollbar-thumb:hover,
+      aside.is-scrolling::-webkit-scrollbar-thumb:hover,
       main::-webkit-scrollbar-thumb:hover {
         background: rgb(160, 160, 160);
       }
