@@ -1,0 +1,52 @@
+---
+// 自サイト記事。URL /blog/[元のファイル名]/ を維持する。Figma: POST DETAIL / Article layout
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MarkdownEnhance from '../../components/posts/MarkdownEnhance.astro';
+import { getLocalPosts } from '../../lib/getPosts';
+import { formatDate } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  return (await getLocalPosts()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={data.title} description={data.description || undefined} image={data.thumb} type="article" gap="gap-12">
+  <a href="/blog/" class="text-caption w-fit text-muted hover:underline">POSTS / ARTICLE</a>
+
+  <header class="flex flex-col gap-5">
+    <h1 class="text-heading font-bold">{data.title}</h1>
+    <time class="text-caption text-muted" datetime={data.date}>{formatDate(data.date)}</time>
+    {data.tags.length > 0 && (
+      <ul class="text-caption flex flex-wrap gap-x-4 text-link">
+        {data.tags.map((tag) => <li>#{tag}</li>)}
+      </ul>
+    )}
+  </header>
+
+  <div class="flex items-start gap-16">
+    <article class="flex w-[800px] flex-none flex-col gap-8">
+      <div class="markdown">
+        <Content />
+      </div>
+      <hr class="border-line" />
+      <a href="/blog/" class="text-link w-fit font-medium text-link hover:underline">← POSTSに戻る</a>
+    </article>
+
+    {toc.length > 0 && (
+      <nav class="sticky top-6 flex w-64 flex-col gap-4" aria-label="目次">
+        <p class="text-label font-medium text-muted">ON THIS PAGE</p>
+        {toc.map((h) => (
+          <a href={`#${h.slug}`} class:list={['text-small text-link hover:underline', h.depth === 3 && 'pl-4']}>{h.text}</a>
+        ))}
+      </nav>
+    )}
+  </div>
+
+  <MarkdownEnhance />
+</BaseLayout>

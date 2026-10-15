@@ -1,0 +1,83 @@
+---
+// Recipes一覧（A案）。?category=rice 等で絞り込み状態を復元する。Figma: RECIPES / Index · Selected A
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { RECIPE_CATEGORIES } from '../../content.config';
+import { isPublished } from '../../lib/getPosts';
+
+const recipes = (await getCollection('recipes', isPublished)).sort((a, b) =>
+  b.data.publishedDate.localeCompare(a.data.publishedDate) || a.data.title.localeCompare(b.data.title, 'ja'),
+);
+const categories = [
+  { key: 'all', label: 'ALL', count: recipes.length },
+  ...Object.entries(RECIPE_CATEGORIES).map(([key, label]) => ({
+    key,
+    label,
+    count: recipes.filter((r) => r.data.category === key).length,
+  })),
+];
+---
+
+<BaseLayout title="Recipes" description="自炊で作っている料理のレシピをまとめています。">
+  <section class="flex flex-col gap-6">
+    <h1 class="text-sub font-medium">RECIPES</h1>
+    <p class="text-body text-muted">自炊で作っている料理のレシピをまとめています。</p>
+  </section>
+
+  {recipes.length === 0 ? (
+    <p class="text-small bg-paper p-8 text-muted">公開中のレシピはまだありません。</p>
+  ) : (
+    <>
+      <nav class="text-link flex gap-10 font-medium" aria-label="カテゴリ">
+        {categories.map((c) =>
+          c.count ? (
+            <a
+              href={c.key === 'all' ? '/recipes/' : `/recipes/?category=${c.key}`}
+              data-category-link={c.key}
+              class="whitespace-pre text-muted underline-offset-4 hover:text-ink aria-[current=true]:text-ink aria-[current=true]:underline"
+              aria-current={c.key === 'all' ? 'true' : undefined}
+            >{`${c.label}  /  ${c.count}`}</a>
+          ) : (
+            <span class="whitespace-pre text-muted opacity-40">{`${c.label}  /  0`}</span>
+          )
+        )}
+      </nav>
+
+      <div class="grid grid-cols-3 gap-8">
+        {recipes.map(({ id, data }) => (
+          <a href={`/recipes/${id}/`} class="group flex flex-col bg-paper" data-category={data.category}>
+            <img src={data.image} alt={data.imageAlt} loading="lazy" class="aspect-video w-full object-cover" />
+            <div class="flex flex-col gap-3 p-6">
+              <p class="text-label font-medium text-muted">{RECIPE_CATEGORIES[data.category]}</p>
+              <h2 class="text-sub font-medium group-hover:underline">{data.title}</h2>
+              <p class="text-small min-h-16 text-muted">{data.description}</p>
+              {data.mainIngredients.length > 0 && <p class="text-caption text-muted">{data.mainIngredients.join('・')}</p>}
+              <p class="text-caption text-muted">{data.cookMinutes}分 / {data.servings}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</BaseLayout>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-category-link]');
+
+  function show(category: string | null) {
+    const valid = [...links].some((a) => a.dataset.categoryLink === category) ? category! : 'all';
+    cards.forEach((card) => (card.hidden = valid !== 'all' && card.dataset.category !== valid));
+    links.forEach((a) => (a.dataset.categoryLink === valid ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+  }
+
+  links.forEach((a) =>
+    a.addEventListener('click', (event) => {
+      event.preventDefault();
+      history.pushState(null, '', a.href);
+      show(a.dataset.categoryLink!);
+    }),
+  );
+  window.addEventListener('popstate', () => show(new URLSearchParams(location.search).get('category')));
+  show(new URLSearchParams(location.search).get('category'));
+</script>

@@ -1,27 +1,5 @@
 {
-  "include": [
-    ".astro/types.d.ts",
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "astro.config.mjs",
-    "src/pages/rss.xml.js"
-  ],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true
-  }
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "node_modules"]
 }

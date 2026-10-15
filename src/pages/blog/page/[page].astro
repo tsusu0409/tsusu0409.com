@@ -1,0 +1,15 @@
+---
+import PostsIndex from '../../../components/posts/PostsIndex.astro';
+import { getAllPosts } from '../../../lib/getPosts';
+import { pageCount, paginate } from '../../../lib/posts';
+
+// 1ページ目は /blog/。2ページ目以降のうち実在する番号だけを生成する。
+export async function getStaticPaths() {
+  const pages = pageCount((await getAllPosts()).length);
+  return Array.from({ length: pages - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+
+const page = paginate(await getAllPosts(), Number(Astro.params.page));
+---
+
+<PostsIndex page={page} />

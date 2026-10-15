@@ -1,0 +1,46 @@
+---
+// POSTS一覧の1ページ分（/blog/ と /blog/page/[n]/ で共用）。Figma: POSTS / Index · 12 articles, Pagination
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from './PostCard.astro';
+import { pageHref, paginate, type Post } from '../../lib/posts';
+
+interface Props {
+  page: ReturnType<typeof paginate<Post>>;
+}
+
+const { page } = Astro.props;
+const numbers = Array.from({ length: page.pages }, (_, i) => i + 1);
+const prev = page.page > 1 ? pageHref(page.page - 1) : null;
+const next = page.page < page.pages ? pageHref(page.page + 1) : null;
+const cell = 'flex size-12 items-center justify-center border border-line text-link font-medium';
+---
+
+<BaseLayout title={page.page === 1 ? 'POSTS' : `POSTS (${page.page}/${page.pages})`} description="自サイトと外部サイトに投稿した記事の一覧です。">
+  <section class="flex flex-col gap-6">
+    <h1 class="text-sub font-medium">POSTS</h1>
+    <p class="text-body">自サイトと外部サイトに投稿した記事をまとめています。</p>
+    <div class="text-small flex justify-between text-muted">
+      <p>{page.from}–{page.to} / {page.total}</p>
+      <p>新しい順</p>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-3 gap-8">
+    {page.items.map((post) => <PostCard post={post} />)}
+  </div>
+
+  {page.pages > 1 && (
+    <nav class="flex flex-col items-center gap-4" aria-label="ページ送り">
+      <div class="flex gap-3">
+        {prev ? <a href={prev} class={cell} aria-label="前のページ">←</a> : <span class:list={[cell, 'text-muted opacity-40']} aria-hidden="true">←</span>}
+        {numbers.map((n) =>
+          n === page.page
+            ? <span class:list={[cell, 'bg-blue']} aria-current="page">{n}</span>
+            : <a href={pageHref(n)} class:list={[cell, 'hover:bg-paper']}>{n}</a>
+        )}
+        {next ? <a href={next} class={cell} aria-label="次のページ">→</a> : <span class:list={[cell, 'text-muted opacity-40']} aria-hidden="true">→</span>}
+      </div>
+      <p class="text-label font-medium text-muted">{page.page} / {page.pages}</p>
+    </nav>
+  )}
+</BaseLayout>

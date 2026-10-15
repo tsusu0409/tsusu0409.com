@@ -1,0 +1,83 @@
+[
+  {
+    "id": "omoshirokaiwai.com/posts/lets_1pass",
+    "title": "パスワード管理を見直そう",
+    "description": "パスワード管理ツールを1Passwordに移行した話",
+    "publishedAt": "2026-06-03T11:41:06.000Z",
+    "href": "https://omoshirokaiwai.com/posts/lets_1pass",
+    "thumbnail": "https://assets.omoshirokaiwai.com/thumbnails/8d7a74a9-3b33-4b47-af82-9789a1010444.png",
+    "sourceName": "おもしろ界隈"
+  },
+  {
+    "id": "omoshirokaiwai.com/posts/site_update_ver3",
+    "title": "おもしろ界隈 ver3.0 アップデート",
+    "description": "おもしろ界隈のWebサイトを、なんか気合いのある感じに更新しました",
+    "publishedAt": "2026-05-07T13:26:36.000Z",
+    "href": "https://omoshirokaiwai.com/posts/site_update_ver3",
+    "thumbnail": "https://assets.omoshirokaiwai.com/thumbnails/ab0196c6-4d61-4ec4-a04b-2302fffa0347.png",
+    "sourceName": "おもしろ界隈"
+  },
+  {
+    "id": "note.com/tsusu0409/n/nf18fb6db1599",
+    "title": "2025年に買ったもの",
+    "description": "2025年もいろいろ買い物をしました。昨年に引き続き人様に見せられるものを恥ずかしげもなく公開していきます。 イベントなどでの購入品は履歴がなく拾いきれなさそうなので、この記事では主にインターネットで購入した買い切り商品を紹介します。 続き…",
+    "publishedAt": "2025-12-22T16:57:22.000Z",
+    "href": "https://note.com/tsusu0409/n/nf18fb6db1599",
+    "thumbnail": "https://assets.st-note.com/production/uploads/images/238211376/rectangle_large_type_2_b2abc1f9821cacde2230432f800cb815.jpeg?width=800",
+    "sourceName": "note"
+  },
+  {
+    "id": "zenn.dev/tsusu0409/articles/70b0072c970c68",
+    "title": "お名前.comからCloudflare Registarに、さくらのレンタルサーバーからCloudflare Pagesに移行した記録",
+    "description": "はじめに はじめまして。Tsusuといいます。 趣味でちまちまとWebを書くことが稀にあります。 昨年秋、「自分のドメインとWebサイトが欲しいぞ」と思い立ち、htmlすらも分からないままお名前.com、さくらのレンタルサーバーに登録して1…",
+    "publishedAt": "2025-10-12T07:37:08.000Z",
+    "href": "https://zenn.dev/tsusu0409/articles/70b0072c970c68",
+    "thumbnail": "https://res.cloudinary.com/zenn/image/upload/s--j98Snbb4--/c_fit%2Cg_north_west%2Cl_text:notosansjp-medium.otf_55:%25E3%2581%258A%25E5%2590%258D%25E5%2589%258D.com%25E3%2581%258B%25E3%2582%2589Cloudflare%2520Registar%25E3%2581%25AB%25E3%2580%2581%25E3%2581%2595%25E3%2581%258F%25E3%2582%2589%25E3%2581%25AE%25E3%2583%25AC%25E3%2583%25B3%25E3%2582%25BF%25E3%2583%25AB%25E3%2582%25B5%25E3%2583%25BC%25E3%2583%2590%25E3%2583%25BC%25E3%2581%258B%25E3%2582%2589Cloudflare%2520Pa...%2Cw_1010%2Cx_90%2Cy_100/g_south_west%2Cl_text:notosansjp-medium.otf_37:Tsusu%2Cx_203%2Cy_121/g_south_west%2Ch_90%2Cl_fetch:aHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSzZIOVVDblRwYjQ3QUpXMEprc0w5dFNKWVZlekc0ZkNTWG4zWlVYajVYWG9hOTdDcz1zOTYtYw==%2Cr_max%2Cw_90%2Cx_87%2Cy_95/v1627283836/default/og-base-w1200-v2.png?_a=BACMTiAE",
+    "sourceName": "Zenn"
+  },
+  {
+    "id": "omoshirokaiwai.com/posts/2025-07-07",
+    "title": "僕が初音ミクにハマったわけ",
+    "description": "Tsusu: オリジン",
+    "publishedAt": "2025-07-07T00:00:00.000Z",
+    "href": "https://omoshirokaiwai.com/posts/2025-07-07",
+    "thumbnail": "https://assets.omoshirokaiwai.com/scripts/past-pic/blogImages/2025/0707/magicalmirai2024_photo_9.jpg",
+    "sourceName": "おもしろ界隈"
+  },
+  {
+    "id": "omoshirokaiwai.com/posts/2025-06-03",
+    "title": "え～あいに任せたら簡単にWebサイトが出来てしまった話",
+    "description": "紹介と自戒と反省と",
+    "publishedAt": "2025-06-03T00:00:00.000Z",
+    "href": "https://omoshirokaiwai.com/posts/2025-06-03",
+    "thumbnail": "https://assets.omoshirokaiwai.com/thumbnails/8260e498-5fdd-49a6-a3f8-4e716acef2c8.png",
+    "sourceName": "おもしろ界隈"
+  },
+  {
+    "id": "omoshirokaiwai.com/posts/2025-06-02",
+    "title": "おもしろ界隈ブログ、始動",
+    "description": "俺たちの「おもしろ」は、外の世界へ。",
+    "publishedAt": "2025-06-02T00:00:00.000Z",
+    "href": "https://omoshirokaiwai.com/posts/2025-06-02",
+    "thumbnail": null,
+    "sourceName": "おもしろ界隈"
+  },
+  {
+    "id": "note.com/tsusu0409/n/nb86a77b52ab4",
+    "title": "2024年に買ったもの",
+    "description": "2024年に色々買い物をしたので、人様に見せられるものを開示しようと思います。 商品の表記等は雑ですが許してください。 リンクはアフィリエイトリンクではないです。 続きをみる",
+    "publishedAt": "2025-01-04T08:32:33.000Z",
+    "href": "https://note.com/tsusu0409/n/nb86a77b52ab4",
+    "thumbnail": "https://assets.st-note.com/production/uploads/images/168631798/rectangle_large_type_2_61878a2aa8719064b1d2458fa10cd342.jpeg?width=800",
+    "sourceName": "note"
+  },
+  {
+    "id": "note.com/tsusu0409/n/n18ce32b7cbc2",
+    "title": "百香亭 5選",
+    "description": "adventar.org この記事は、 jsys Advent Calendar 2024 に参加しています。 筑波大学学園祭実行委員会 情報メディアシステム局の現役やOBOGが色々書いています。 続きをみる",
+    "publishedAt": "2024-12-21T06:00:28.000Z",
+    "href": "https://note.com/tsusu0409/n/n18ce32b7cbc2",
+    "thumbnail": "https://assets.st-note.com/production/uploads/images/166598094/rectangle_large_type_2_6313fce5fccf9028b60b6c123407fb48.jpeg?width=800",
+    "sourceName": "note"
+  }
+]

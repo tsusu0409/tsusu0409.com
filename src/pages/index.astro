@@ -1,191 +1,121 @@
 ---
-import "../styles/global.css";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import Btn from "../components/Btn.astro";
-import BlogThumbnail from '../components/BlogThumbnail.astro';
-import { ActivityDialog } from '../components/ActivityDialog';
-import { Image } from 'astro:assets';
+// TOP: 名刺（First view）→ ABOUT → POSTS → CONTENTS。Figma: TOP / 01 First view, TOP / 02
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/common/Header.astro';
+import PostCard from '../components/posts/PostCard.astro';
+import { getAllPosts } from '../lib/getPosts';
 
-import { fetchAndProcessRSS } from "../lib/fetchAndProcessRSS";
+const latest = (await getAllPosts()).slice(0, 3);
 
-import GymKusa from "@/components/GymKusa.astro";
-
-// 画像のインポート
-import profIcon from '../../public/images/prof-icon.png';
-import musicIcon from '../../public/images/music.svg';
-import tsukubaLove from '../../public/images/tsukuba-love2.png';
-import noTime from '../../public/images/no-time.png';
-
-// RSSからブログの一覧取得
-const rssURLs = [
-  "https://note.com/tsusu0409/rss",
-  "https://omoshirokaiwai.com/rss.xml",
-  "https://qiita.com/tsusu0409/feed",
-  "https://zenn.dev/tsusu0409/feed",
-  "local"
+const work = [{ name: '株式会社Kaizen Platform', period: '2026.03 - now' }];
+const education = [
+  { name: '筑波大学 理工学群', period: '2023.04 - now' },
+  { name: '千葉県立東葛飾高等学校 95期生', period: '2020.04 - 2023.03' },
+  { name: '千葉県立東葛飾中学校 2期生', period: '2017.04 - 2020.03' },
 ];
-
-const posts = await fetchAndProcessRSS(rssURLs);
-
-// アクティビティの一覧取得
-const allActivities = await Astro.glob('../content/activity/*.md');
+const contents = [
+  {
+    label: 'MUSIC',
+    title: 'Playlist',
+    icon: '/images/v4/icon-music.svg',
+    text: '1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストを公開しています。',
+    href: '/playlist/',
+    cta: 'プレイリストを見る →',
+  },
+  {
+    label: 'COOKING',
+    title: 'Recipes',
+    icon: '/images/v4/icon-cooking.svg',
+    text: '普段の自炊で作っている料理のレシピをまとめています。',
+    href: '/recipes/',
+    cta: 'レシピを見る →',
+  },
+];
 ---
 
-<html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Tsusu</title>
-
-		<!-- OGPタグ -->
-		<meta property="og:title" content="Tsusu" />
-		<meta property="og:description" content="Tsusuの個人サイト" />
-		<meta property="og:image" content="https://tsusu0409.com/images/ogp.png" />
-		<meta property="og:url" content="https://tsusu0409.com/" />
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Tsusu" />
-
-		<!-- Twitterカード -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Tsusu" />
-		<meta name="twitter:description" content="Tsusuの個人サイト" />
-		<meta name="twitter:image" content="https://tsusu0409.com/images/ogp.png" />
-		<meta name="twitter:url" content="https://tsusu0409.com/" />
-
-		
-        <!-- アドセンス -->
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8366184314757569"
-        crossorigin="anonymous"></script>
-
-	</head>
-	<body>
-		<div>
-			<Header />
-
-			<div class="py-20 bg-primary">
-                <div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto relative flex flex-col sm:flex-row items-center sm:items-start gap-10 sm:gap-20">
-                    <Image 
-                        src={profIcon} 
-                        alt="Tsusuのプロフィール画像"
-                        width={160}
-                        height={160}
-                        class="h-30 w-30 sm:h-40 sm:w-40 rounded-2xl sm:rounded-4xl"
-                        loading="eager"
-                        format="webp"
-                    />
-                    <div class="pt-4 text-center sm:text-left">
-                        <p class="text-xl sm:text-2xl font-geo font-thin">Tsusu / Tsubasa KAWAGISHI</p>
-                        <p class="mt-6 text-sm sm:text-lg font-zen">
-                            筑波大学に通う学生です。<br />
-                            趣味でWebを触り始めています。AtCoder Beginner ContestやOnlineMathContestに時々参加しています。
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-			<div class="mt-6 mb-12">
-				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
-					<h2 class="text-xl sm:text-2xl font-geo font-thin">Recent Posts</h2>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-2 px-4">
-						{posts.slice(0, 3).map((post:any) => (
-							<BlogThumbnail 
-								title={post.title}
-								description={post.description}
-								link={post.link}
-								pubDate={post.pubDate}
-								webSite={post.source}
-								thumbLink={post.thumb}
-							/>
-						))}
-					</div>
-				</div>
-				<Btn name="Blogs" slug="blog"/>
-			</div>
-
-      <div class="my-20 pb-8">
-        <div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
-          <h2 class="text-xl sm:text-2xl font-geo font-thin">Gym Kusa</h2>
-          <div class="mx-6">
-            <GymKusa />
-          </div>
-        </div>
+<BaseLayout header={false} gap="gap-[72px]">
+  <!-- First view: 名刺 -->
+  <section class="flex min-h-[calc(100svh-48px)] flex-col">
+    <Header />
+    <div class="mt-[23px] flex min-h-[640px] bg-paper shadow-[0_16px_20px_rgba(31,56,66,0.08)]">
+      <div class="flex w-[360px] flex-none items-center justify-center bg-blue p-8">
+        <img src="/images/v4/portrait.jpg" alt="川岸 翼" width="296" height="446" class="h-[446px] w-[296px] object-cover" />
       </div>
+      <div class="flex flex-1 flex-col gap-[22px] p-[60px]">
+        <h1 class="text-[64px] leading-[1.5] font-medium">川岸 翼</h1>
+        <p class="text-[22px] leading-[1.5] text-muted">KAWAGISHI Tsubasa</p>
+        <hr class="border-line" />
+        <p class="text-label font-medium text-muted">AFFILIATION</p>
+        <p class="text-[22px] leading-[1.5]">
+          筑波大学 理工学群 応用理工学類<br />電子・量子工学主専攻<br />超ワイドギャップ半導体研究室B4
+        </p>
+        <p class="text-label font-medium text-muted">COMMUNITY</p>
+        <p class="text-[22px] leading-[1.5]">INVERHOUSE #24<br />jsys23, 24</p>
+      </div>
+    </div>
+    <div class="flex min-h-24 flex-1 items-center justify-center">
+      <a href="#about" class="p-2" aria-label="ABOUTへ移動">
+        <img src="/images/v4/chevron-down.svg" width="32" height="32" alt="" />
+      </a>
+    </div>
+  </section>
 
-			<div class="my-20 pb-8">
-				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
-					<h2 class="text-xl sm:text-2xl font-geo font-thin">Contents</h2>
-					<div class="mx-2 sm:mx-6 mt-4">
-					<a
-						href="/playlist"
-						class="block p-4 sm:p-6 text-neutral-800 transition-colors hover:bg-neutral-100"
-					>
-						<div class="flex items-center gap-4">
-						<Image
-                            src={musicIcon}
-                            alt="Music Icon"
-                            width={24}
-                            height={24}
-                            class="w-6 h-6"
-                        />
-						<div>
-							<h3 class="text-lg sm:text-xl font-semibold">Favorite Songs</h3>
-							<p class="text-sm text-neutral-600 mt-1">
-							1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストを公開しています。
-							</p>
-						</div>
-						</div>
-					</a>
-					<a
-						href="/GymKusa"
-						class="block p-4 sm:p-6 text-neutral-800 transition-colors hover:bg-neutral-100"
-					>
-						<div class="flex items-center gap-4">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6" fill="rgb(95, 95, 95)">
-							<path d="M293.006,92.625c24.891,0,45.076-20.176,45.076-45.068S317.896,2.49,293.006,2.49c-24.883,0-45.06,20.176-45.06,45.068S268.123,92.625,293.006,92.625z"/>
-							<path d="M153.846,167.987l60.642,36.187c7.539,4.506,16.734,5.316,24.952,2.214l35.916-19.348l17.03,68.695l-56.607-0.287c-9.534-0.027-18.59,4.201-24.673,11.548c-6.083,7.347-8.55,17.03-6.737,26.399l19.044,98.04c2.109,10.86,12.402,18.128,23.34,16.489l0.819-0.122c10.834-1.621,18.512-11.408,17.509-22.312l-6.449-70.247l84.74,3.156l31.576,50.244c6.51,6.581,13.962,12.176,22.102,16.612l69.567,37.999c9.744,5.037,21.745,1.429,27.096-8.149l0.384-0.671c5.333-9.561,2.144-21.623-7.208-27.306l-64.46-44.144l-39.908-85.141l-17.57-99.147l41.904-5.316l49.199,31.82c6.615,4.271,15.33,3.068,20.516-2.842l0.288-0.331c5.77-6.546,5.151-16.516-1.377-22.312l-44.022-39.142c-4.75-4.218-10.816-6.658-17.169-6.893l-94.597-6.127c-3.382-0.183-6.545,0.07-6.545,0.07c-1.412,0.121-2.842,0.296-4.262,0.531c-8,1.377-15.182,4.689-21.16,9.361l-65.532,44.196l-50.881-23.88c-7.904-4.428-17.875-1.804-22.573,5.936l-0.645,1.046c-2.318,3.843-3.033,8.436-1.952,12.785C147.213,161.948,149.993,165.686,153.846,167.987z"/>
-							<path d="M511.615,472.601c-0.131-7.591-5.866-13.919-13.405-14.799l-444.784-52.17l-3.338-0.488l3.338-19.862L79.938,227.41l51.09,7.59l5.526-35.35l-56.468-8.497c-16.376-2.467-31.706,8.654-34.452,24.987L18.086,380.104L0.279,485.918c-0.984,5.865,0.663,11.878,4.506,16.419c3.853,4.55,9.5,7.173,15.453,7.173h12.306h464.272c4.079,0,7.974-1.638,10.833-4.541c2.85-2.902,4.419-6.833,4.349-10.911L511.615,472.601z"/>
-						</svg>
-						<div>
-							<h3 class="text-lg sm:text-xl font-semibold">Gym Kusa</h3>
-							<p class="text-sm text-neutral-600 mt-1">
-							走ると生える草
-							</p>
-						</div>
-						</div>
-					</a>
-					</div>
-				</div>
-			</div>
+  <section id="about" class="flex scroll-mt-12 flex-col gap-8">
+    <h2 class="text-sub font-medium">ABOUT</h2>
+    <div class="flex items-start gap-16">
+      <div class="flex w-[296px] flex-none flex-col gap-4 bg-paper p-8">
+        <p class="text-sub font-medium">川岸翼 / Tsusu</p>
+        <p class="text-small text-muted">@tsusu0409</p>
+      </div>
+      <div class="flex w-[760px] flex-col gap-8">
+        <div class="text-body flex flex-col gap-6">
+          <p>筑波大学の学生です。</p>
+          <p>アルティメットが好きで、<br />サークルでもアルティメットをしています。</p>
+          <p>趣味でパソコンを触っています。<br />最近は千葉ロッテマリーンズが好きです。</p>
+        </div>
+        <hr class="border-line" />
+        {[{ label: 'WORK', items: work }, { label: 'EDUCATION', items: education }].map((group) => (
+          <dl class="flex flex-col gap-3">
+            <dt class="text-label font-medium text-muted">{group.label}</dt>
+            {group.items.map((item) => (
+              <dd class="flex flex-col gap-2 leading-[1.75]">
+                <span class="text-[18px] font-medium">{item.name}</span>
+                <span class="text-[16px] text-muted">{item.period}</span>
+              </dd>
+            ))}
+          </dl>
+        ))}
+      </div>
+    </div>
+  </section>
 
-			<div class="my-20">
-				<div class="w-full sm:w-4/5 px-4 sm:px-0 mx-auto">
-					<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-						<a href="https://love.tsukuba-ac.net/"><Image 
-                            src={tsukubaLove} 
-                            alt="Tsukuba Love"
-                            width={400}
-                            height={400}
-                            class="w-full h-auto object-contain"
-                            loading="lazy"
-                            format="webp"
-                        /></a>
-						<a href="https://sites.google.com/view/happy-busy/"><Image 
-                            src={noTime} 
-                            alt="No Time"
-                            width={400}
-                            height={400}
-                            class="w-full h-auto object-contain"
-                            loading="lazy"
-                            format="webp"
-                        /></a>
-					</div>
-				</div>
-			</div>
-			
-			<Footer />
-		</div>
-	</body>
-</html>
+  <section class="flex flex-col gap-8">
+    <div class="flex items-end justify-between">
+      <h2 class="text-sub font-medium">POSTS</h2>
+      <a href="/blog/" class="text-link font-medium hover:underline">ブログ一覧へ →</a>
+    </div>
+    <div class="grid grid-cols-3 gap-8">
+      {latest.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-8">
+    <h2 class="text-sub font-medium">CONTENTS</h2>
+    <div class="grid grid-cols-2 gap-8">
+      {contents.map((item) => (
+        <div class="flex flex-col gap-6 bg-paper p-8">
+          <div class="flex items-center gap-6">
+            <img src={item.icon} width="40" height="40" alt="" class="size-10 object-contain" />
+            <div class="flex flex-col gap-2 font-medium">
+              <p class="text-label text-muted">{item.label}</p>
+              <h3 class="text-sub">{item.title}</h3>
+            </div>
+          </div>
+          <p class="text-small min-h-16 text-muted">{item.text}</p>
+          <hr class="border-line" />
+          <a href={item.href} class="text-link w-fit font-medium hover:underline">{item.cta}</a>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

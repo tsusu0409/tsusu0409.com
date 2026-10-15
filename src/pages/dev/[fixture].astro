@@ -1,0 +1,20 @@
+---
+// Markdown表示検証ページ。開発サーバーでのみ生成し、本番ビルド・一覧・RSS・サイトマップには出さない。
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MarkdownEnhance from '../../components/posts/MarkdownEnhance.astro';
+
+export async function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return (await getCollection('fixtures')).map((entry) => ({ params: { fixture: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} noindex gap="gap-12">
+  <h1 class="text-heading font-bold">{entry.data.title}</h1>
+  <div class="markdown w-[800px]"><Content /></div>
+  <MarkdownEnhance />
+</BaseLayout>

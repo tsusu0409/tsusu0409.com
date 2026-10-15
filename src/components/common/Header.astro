@@ -1,0 +1,132 @@
+---
+// 共通ヘッダーと円形メニュー（Figma: Navigation / Menu button, MENU / Open · Circular overlay）
+const items = [
+  { label: 'POSTS', href: '/blog/', angle: 150 },
+  { label: 'PLAYLIST', href: '/playlist/', angle: 120 },
+  { label: 'RECIPES', href: '/recipes/', angle: 90 },
+];
+---
+
+<header class="flex h-16 items-center justify-between">
+  <a href="/" class="text-link font-medium">Tsusu</a>
+  <button
+    type="button"
+    id="menu-open"
+    class="flex size-12 cursor-pointer items-center justify-center"
+    aria-haspopup="dialog"
+    aria-controls="site-menu"
+    aria-expanded="false"
+  >
+    <img src="/images/v4/icon-menu.svg" width="24" height="24" alt="" />
+    <span class="sr-only">メニューを開く</span>
+  </button>
+</header>
+
+<dialog id="site-menu" class="menu" aria-label="メニュー">
+  <div class="menu-circle">
+    <button type="button" class="menu-close" id="menu-close" autofocus>
+      <img src="/images/v4/icon-close.svg" width="24" height="24" alt="" />
+      <span class="sr-only">メニューを閉じる</span>
+    </button>
+    <nav aria-label="メインメニュー">
+      {items.map((item) => (
+        <a href={item.href} class="menu-link" style={`--angle: ${item.angle}deg`}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
+</dialog>
+
+<style>
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+  .menu::backdrop { background: rgb(32 52 60 / 0.7); }
+
+  /* 白い円の中心 = 開閉ボタンの実中心（JSで --cx / --cy を設定）。円は clip-path で描く。 */
+  .menu-circle {
+    position: absolute;
+    left: var(--cx, calc(100vw - 184px));
+    top: var(--cy, 80px);
+    width: 560px;
+    height: 560px;
+    translate: -50% -50%;
+    background: var(--color-paper);
+    clip-path: circle(280px at 50% 50%);
+  }
+
+  .menu-close,
+  .menu-link {
+    position: absolute;
+    translate: -50% -50%;
+  }
+  .menu-close {
+    left: 50%;
+    top: 50%;
+    display: flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  /* ラベルの文字列中心を半径200pxの円周上（150°・120°・90°）に置く。y軸は下向き。 */
+  .menu-link {
+    left: calc(50% + 200px * cos(var(--angle)));
+    top: calc(50% + 200px * sin(var(--angle)));
+    white-space: nowrap;
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .menu-link:hover { color: var(--color-link); text-decoration: underline; text-underline-offset: 4px; }
+</style>
+
+<script>
+  const openButton = document.getElementById('menu-open') as HTMLButtonElement;
+  const dialog = document.getElementById('site-menu') as HTMLDialogElement;
+  const circle = dialog.querySelector('.menu-circle') as HTMLElement;
+
+  const placeCircle = () => {
+    const rect = openButton.getBoundingClientRect();
+    circle.style.setProperty('--cx', `${rect.left + rect.width / 2}px`);
+    circle.style.setProperty('--cy', `${rect.top + rect.height / 2}px`);
+  };
+
+  openButton.addEventListener('click', () => {
+    placeCircle();
+    dialog.showModal();
+    openButton.setAttribute('aria-expanded', 'true');
+    document.documentElement.style.overflow = 'hidden';
+  });
+
+  const restore = () => {
+    if (openButton.getAttribute('aria-expanded') === 'false') return;
+    openButton.setAttribute('aria-expanded', 'false');
+    document.documentElement.style.overflow = '';
+    openButton.focus();
+  };
+  const closeMenu = () => {
+    dialog.close();
+    restore();
+  };
+
+  // Escキーはネイティブのdialogが閉じるので close イベントで後始末する
+  dialog.addEventListener('close', restore);
+  // 暗い領域（円の外）をクリックしたら閉じる。clip-pathの外側はdialog自身に当たる。
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) closeMenu();
+  });
+  document.getElementById('menu-close')!.addEventListener('click', closeMenu);
+  window.addEventListener('resize', () => dialog.open && placeCircle());
+</script>

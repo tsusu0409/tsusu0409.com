@@ -1,4 +1,7 @@
+// Spotifyの月別プレイリスト（YYYY.MM）を取得して src/data/spotify-playlists.json を更新する。
+// usage: npm run data:spotify
 import dotenv from 'dotenv';
+import { pathToFileURL } from 'node:url';
 dotenv.config();
 
 interface SpotifyPlaylist {
@@ -62,7 +65,7 @@ if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REFRESH_TOKEN) {
   console.error('  SPOTIFY_REFRESH_TOKEN=...');
   console.error('');
   console.error('💡 リフレッシュトークンの取得方法:');
-  console.error('   node get-spotify-token.js を実行してください');
+  console.error('   npm run data:spotify-token を実行してください');
   process.exit(1);
 }
 
@@ -157,13 +160,22 @@ async function fetchSpotifyJson<T>(url: string, accessToken: string, label: stri
   throw new Error('予期せぬエラー');
 }
 
-// 修正: リトライ処理を追加
+// 曲一覧は100件ごとのページングなので next を最後まで辿る
 async function fetchPlaylist(playlistId: string, accessToken: string): Promise<SpotifyPlaylist> {
-  return fetchSpotifyJson<SpotifyPlaylist>(
+  const playlist = await fetchSpotifyJson<SpotifyPlaylist & { tracks: { next?: string | null } }>(
     `https://api.spotify.com/v1/playlists/${playlistId}`,
     accessToken,
     playlistId
   );
+  let next = playlist.tracks.next;
+  while (next) {
+    const page: SpotifyPaging<SpotifyTrackItem> = await fetchSpotifyJson(next, accessToken, `${playlistId} tracks`);
+    playlist.tracks.items.push(...page.items);
+    next = page.next;
+    await delay(300);
+  }
+  playlist.tracks.next = null;
+  return playlist;
 }
 
 async function fetchCurrentUser(accessToken: string): Promise<SpotifyCurrentUser> {
@@ -247,13 +259,15 @@ export async function getSpotifyData() {
   return await fetchAllPlaylists();
 }
 
-// ビルド時に実行してJSONファイルに保存
-if (import.meta.url === `file://${process.argv[1]}`) {
+// CLIとして実行されたときだけ保存する（Windowsのパスでも一致するよう pathToFileURL で比較）
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const fs = await import('fs/promises');
+  const OUTPUT = 'src/data/spotify-playlists.json';
   const data = await getSpotifyData();
-  await fs.writeFile(
-    'src/data/spotify-playlists.json',
-    JSON.stringify(data, null, 2)
-  );
-  console.log('✅ Spotifyプレイリストデータ保存完了!');
+  const tracks = data.reduce((n, p) => n + p.tracks.items.length, 0);
+  if (!data.length || !tracks) throw new Error('取得結果が空のため保存しません');
+  // 一時ファイルに書いてから置き換え、失敗時は前回データを残す
+  await fs.writeFile(`${OUTPUT}.tmp`, JSON.stringify(data, null, 2));
+  await fs.rename(`${OUTPUT}.tmp`, OUTPUT);
+  console.log(`✅ Spotifyプレイリストデータ保存完了: ${data.length}か月 / ${tracks}曲`);
 }
