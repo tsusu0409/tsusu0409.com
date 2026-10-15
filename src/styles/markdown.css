@@ -2,11 +2,12 @@
    埋め込み内の div / p / svg には余白や幅を一律に当てないよう、要素間隔は直下の子だけに付ける。 */
 @layer components {
   .markdown {
-    font-size: 20px;
+    /* 本文は旧サイトに合わせて16px / 1.8。見出し・コードは個別の値を維持する */
+    font-size: 16px;
     line-height: 1.8;
     overflow-wrap: anywhere;
 
-    & > * + * { margin-top: 24px; }
+    & > * + * { margin-top: 20px; }
     & > :is(h1, h2, h3) { margin-top: 48px; }
     & > :is(h4, h5, h6) { margin-top: 32px; }
 
@@ -33,20 +34,18 @@
     & .task-list-item input { margin-right: 12px; accent-color: var(--color-link); }
 
     & blockquote {
-      border-left: 2px solid var(--color-accent);
-      padding: 4px 0 4px 16px;
+      border-left: 3px solid var(--color-accent);
+      padding-left: 20px;
       color: var(--color-muted);
-      font-size: 18px;
-      line-height: 1.75;
-      & > * + * { margin-top: 12px; }
+      & > * + * { margin-top: 16px; }
     }
 
     & hr { border: 0; border-top: 1px solid var(--color-line); }
 
-    & table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
-    & th { background: var(--color-blue); font-weight: 500; }
+    & table { width: 100%; border-collapse: collapse; }
+    & th { background: var(--color-blue); font-weight: 400; line-height: 1.75; }
     & td { background: var(--color-paper); }
-    & :is(th, td) { padding: 12px 8px; border-bottom: 1px solid var(--color-line); vertical-align: top; }
+    & :is(th, td) { padding: 12px; border-bottom: 1px solid var(--color-line); vertical-align: top; }
 
     & :not(pre) > code {
       background: var(--color-blue);
