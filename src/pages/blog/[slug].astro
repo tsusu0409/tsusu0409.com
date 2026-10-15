@@ -1,5 +1,6 @@
 ---
 // 自サイト記事。URL /blog/[元のファイル名]/ を維持する。Figma: POST DETAIL / Article layout
+// 文字サイズは記事専用（実装計画 9.3）: タイトル30px、メタ12px、目次14/13px、戻るリンク14px。
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MarkdownEnhance from '../../components/posts/MarkdownEnhance.astro';
@@ -16,14 +17,14 @@ const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={data.title} description={data.description || undefined} image={data.thumb} type="article" gap="gap-12">
-  <a href="/blog/" class="text-caption w-fit text-muted hover:underline">POSTS / ARTICLE</a>
+<BaseLayout title={data.title} description={data.description || undefined} image={data.thumb} type="article" gap="gap-8">
+  <a href="/blog/" class="w-fit text-[12px] leading-[1.6] text-muted hover:underline">POSTS / ARTICLE</a>
 
-  <header class="flex flex-col gap-5">
-    <h1 class="text-heading font-bold">{data.title}</h1>
-    <time class="text-caption text-muted" datetime={data.date}>{formatDate(data.date)}</time>
+  <header class="flex flex-col gap-3">
+    <h1 class="text-[30px] leading-[1.5] font-bold">{data.title}</h1>
+    <time class="text-[12px] leading-[1.6] text-muted" datetime={data.date}>{formatDate(data.date)}</time>
     {data.tags.length > 0 && (
-      <ul class="text-caption flex flex-wrap gap-x-4 text-link">
+      <ul class="flex flex-wrap gap-x-4 text-[12px] leading-[1.6] text-link">
         {data.tags.map((tag) => <li>#{tag}</li>)}
       </ul>
     )}
@@ -34,15 +35,20 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       <div class="markdown">
         <Content />
       </div>
-      <hr class="border-line" />
-      <a href="/blog/" class="text-link w-fit font-medium text-link hover:underline">← POSTSに戻る</a>
+      <div class="flex flex-col gap-4">
+        <hr class="border-line" />
+        <a href="/blog/" class="w-fit text-[14px] leading-[1.6] font-medium text-link hover:underline">← POSTSに戻る</a>
+      </div>
     </article>
 
     {toc.length > 0 && (
-      <nav class="sticky top-6 flex w-64 flex-col gap-4" aria-label="目次">
-        <p class="text-label font-medium text-muted">ON THIS PAGE</p>
+      <nav class="sticky top-6 flex w-64 flex-col gap-3" aria-label="目次">
+        <p class="text-[11px] leading-[1.5] font-medium text-muted">ON THIS PAGE</p>
         {toc.map((h) => (
-          <a href={`#${h.slug}`} class:list={['text-small text-link hover:underline', h.depth === 3 && 'pl-4']}>{h.text}</a>
+          <a
+            href={`#${h.slug}`}
+            class:list={['leading-[1.7] text-link hover:underline', h.depth === 3 ? 'pl-3 text-[13px]' : 'text-[14px]']}
+          >{h.text}</a>
         ))}
       </nav>
     )}

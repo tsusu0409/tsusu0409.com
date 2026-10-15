@@ -13,8 +13,8 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={entry.data.title} noindex gap="gap-12">
-  <h1 class="text-heading font-bold">{entry.data.title}</h1>
+<BaseLayout title={entry.data.title} noindex gap="gap-8">
+  <h1 class="text-[30px] leading-[1.5] font-bold">{entry.data.title}</h1>
   <div class="markdown w-[800px]"><Content /></div>
   <MarkdownEnhance />
 </BaseLayout>

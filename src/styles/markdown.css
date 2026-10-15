@@ -2,22 +2,26 @@
    埋め込み内の div / p / svg には余白や幅を一律に当てないよう、要素間隔は直下の子だけに付ける。 */
 @layer components {
   .markdown {
-    /* 本文は旧サイトに合わせて16px / 1.8。見出し・コードは個別の値を維持する */
+    /* 記事専用の文字サイズ（実装計画 9.3）。本文16px / 1.8、コード14px / 24px */
     font-size: 16px;
     line-height: 1.8;
     overflow-wrap: anywhere;
 
-    & > * + * { margin-top: 20px; }
-    & > :is(h1, h2, h3) { margin-top: 48px; }
-    & > :is(h4, h5, h6) { margin-top: 32px; }
+    /* 余白: 章（h1/h2）の区切り32px、小節（h3〜h6）24px、見出しと本文16px（h3以下12px）、その他16px */
+    /* 見出しの直前の余白を優先するため、見出し前のルールを後に置く */
+    & > * + * { margin-top: 16px; }
+    & > :is(h1, h2) + * { margin-top: 16px; }
+    & > :is(h3, h4, h5, h6) + * { margin-top: 12px; }
+    & > * + :is(h3, h4, h5, h6) { margin-top: 24px; }
+    & > * + :is(h1, h2) { margin-top: 32px; }
 
     & :is(h1, h2, h3, h4, h5, h6) { line-height: 1.5; font-weight: 500; scroll-margin-top: 24px; }
-    & h1 { font-size: 36px; font-weight: 700; }
-    & h2 { font-size: 28px; }
-    & h3 { font-size: 24px; }
-    & h4 { font-size: 20px; }
-    & h5 { font-size: 18px; }
-    & h6 { font-size: 16px; }
+    & h1 { font-size: 30px; font-weight: 700; }
+    & h2 { font-size: 22px; }
+    & h3 { font-size: 18px; }
+    & h4 { font-size: 16px; }
+    & h5 { font-size: 15px; line-height: 1.6; }
+    & h6 { font-size: 14px; line-height: 1.6; }
 
     & a { color: var(--color-link); text-decoration: underline; text-underline-offset: 3px; }
     & strong { font-weight: 700; }
@@ -78,10 +82,10 @@
     & .footnotes {
       border-top: 1px solid var(--color-line);
       padding-top: 16px;
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1.6;
       color: var(--color-muted);
-      & h2 { font-size: 12px; margin: 0 0 8px; }
+      & h2 { font-size: 11px; margin: 0 0 8px; }
     }
 
     & .katex-display { background: var(--color-paper); padding: 24px; overflow-x: auto; }
