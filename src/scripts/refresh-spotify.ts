@@ -224,8 +224,11 @@ async function fetchMonthlyPlaylistIds(accessToken: string): Promise<string[]> {
   return sortedPlaylists.map((playlist) => playlist.id);
 }
 
+// 過去月は更新されないので、直近この件数だけ中身を取り直し、それ以外は前回データを使う
+const REFRESH_RECENT = 2;
+
 // 修正: Promise.allを廃止し、直列（for...of）に変更
-async function fetchAllPlaylists() {
+async function fetchAllPlaylists(cached: SpotifyPlaylist[]) {
   const accessToken = await getAccessToken();
   const playlistIds = await fetchMonthlyPlaylistIds(accessToken);
 
@@ -233,21 +236,22 @@ async function fetchAllPlaylists() {
     throw new Error('YYYY.MM 形式の自分のプレイリストが見つかりませんでした');
   }
 
-  console.log(`📝 ${playlistIds.length}個のプレイリストを順番に取得中...`);
-  
+  const cache = new Map(cached.map((p) => [p.id, p]));
   const playlists: SpotifyPlaylist[] = [];
-  
+
+  // playlistIds は名前の降順なので、先頭が直近の月
   for (let i = 0; i < playlistIds.length; i++) {
     const id = playlistIds[i];
-    console.log(`⬇️  (${i + 1}/${playlistIds.length}) 取得中: ${id}`);
-    
-    const playlist = await fetchPlaylist(id, accessToken);
-    playlists.push(playlist);
-    
-    // サーバー負荷軽減のため、次のリクエストまで少し待機（最後のリクエスト後は不要）
-    if (i < playlistIds.length - 1) {
-      await delay(300);
+    const hit = i >= REFRESH_RECENT ? cache.get(id) : undefined;
+    if (hit) {
+      playlists.push(hit);
+      continue;
     }
+
+    console.log(`⬇️  (${i + 1}/${playlistIds.length}) 取得中: ${id}`);
+    playlists.push(await fetchPlaylist(id, accessToken));
+    // サーバー負荷軽減のため、次のリクエストまで少し待機
+    await delay(300);
   }
 
   console.log('✅ 全プレイリスト取得完了');
@@ -255,15 +259,17 @@ async function fetchAllPlaylists() {
   return playlists.sort((a, b) => b.name.localeCompare(a.name));
 }
 
-export async function getSpotifyData() {
-  return await fetchAllPlaylists();
+export async function getSpotifyData(cached: SpotifyPlaylist[] = []) {
+  return await fetchAllPlaylists(cached);
 }
 
 // CLIとして実行されたときだけ保存する（Windowsのパスでも一致するよう pathToFileURL で比較）
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const fs = await import('fs/promises');
   const OUTPUT = 'src/data/spotify-playlists.json';
-  const data = await getSpotifyData();
+  // 前回データが無い・壊れている場合は全件取得になる
+  const cached = await fs.readFile(OUTPUT, 'utf8').then(JSON.parse).catch(() => []);
+  const data = await getSpotifyData(cached);
   const tracks = data.reduce((n, p) => n + p.tracks.items.length, 0);
   if (!data.length || !tracks) throw new Error('取得結果が空のため保存しません');
   // 一時ファイルに書いてから置き換え、失敗時は前回データを残す
