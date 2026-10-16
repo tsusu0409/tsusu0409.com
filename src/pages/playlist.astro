@@ -1,272 +1,112 @@
 ---
+// Playlist: 月ごとのSpotifyプレイリスト。初期表示はデータ内の最新月（静的HTML）、?month=YYYY.MM で切替。
+// Figma: PLAYLIST / Selected month
+import BaseLayout from '../layouts/BaseLayout.astro';
 import playlistsData from '../data/spotify-playlists.json';
-import "../styles/global.css";
+import { archiveRows, toMonths, type RawPlaylist } from '../lib/playlist';
 
-interface Playlist {
-  id: string;
-  name: string;
-  description: string;
-  images: { url: string }[];
-  external_urls: { spotify: string };
-  tracks: {
-    total: number;
-    items: Array<{
-      added_at: string;
-      track: {
-        id: string;
-        name: string;
-        duration_ms: number;
-        explicit: boolean;
-        external_urls: { spotify: string };
-        artists: Array<{ name: string; external_urls: { spotify: string } }>;
-        album: {
-          name: string;
-          images: { url: string }[];
-          external_urls: { spotify: string };
-        };
-      };
-    }>;
-  };
-}
-
-const playlists = playlistsData as Playlist[];
-
-// 再生時間のフォーマット
-function formatDuration(ms: number): string {
-  const minutes = Math.floor(ms / 60000);
-  const seconds = Math.floor((ms % 60000) / 1000);
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
-
-// プレイリストの合計時間を計算
-function getTotalDuration(playlist: Playlist): string {
-  const totalMs = playlist.tracks.items.reduce(
-    (sum, item) => sum + item.track.duration_ms,
-    0
-  );
-  const hours = Math.floor(totalMs / 3600000);
-  const minutes = Math.floor((totalMs % 3600000) / 60000);
-  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-}
+const months = toMonths(playlistsData as unknown as RawPlaylist[]);
+const rows = archiveRows(months.map((m) => m.key));
+const latest = months[0]?.key;
+// スマホ版は44pxの月ボタンを6個×2段、現在の月は濃色（Figma: Mobile / Archive month）
+const cell = 'flex size-11 items-center justify-center text-[14px] leading-[1.7] pc:h-9 pc:w-16 pc:text-[16px] pc:leading-[1.75]';
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/prof-icon.png" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Tsusu | Favorite Songs</title>
+<BaseLayout title="Playlist" description="1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストです。" gap="gap-10 pc:gap-12">
+  <h1 class="text-sub font-medium max-pc:text-[28px]">Playlist</h1>
 
-    <meta property="og:title" content="Tsusu" />
-    <meta property="og:description" content="Tsusuの個人サイト" />
-    <meta property="og:image" content="https://tsusu0409.com/images/ogp.png" />
-    <meta property="og:url" content="https://tsusu0409.com/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Tsusu" />
+  {months.length === 0 && <p class="text-body text-muted">公開中のプレイリストはありません。</p>}
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tsusu" />
-    <meta name="twitter:description" content="Tsusuの個人サイト" />
-    <meta name="twitter:image" content="https://tsusu0409.com/images/ogp.png" />
-    <meta name="twitter:url" content="https://tsusu0409.com/" />
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8366184314757569"
-      crossorigin="anonymous"></script>
-  </head>
-
-  <body class="bg-white text-black">
-    <div class="flex flex-col md:flex-row h-screen">
-      <!-- サイドバー（md以上） / モバイルでは上部として振る舞う -->
-      <aside class="w-full md:w-64 border-b md:border-b-0 md:border-r border-neutral-800 overflow-y-auto bg-white">
-        <div class="p-6">
-          <h2 class="text-xl font-bold mb-6 text-neutral-700">Favorite Songs</h2>
-
-          <!-- モバイルでは横スクロール、デスクトップでは縦並び -->
-          <nav class="flex md:block gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0">
-            {playlists.map((playlist) => (
-              <button
-                data-playlist-id={playlist.id}
-                class="playlist-item flex-shrink-0 md:flex-shrink md:w-full text-left px-4 py-3 rounded hover:bg-neutral-100 transition-colors duration-200 border-l-2 border-transparent hover:border-cyan-400"
-              >
-                <h3 class="font-medium text-neutral-800">{playlist.name}</h3>
-              </button>
+  {months.map((month) => (
+    <section class="flex flex-col gap-10 pc:flex-row pc:gap-12" data-month={month.key} hidden={month.key !== latest}>
+      <div class="flex flex-col gap-4 pc:w-80 pc:flex-none pc:gap-6">
+        <h2 class="text-sub font-medium max-pc:text-[28px]">{month.key}</h2>
+        <p class="text-small text-muted max-pc:text-[12px] max-pc:leading-[1.6]">{month.tracks.length} tracks / {month.duration}</p>
+        {month.covers.length > 0 && (
+          <div class="grid grid-cols-2">
+            {Array.from({ length: 4 }, (_, i) => month.covers[i % month.covers.length]).map((src) => (
+              <img src={src} alt="" width="160" height="160" loading="lazy" class="aspect-square w-full object-cover pc:size-40" />
             ))}
-          </nav>
-        </div>
-      </aside>
-
-      <main class="flex-1 overflow-y-auto bg-white">
-        <div id="playlist-detail" class="hidden">
-          {playlists.map((playlist) => (
-            <div
-              data-playlist-content={playlist.id}
-              class="playlist-content hidden p-6 md:p-8"
-            >
-              <div class="mb-6">
-                <h1 class="text-2xl md:text-4xl font-bold mb-2 text-neutral-900">{playlist.name}</h1>
-                <div class="flex gap-4 text-sm text-neutral-500">
-                  <span>{playlist.tracks.total} tracks</span>
-                  <span>•</span>
-                  <span>{getTotalDuration(playlist)}</span>
-                </div>
-              </div>
-
-              <!-- 画像グリッド: レスポンシブで列数を変更 -->
-              <div class="grid gap-3"
-                   style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
-                {playlist.tracks.items.map((item) => (
-                  <a
-                    href={item.track.external_urls.spotify}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group relative block w-full aspect-square shadow overflow-hidden rounded"
-                  >
-                    <!-- 各楽曲のイメージ -->
-                    <img
-                      src={item.track.album.images[0]?.url}
-                      alt={item.track.album.name}
-                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-
-                    <!-- ホバー時のオーバーレイ -->
-                    <div
-                      class="absolute inset-0 flex flex-col justify-end p-2 
-                            bg-black/70 opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-300"
-                    >
-                      <p
-                        class="text-white text-sm font-bold truncate"
-                        title={item.track.name}
-                      >
-                        {item.track.name}
-                      </p>
-                      <p
-                        class="text-neutral-300 text-xs truncate"
-                        title={item.track.artists.map((a) => a.name).join(', ')}
-                      >
-                        {item.track.artists.map((a) => a.name).join(', ')}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-
-              <div class="mt-12 mx-0 text-center">
-                <a
-                  href={playlist.external_urls?.spotify}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block bg-cyan-400 text-white font-semibold px-5 py-2 rounded-full hover:bg-cyan-500 transition-colors duration-200"
-                >
-                  このプレイリストを聴く
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <!-- 空のときの表示 -->
-        <div id="empty-state" class="flex items-center justify-center h-full text-neutral-500 p-6">
-          <div class="text-center">
-            <svg class="w-20 h-20 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-            </svg>
-            <p class="text-lg">Select a playlist to view tracks</p>
           </div>
-        </div>
-      </main>
+        )}
+        {month.spotifyUrl && (
+          <a href={month.spotifyUrl} target="_blank" rel="noopener noreferrer" class="text-action flex h-12 items-center justify-center bg-paper font-medium pc:h-auto pc:bg-blue pc:p-3 pc:hover:bg-accent">
+            Spotifyで聴く ↗
+          </a>
+        )}
+      </div>
+
+      <div class="flex flex-1 flex-col">
+        <p class="text-label font-medium text-muted max-pc:pb-4">TRACKS</p>
+        <ol>
+          {month.tracks.map((track, i) => (
+            <li class="flex items-center gap-3 border-b border-line py-3 pc:gap-6 pc:last:border-b-0">
+              <span class="text-caption w-5 flex-none text-muted pc:w-6 pc:leading-[1.75]">{String(i + 1).padStart(2, '0')}</span>
+              {track.image
+                ? <img src={track.image} alt={track.album} width="56" height="56" loading="lazy" class="size-12 flex-none object-cover pc:size-14" />
+                : <span class="size-12 flex-none bg-blue pc:size-14" aria-hidden="true"></span>}
+              <div class="flex min-w-0 flex-col gap-1">
+                {track.url
+                  ? <a href={track.url} target="_blank" rel="noopener noreferrer" class="text-action font-medium hover:underline">{track.name}</a>
+                  : <span class="text-action font-medium">{track.name}</span>}
+                <span class="text-caption text-muted pc:leading-[1.75]">{track.artists}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  ))}
+
+  <section class="flex flex-col gap-6">
+    <h2 class="text-label font-medium text-muted max-pc:text-[22px] max-pc:text-ink">ARCHIVE</h2>
+    <div class="flex flex-col gap-6 pc:gap-3">
+      {rows.map((row) =>
+        row.type === 'gap' ? (
+          <p class="w-16 text-center text-[22px] leading-[1.5] font-medium text-muted pc:w-24 pc:text-action pc:text-ink" aria-hidden="true">⋮</p>
+        ) : (
+          <div class="flex flex-col gap-3 pc:flex-row pc:items-center pc:gap-6">
+            <p class="w-16 text-center text-[14px] leading-[1.7] pc:w-24 pc:text-action pc:font-medium">{row.year}</p>
+            <div class="grid grid-cols-[repeat(6,44px)] justify-center gap-3 pc:flex">
+              {row.months.map((m) =>
+                m.enabled ? (
+                  <a
+                    href={`/playlist/?month=${m.key}`}
+                    data-month-link={m.key}
+                    class:list={[cell, 'hover:bg-paper aria-[current=true]:bg-ink aria-[current=true]:text-paper pc:text-muted pc:aria-[current=true]:bg-blue pc:aria-[current=true]:text-ink']}
+                    aria-current={m.key === latest ? 'true' : undefined}
+                    aria-label={m.key}
+                  >{m.label}</a>
+                ) : (
+                  <span class:list={[cell, 'opacity-30 pc:text-muted pc:opacity-35']} aria-hidden="true">{m.label}</span>
+                )
+              )}
+            </div>
+          </div>
+        )
+      )}
     </div>
+  </section>
+</BaseLayout>
 
-    <script>
-      const playlistItems = document.querySelectorAll('.playlist-item');
-      const playlistDetail = document.getElementById('playlist-detail');
-      const emptyState = document.getElementById('empty-state');
-      const sidebar = document.querySelector('aside');
-      let sidebarScrollTimer: number | undefined;
+<script>
+  const sections = document.querySelectorAll<HTMLElement>('[data-month]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-month-link]');
+  const latest = sections[0]?.dataset.month;
 
-      playlistItems.forEach((item) => {
-        item.addEventListener('click', () => {
-          const playlistId = item.getAttribute('data-playlist-id');
+  function show(month: string | null) {
+    const target = [...sections].some((s) => s.dataset.month === month) ? month : latest;
+    sections.forEach((s) => (s.hidden = s.dataset.month !== target));
+    links.forEach((a) => (a.dataset.monthLink === target ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+  }
 
-          // 全てのプレイリストコンテンツを非表示
-          document.querySelectorAll('.playlist-content').forEach((content) => {
-            content.classList.add('hidden');
-          });
-
-          // アクティブ状態を更新
-          playlistItems.forEach((i) => {
-            i.classList.remove('bg-neutral-100', 'border-cyan-400');
-          });
-          item.classList.add('bg-neutral-100', 'border-cyan-400');
-
-          // 選択されたプレイリストを表示
-          const selectedContent = document.querySelector(
-            `[data-playlist-content="${playlistId}"]`
-          );
-          if (selectedContent) {
-            emptyState?.classList.add('hidden');
-            playlistDetail?.classList.remove('hidden');
-            selectedContent.classList.remove('hidden');
-          }
-        });
-      });
-
-      sidebar?.addEventListener('scroll', () => {
-        sidebar.classList.add('is-scrolling');
-        window.clearTimeout(sidebarScrollTimer);
-        sidebarScrollTimer = window.setTimeout(() => {
-          sidebar.classList.remove('is-scrolling');
-        }, 700);
-      });
-    </script>
-
-    <style>
-      main::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      aside {
-        scrollbar-width: none;
-      }
-
-      aside.is-scrolling {
-        scrollbar-width: thin;
-        scrollbar-color: rgb(192, 192, 192) rgb(250, 250, 250);
-      }
-
-      aside::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-      }
-
-      aside.is-scrolling::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-
-      aside.is-scrolling::-webkit-scrollbar-track,
-      main::-webkit-scrollbar-track {
-        background: rgb(250, 250, 250);
-      }
-
-      aside.is-scrolling::-webkit-scrollbar-thumb,
-      main::-webkit-scrollbar-thumb {
-        background: rgb(192, 192, 192);
-        border-radius: 4px;
-      }
-
-      aside.is-scrolling::-webkit-scrollbar-thumb:hover,
-      main::-webkit-scrollbar-thumb:hover {
-        background: rgb(160, 160, 160);
-      }
-
-      @media (max-width: 420px) {
-        .playlist-content .grid > a {
-          min-width: 110px;
-        }
-      }
-    </style>
-  </body>
-</html>
+  links.forEach((a) =>
+    a.addEventListener('click', (event) => {
+      event.preventDefault();
+      history.pushState(null, '', a.href);
+      show(a.dataset.monthLink!);
+    }),
+  );
+  window.addEventListener('popstate', () => show(new URLSearchParams(location.search).get('month')));
+  show(new URLSearchParams(location.search).get('month'));
+</script>

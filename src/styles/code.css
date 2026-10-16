@@ -1,0 +1,73 @@
+/* コードブロック。構造は src/lib/markdown/code.mjs が生成する。Figma「Code blocks」準拠。 */
+@layer components {
+  .code-block {
+    background: var(--color-code-bg);
+    color: var(--color-code-text);
+    font-size: 12px;
+    line-height: 1.6;
+
+    & .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--color-code-bar);
+      padding: 12px;
+    }
+    & .code-meta { display: flex; gap: 16px; min-width: 0; }
+    & .code-lang { color: var(--color-code-keyword); font-weight: 500; }
+    & .code-title { font-family: var(--font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    & .code-copy {
+      flex: none;
+      font-weight: 500;
+      color: var(--color-code-text);
+      padding: 2px 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    & .code-copy:hover { background: var(--color-code-highlight); }
+    & .code-copy:focus-visible { outline: none; border-color: var(--color-accent); }
+
+    & pre { overflow-x: auto; padding: 16px 0; background: transparent !important; }
+    & pre code {
+      display: block;
+      width: max-content;
+      min-width: 100%;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 24px;
+      counter-reset: line;
+    }
+    & .line { display: inline-block; width: 100%; padding: 0 20px; }
+    & .line.highlighted { background: var(--color-code-highlight); }
+    & .line.diff-add { background: var(--color-code-add); }
+    & .line.diff-remove { background: var(--color-code-remove); }
+
+    &[data-line-numbers] .line::before {
+      counter-increment: line;
+      content: counter(line, decimal-leading-zero);
+      display: inline-block;
+      width: 32px;
+      margin-right: 16px;
+      color: var(--color-code-muted);
+      user-select: none;
+    }
+
+    & .code-footer { background: var(--color-code-bar); color: var(--color-code-muted); font-size: 11px; font-weight: 500; padding: 8px 20px; }
+
+    & pre::-webkit-scrollbar { height: 8px; }
+    & pre::-webkit-scrollbar-thumb { background: var(--color-code-muted); }
+
+    /* スマホ版（Figma: Mobile / Code block）: 1段目に言語とCOPY（44px）、2段目にファイル名 */
+    @media (width < 75rem) {
+      & .code-header { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; padding: 12px; }
+      & .code-meta { display: contents; }
+      & .code-lang { font-family: var(--font-mono); font-size: 10px; line-height: 1.5; font-weight: 400; color: var(--color-code-muted); align-self: center; }
+      & .code-copy { grid-column: 2; grid-row: 1; min-width: 44px; height: 44px; padding: 0; font-size: 11px; }
+      & .code-title { grid-column: 1 / -1; color: var(--color-code-muted); }
+      &[data-line-numbers] .line::before { font-size: 10px; }
+      & .code-footer { font-family: var(--font-mono); font-size: 10px; font-weight: 400; padding: 12px; }
+    }
+  }
+}

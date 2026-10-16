@@ -1,0 +1,50 @@
+---
+// Markdown本文の補助: KaTeXのCSS、コードのCOPYボタン、Mermaid図（図のある記事だけ遅延読み込み）
+import 'katex/dist/katex.min.css';
+---
+
+<script>
+  // COPY: コピー対象は元コードのみ（ヘッダー・行番号はDOMテキストに含まれない）
+  for (const block of document.querySelectorAll<HTMLElement>('.code-block')) {
+    const button = block.querySelector<HTMLButtonElement>('.code-copy');
+    const status = block.querySelector<HTMLElement>('.code-status');
+    const code = block.querySelector('pre code');
+    if (!button || !code) continue;
+    let timer: number | undefined;
+    button.addEventListener('click', async () => {
+      let label = 'COPIED ✓';
+      try {
+        await navigator.clipboard.writeText(code.textContent ?? '');
+      } catch {
+        label = 'FAILED';
+      }
+      button.textContent = label;
+      if (status) status.textContent = label === 'FAILED' ? 'コピーできませんでした' : 'コピーしました';
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        button.textContent = 'COPY';
+        if (status) status.textContent = '';
+      }, 2000);
+    });
+  }
+
+  // Mermaid: 失敗したら元のコード表示のまま残す
+  const diagrams = document.querySelectorAll<HTMLElement>('pre > code.language-mermaid');
+  if (diagrams.length) {
+    import('mermaid').then(async ({ default: mermaid }) => {
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', fontFamily: 'Noto Sans JP' });
+      let i = 0;
+      for (const code of diagrams) {
+        try {
+          const { svg } = await mermaid.render(`mermaid-${i++}`, code.textContent ?? '');
+          const figure = document.createElement('div');
+          figure.className = 'mermaid-diagram';
+          figure.innerHTML = svg;
+          code.parentElement!.replaceWith(figure);
+        } catch (error) {
+          console.warn('mermaid render failed', error);
+        }
+      }
+    });
+  }
+</script>

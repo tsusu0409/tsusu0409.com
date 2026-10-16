@@ -1,0 +1,36 @@
+---
+import SiteHead from '../components/common/SiteHead.astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string | null;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  /** ヘッダー・本文・フッターの間隔（Figma: PC 一覧64px / 本文48px、スマホは主に32px） */
+  gap?: string;
+  /** TOPのように名刺の中にヘッダーを置くページはfalse */
+  header?: boolean;
+}
+
+const { gap = 'gap-8 pc:gap-16', header = true, ...head } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <SiteHead {...head} />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class:list={['container-page flex flex-col pt-4 pb-8 pc:pt-12 pc:pb-16', gap]}>
+      {header && <Header />}
+      <main class:list={['flex flex-col', gap]}>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

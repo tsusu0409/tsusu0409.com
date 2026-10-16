@@ -1,190 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
 @import "tailwindcss";
-@import "tw-animate-css";
+@import "./markdown.css";
+@import "./code.css";
 
-@plugin "@tailwindcss/typography";
-
-/* 全体のスタイル */
+/* デザイントークン（Figma ver4.0） */
 @theme {
-    --color-primary: #85BCC7;
-    --font-zen: "Zen Kaku Gothic New", sans-serif;
-    --font-geo: "Geologica", sans-serif;
+  --color-mist: #F1F7F9;
+  --color-paper: #FFFFFF;
+  --color-ink: #20343C;
+  --color-muted: #546C75;
+  --color-blue: #B8DCE5;
+  --color-accent: #85BCC7;
+  --color-line: #A7C5CE;
+  --color-link: #326879;
+
+  --color-code-bg: #162932;
+  --color-code-bar: #203A46;
+  --color-code-text: #E9F1F4;
+  --color-code-muted: #96AEBB;
+  --color-code-keyword: #B5D5FF;
+  --color-code-highlight: #294959;
+  --color-code-add: #24483C;
+  --color-code-remove: #4C2D36;
+
+  --font-sans: "Noto Sans JP", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --text-label: 12px;
+  --text-label--line-height: 1.5;
+  --text-caption: 14px;
+  --text-caption--line-height: 1.6;
+  --text-small: 18px;
+  --text-small--line-height: 1.75;
+  /* Figma「link」。text-link だと --color-link の文字色になるため別名にする */
+  --text-action: 18px;
+  --text-action--line-height: 1.5;
+  --text-body: 20px;
+  --text-body--line-height: 1.8;
+  --text-sub: 24px;
+  --text-sub--line-height: 1.5;
+  --text-heading: 36px;
+  --text-heading--line-height: 1.5;
+
+  /* これ未満はスマホ版（Figma: 04 Mobile / 390px）。PC版の1120pxが余白付きで収まる幅で切り替える */
+  --breakpoint-pc: 75rem;
 }
 
-.blogPostTitle {
-    width: 60%;
-    max-width: 1080px;
-    min-width: 720px;
-    margin: 0 auto 60px auto;
-    padding-top: 40px;
+@layer base {
+  /* サイト自身のUIは角丸0 */
+  *, ::before, ::after { border-radius: 0; }
 
-    h1 {
-        font-size: 32px;
-        font-weight: 700;
+  /* スマホ版の文字サイズ。PC版と同じクラス名のまま、役割ごとの値だけ差し替える */
+  @media (width < 75rem) {
+    :root {
+      --text-label: 11px;
+      --text-caption: 12px;
+      --text-caption--line-height: 1.6;
+      --text-small: 14px;
+      --text-small--line-height: 1.7;
+      --text-action: 14px;
+      --text-action--line-height: 1.6;
+      --text-body: 16px;
+      --text-sub: 22px;
+      --text-heading: 28px;
     }
-    p {
-        margin-top: 16px;
-    }
-    .tags {
-        margin-top: -8px;
-    }
-    .tag {
-        margin-right: 12px;
-        float: left;
-        background-color: #e2e2e2;
-        border-radius: 4px;
-        padding: 0 8px;
-        font-size: 14px;
-    }
+  }
+
+  /* メニュー表示中にスクロールを止めてもスクロールバー分ずれないよう幅を確保 */
+  html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+
+  body {
+    background: var(--color-mist);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; }
 }
 
-.blogPostBody {
-    width: 60%;
-    max-width: 1080px;
-    min-width: 720px;
-    margin: 0 auto 120px auto;
-
-    * {
-        margin-bottom: 12px;
-        padding-bottom: 4px;
-    }
-    h2 {
-        font-size: 24px;
-        font-weight: 500;
-        border-bottom: 2px solid #85BCC7;
-        padding-top: 20px;
-    }
-    h3 {
-        font-size: 20px;
-        font-weight: 500;
-        padding-top: 16px;
-    }
-    h3:before {
-        content: "｜";
-        color: #0586a0;
-    }
-    p, li {
-        width: 98%;
-        margin-right: 0;
-        margin-left: auto;
-        font-size: 16px;
-    }
-    li:before {
-        content: "- "
-    }
-    ul {
-        padding-top: 12px;
-        background-color: #f1f1f1;
-        border-radius: 8px;
-        width: 95%;
-        margin: 0 auto 8px auto;
-    }
-    a {
-        color: #0586a0;
-        font-weight: 500;
-        text-decoration: underline;
-    }    
-    img {
-        width: 100%;
-        margin: 0 auto;
-        padding: 12px;
-        border: 2px solid #e2e2e2;
-    }
-
-    iframe {
-        width: 80%;
-        aspect-ratio: 16 / 9;
-        margin: 0 auto 20px auto;
-    }
-    .twitter-tweet {
-        max-width: 100%;
-        margin: 0 auto;
-    }
-    pre {
-        width: 95%;
-        margin: 0 auto;
-        border-radius: 8px;
-        padding: 4px;
-        background-color: #e2e2e2;
-        font-size: 14px;
-    }
-    blockquote {
-        width: 95%;
-        margin: 16px auto 20px auto;
-        padding: 12px 16px 12px 20px;
-        border-left: 4px solid #85BCC7;
-        border-radius: 0 8px 8px 0;
-        color: #333;
-    }
-    blockquote p {
-        width: 100%;
-        margin-bottom: 8px;
-        padding-bottom: 0;
-        font-size: 15px;
-        line-height: 1.7;
-    }
-    blockquote p:last-child {
-        margin-bottom: 0;
-    }
-    blockquote blockquote {
-        margin-top: 12px;
-        margin-bottom: 0;
-        background-color: #e8e8e8;
-        border-left-color: #0586a0;
-    }
-    .twitter-tweet{
-        margin: 8px auto;
-        padding: 8px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .blogPostTitle,
-    .blogPostBody {
-        width: 95%;
-        min-width: auto;
-        margin: 0 auto 60px auto;
-        padding-top: 20px;
-    }
-
-    .blogPostTitle h1 {
-        font-size: 18px;
-    }
-
-    .blogPostBody h2 {
-        font-size: 16px;
-    }
-
-    .blogPostBody h3 {
-        font-size: 14px;
-    }
-
-    .blogPostTitle p,
-    .blogPostBody p,
-    .blogPostBody li {
-        font-size: 14px;
-    }
-
-    .blogPostBody img {
-        width: 100%;
-        margin: 0 auto;
-        padding: 4px;
-        border: 1px solid #e2e2e2;
-    }
-
-    .blogPostBody ul {
-        padding-top: 12px;
-        padding-right: 2px;
-        background-color: #f1f1f1;
-        border-radius: 4px;
-    }
-
-    .blogPostBody blockquote {
-        width: 98%;
-        padding: 10px 12px 10px 16px;
-    }
-
-    .blogPostBody blockquote p {
-        font-size: 14px;
-    }
+/* スマホ版は左右24px。タブレット幅で1列が間延びしないよう本文幅は640pxまで */
+@utility container-page {
+  width: 100%;
+  max-width: 688px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  @media (width >= 75rem) {
+    max-width: 1120px;
+    padding-inline: 0;
+  }
 }

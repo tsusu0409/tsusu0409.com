@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/pages/blog/**'
+      - 'src/content/blog/**'
 
 jobs:
   tweet:
@@ -25,11 +25,13 @@ jobs:
       - name: Install dependencies
         run: pip install tweepy atproto
 
+      # 新規追加（A）だけを対象にする。-M で移動・改名は R として扱い、
+      # 既存記事の移行やフロントマター変更を新投稿として通知しない。draftは tweet.py 側で除外。
       - name: Detect new blog file
         id: check_new_file
         run: |
-          ADDED_FILE=$(git diff --name-status ${{ github.event.before }} ${{ github.sha }} \
-            | awk '$1 == "A" && $2 ~ /^src\/pages\/blog\/.*\.md$/ {print $2}' | head -n 1)
+          ADDED_FILE=$(git diff -M --name-status ${{ github.event.before }} ${{ github.sha }} \
+            | awk '$1 == "A" && $2 ~ /^src\/content\/blog\/.*\.md$/ {print $2}' | head -n 1)
           echo "added_file=$ADDED_FILE" >> $GITHUB_OUTPUT
 
       - name: Tweet about blog update

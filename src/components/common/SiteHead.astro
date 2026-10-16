@@ -1,0 +1,47 @@
+---
+import '@fontsource/noto-sans-jp/400.css';
+import '@fontsource/noto-sans-jp/500.css';
+import '@fontsource/noto-sans-jp/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string | null;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { title, description = 'Tsusu（川岸 翼）の個人サイト', image, type = 'website', noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | Tsusu` : 'Tsusu';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image || '/images/ogp.png', Astro.site).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" type="image/png" href="/images/prof-icon.png" />
+<link rel="alternate" type="application/rss+xml" title="Tsusuのブログ" href="/rss.xml" />
+{noindex && <meta name="robots" content="noindex" />}
+
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content="Tsusu" />
+<meta property="og:locale" content="ja_JP" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@tsusu0409" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- AdSense: 旧サイトから継続（公開前に継続要否を確定する） -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8366184314757569" crossorigin="anonymous"></script>

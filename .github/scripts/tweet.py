@@ -39,6 +39,10 @@ if __name__ == "__main__":
         sys.exit(1)
     
     filename = sys.argv[1]
+    with open(filename, 'r', encoding='utf-8') as f:
+        if re.search(r'^draft:\s*true\s*$', f.read(), re.MULTILINE):
+            print(f"Skip draft: {filename}")
+            sys.exit(0)
     title = extract_frontmatter_title(filename)
     
     if not title:

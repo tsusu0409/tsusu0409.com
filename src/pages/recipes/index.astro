@@ -1,0 +1,85 @@
+---
+// Recipes一覧（A案）。?category=rice 等で絞り込み状態を復元する。Figma: RECIPES / Index · Selected A
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { RECIPE_CATEGORIES } from '../../content.config';
+import { isPublished } from '../../lib/getPosts';
+
+const recipes = (await getCollection('recipes', isPublished)).sort((a, b) =>
+  b.data.publishedDate.localeCompare(a.data.publishedDate) || a.data.title.localeCompare(b.data.title, 'ja'),
+);
+const categories = [
+  { key: 'all', label: 'ALL', count: recipes.length },
+  ...Object.entries(RECIPE_CATEGORIES).map(([key, label]) => ({
+    key,
+    label,
+    count: recipes.filter((r) => r.data.category === key).length,
+  })),
+];
+---
+
+<BaseLayout title="Recipes" description="自炊で作っている料理のレシピをまとめています。">
+  <section class="flex flex-col gap-4 pc:gap-6">
+    <h1 class="text-sub font-medium max-pc:text-[28px]">RECIPES</h1>
+    <p class="text-body text-muted">僕の自炊レシピ群です。</p>
+  </section>
+
+  {recipes.length === 0 ? (
+    <p class="text-small bg-paper p-8 text-muted">公開中のレシピはまだありません。</p>
+  ) : (
+    <>
+      <!-- スマホ版は2列のボタン、選択中は濃色（Figma: Mobile / Recipe category） -->
+      <nav class="text-action grid grid-cols-2 gap-3 font-medium pc:flex pc:gap-10" aria-label="カテゴリ">
+        {categories.map((c) =>
+          c.count ? (
+            <a
+              href={c.key === 'all' ? '/recipes/' : `/recipes/?category=${c.key}`}
+              data-category-link={c.key}
+              class="flex h-11 items-center justify-center bg-paper underline-offset-4 aria-[current=true]:bg-ink aria-[current=true]:text-paper pc:block pc:h-auto pc:whitespace-pre pc:bg-transparent pc:text-muted pc:hover:text-ink pc:aria-[current=true]:bg-transparent pc:aria-[current=true]:text-ink pc:aria-[current=true]:underline"
+              aria-current={c.key === 'all' ? 'true' : undefined}
+            >{`${c.label}  /  ${c.count}`}</a>
+          ) : (
+            <span class="flex h-11 items-center justify-center bg-paper opacity-40 pc:block pc:h-auto pc:whitespace-pre pc:bg-transparent pc:text-muted">{`${c.label}  /  0`}</span>
+          )
+        )}
+      </nav>
+
+      <div class="grid gap-6 pc:grid-cols-3 pc:gap-8">
+        {recipes.map(({ id, data }) => (
+          <a href={`/recipes/${id}/`} class="group flex flex-col bg-paper" data-category={data.category}>
+            <img src={data.image} alt={data.imageAlt} loading="lazy" class="aspect-video w-full object-cover" />
+            <div class="flex flex-col gap-3 p-4 pc:p-6">
+              <p class="text-label font-medium text-muted">{RECIPE_CATEGORIES[data.category]}</p>
+              <h2 class="text-sub font-medium group-hover:underline max-pc:text-[18px]">{data.title}</h2>
+              <p class="text-small pc:min-h-16 pc:text-muted">{data.description}</p>
+              {data.mainIngredients.length > 0 && <p class="text-caption text-muted max-pc:text-[14px] max-pc:leading-[1.7]">{data.mainIngredients.join('・')}</p>}
+              <hr class="border-line pc:hidden" />
+              <p class="text-caption text-muted">{data.cookMinutes}分 / {data.servings}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</BaseLayout>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-category-link]');
+
+  function show(category: string | null) {
+    const valid = [...links].some((a) => a.dataset.categoryLink === category) ? category! : 'all';
+    cards.forEach((card) => (card.hidden = valid !== 'all' && card.dataset.category !== valid));
+    links.forEach((a) => (a.dataset.categoryLink === valid ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+  }
+
+  links.forEach((a) =>
+    a.addEventListener('click', (event) => {
+      event.preventDefault();
+      history.pushState(null, '', a.href);
+      show(a.dataset.categoryLink!);
+    }),
+  );
+  window.addEventListener('popstate', () => show(new URLSearchParams(location.search).get('category')));
+  show(new URLSearchParams(location.search).get('category'));
+</script>

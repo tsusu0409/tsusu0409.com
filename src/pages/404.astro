@@ -1,0 +1,20 @@
+---
+// 未知URL・廃止したGymKusa等の404。Figma: 404 / Page not found（スマホ版は中央揃えの1列）
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="ページが見つかりません" noindex>
+  <section class="flex flex-col gap-4 text-center pc:min-h-[calc(100svh-480px)] pc:flex-row pc:items-center pc:gap-16 pc:py-16 pc:text-left">
+    <div class="flex flex-col gap-4 font-medium pc:w-[360px] pc:flex-none">
+      <p class="text-[88px] leading-[1.1] text-accent pc:text-[156px] pc:leading-none pc:tracking-[-0.04em]">404</p>
+      <p class="text-label text-muted">PAGE NOT FOUND</p>
+    </div>
+    <div class="flex flex-col gap-4 pc:gap-8">
+      <div class="flex flex-col gap-4 pc:gap-6">
+        <h1 class="text-heading font-medium max-pc:text-[20px]">ページが見つかりません</h1>
+        <p class="text-body text-muted max-pc:text-[14px] max-pc:leading-[1.7]">お探しのページは、移動・削除されたか、<br />現在公開していません。</p>
+      </div>
+      <a href="/" class="text-action flex h-12 items-center justify-center bg-blue font-medium hover:bg-accent pc:block pc:h-auto pc:w-[200px] pc:px-6 pc:py-4">TOPに戻る →</a>
+    </div>
+  </section>
+</BaseLayout>
