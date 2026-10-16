@@ -1,0 +1,80 @@
+---
+// After ten seconds of hover, crossfade to the portrait over three seconds.
+---
+
+<button
+  type="button"
+  data-portrait-reveal
+  aria-label="川岸 翼のプロフィール画像"
+  aria-pressed="false"
+  class="portrait-reveal relative block h-[168px] w-28 flex-none overflow-hidden border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink pc:h-[446px] pc:w-[296px]"
+>
+  <img
+    src="/images/v4/portrait.jpg"
+    alt="川岸 翼"
+    width="296"
+    height="446"
+    draggable="false"
+    class="block size-full object-cover"
+  />
+  <img
+    src="/images/v4/portrait-reveal.jpg"
+    alt=""
+    aria-hidden="true"
+    width="296"
+    height="446"
+    draggable="false"
+    class="portrait-photo absolute inset-0 block size-full object-cover"
+  />
+  <span class="sr-only" role="status" aria-live="polite" data-portrait-status></span>
+</button>
+
+<style>
+  .portrait-reveal {
+    cursor: default;
+  }
+  .portrait-photo {
+    object-position: 20% center;
+    opacity: 0;
+    transition: opacity 3s linear;
+  }
+  .portrait-reveal[data-revealed='true'] .portrait-photo {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { createHoverToReveal } from '../../lib/hoverToReveal';
+
+  document.querySelectorAll<HTMLButtonElement>('[data-portrait-reveal]').forEach((button) => {
+    const status = button.querySelector<HTMLElement>('[data-portrait-status]')!;
+    const hover = createHoverToReveal(() => {
+      button.dataset.revealed = 'true';
+      button.setAttribute('aria-pressed', 'true');
+      button.setAttribute('aria-label', '川岸 翼の顔写真');
+      status.textContent = 'プロフィール写真に切り替わります。';
+    });
+
+    button.addEventListener('pointerenter', (event) => {
+      // Touch contact is not hover and must not start the countdown.
+      if (event.pointerType !== 'touch') hover.start();
+    });
+    button.addEventListener('pointerleave', () => hover.cancel());
+    button.addEventListener('pointercancel', () => hover.cancel());
+
+    // Keyboard focus provides the equivalent interaction without holding a key.
+    button.addEventListener('focus', () => {
+      if (button.matches(':focus-visible')) hover.start();
+    });
+    button.addEventListener('blur', () => hover.cancel());
+    button.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hover.cancel();
+    });
+    window.addEventListener('blur', () => hover.cancel());
+    window.addEventListener('pagehide', () => hover.cancel());
+    window.addEventListener('scroll', () => hover.cancel(), { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) hover.cancel();
+    });
+  });
+</script>

@@ -1,23 +1,23 @@
 ---
-// 未知URL・廃止したGymKusa等の404。Figma: 404 / Page not found
+// 未知URL・廃止したGymKusa等の404。Figma: 404 / Page not found（スマホ版は中央揃えの1列）
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="ページが見つかりません" noindex>
-  <section class="flex min-h-[calc(100svh-480px)] items-center gap-16 py-16">
-    <div class="flex w-[360px] flex-none flex-col gap-4 font-medium">
-      <p class="text-[156px] leading-none tracking-[-0.04em] text-accent">404</p>
+  <section class="flex flex-col gap-4 text-center pc:min-h-[calc(100svh-480px)] pc:flex-row pc:items-center pc:gap-16 pc:py-16 pc:text-left">
+    <div class="flex flex-col gap-4 font-medium pc:w-[360px] pc:flex-none">
+      <p class="text-[88px] leading-[1.1] text-accent pc:text-[156px] pc:leading-none pc:tracking-[-0.04em]">404</p>
       <p class="text-label text-muted">PAGE NOT FOUND</p>
     </div>
-    <div class="flex flex-col gap-8">
-      <div class="flex flex-col gap-6">
-        <h1 class="text-heading font-medium">ページが見つかりません</h1>
-        <p class="text-body text-muted">お探しのページは、移動・削除されたか、<br />現在公開していません。</p>
+    <div class="flex flex-col gap-4 pc:gap-8">
+      <div class="flex flex-col gap-4 pc:gap-6">
+        <h1 class="text-heading font-medium max-pc:text-[20px]">ページが見つかりません</h1>
+        <p class="text-body text-muted max-pc:text-[14px] max-pc:leading-[1.7]">お探しのページは、移動・削除されたか、<br />現在公開していません。</p>
       </div>
-      <a href="/" class="text-link w-[200px] bg-blue px-6 py-4 font-medium hover:bg-accent">TOPに戻る →</a>
-      <div class="text-link flex gap-10 font-medium">
-        <a href="/blog/" class="w-[120px] hover:underline">POSTS →</a>
-        <a href="/playlist/" class="w-[152px] hover:underline">PLAYLIST →</a>
+      <a href="/" class="text-action flex h-12 items-center justify-center bg-blue font-medium hover:bg-accent pc:block pc:h-auto pc:w-[200px] pc:px-6 pc:py-4">TOPに戻る →</a>
+      <div class="text-action grid grid-cols-2 gap-3 font-medium pc:flex pc:gap-10">
+        <a href="/blog/" class="flex h-11 items-center justify-center hover:underline pc:block pc:h-auto pc:w-[120px]">POSTS →</a>
+        <a href="/playlist/" class="flex h-11 items-center justify-center hover:underline pc:block pc:h-auto pc:w-[152px]">PLAYLIST →</a>
       </div>
     </div>
   </section>

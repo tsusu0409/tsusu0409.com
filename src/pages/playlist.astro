@@ -8,47 +8,48 @@ import { archiveRows, toMonths, type RawPlaylist } from '../lib/playlist';
 const months = toMonths(playlistsData as unknown as RawPlaylist[]);
 const rows = archiveRows(months.map((m) => m.key));
 const latest = months[0]?.key;
-const cell = 'flex h-9 w-16 items-center justify-center text-[16px] leading-[1.75]';
+// スマホ版は44pxの月ボタンを6個×2段、現在の月は濃色（Figma: Mobile / Archive month）
+const cell = 'flex size-11 items-center justify-center text-[14px] leading-[1.7] pc:h-9 pc:w-16 pc:text-[16px] pc:leading-[1.75]';
 ---
 
-<BaseLayout title="Playlist" description="1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストです。" gap="gap-12">
-  <h1 class="text-sub font-medium">Playlist</h1>
+<BaseLayout title="Playlist" description="1ヶ月に1度、その月にお気に入りだった楽曲をまとめたプレイリストです。" gap="gap-10 pc:gap-12">
+  <h1 class="text-sub font-medium max-pc:text-[28px]">Playlist</h1>
 
   {months.length === 0 && <p class="text-body text-muted">公開中のプレイリストはありません。</p>}
 
   {months.map((month) => (
-    <section class="flex gap-12" data-month={month.key} hidden={month.key !== latest}>
-      <div class="flex w-80 flex-none flex-col gap-6">
-        <h2 class="text-sub font-medium">{month.key}</h2>
-        <p class="text-small text-muted">{month.tracks.length} tracks / {month.duration}</p>
+    <section class="flex flex-col gap-10 pc:flex-row pc:gap-12" data-month={month.key} hidden={month.key !== latest}>
+      <div class="flex flex-col gap-4 pc:w-80 pc:flex-none pc:gap-6">
+        <h2 class="text-sub font-medium max-pc:text-[28px]">{month.key}</h2>
+        <p class="text-small text-muted max-pc:text-[12px] max-pc:leading-[1.6]">{month.tracks.length} tracks / {month.duration}</p>
         {month.covers.length > 0 && (
           <div class="grid grid-cols-2">
             {Array.from({ length: 4 }, (_, i) => month.covers[i % month.covers.length]).map((src) => (
-              <img src={src} alt="" width="160" height="160" loading="lazy" class="size-40 object-cover" />
+              <img src={src} alt="" width="160" height="160" loading="lazy" class="aspect-square w-full object-cover pc:size-40" />
             ))}
           </div>
         )}
         {month.spotifyUrl && (
-          <a href={month.spotifyUrl} target="_blank" rel="noopener noreferrer" class="text-link bg-blue p-3 text-center font-medium hover:bg-accent">
+          <a href={month.spotifyUrl} target="_blank" rel="noopener noreferrer" class="text-action flex h-12 items-center justify-center bg-paper font-medium pc:h-auto pc:bg-blue pc:p-3 pc:hover:bg-accent">
             Spotifyで聴く ↗
           </a>
         )}
       </div>
 
       <div class="flex flex-1 flex-col">
-        <p class="text-label font-medium text-muted">TRACKS</p>
+        <p class="text-label font-medium text-muted max-pc:pb-4">TRACKS</p>
         <ol>
           {month.tracks.map((track, i) => (
-            <li class="flex items-center gap-6 border-b border-line py-3 last:border-b-0">
-              <span class="text-caption w-6 text-muted leading-[1.75]">{String(i + 1).padStart(2, '0')}</span>
+            <li class="flex items-center gap-3 border-b border-line py-3 pc:gap-6 pc:last:border-b-0">
+              <span class="text-caption w-5 flex-none text-muted pc:w-6 pc:leading-[1.75]">{String(i + 1).padStart(2, '0')}</span>
               {track.image
-                ? <img src={track.image} alt={track.album} width="56" height="56" loading="lazy" class="size-14 flex-none object-cover" />
-                : <span class="size-14 flex-none bg-blue" aria-hidden="true"></span>}
+                ? <img src={track.image} alt={track.album} width="56" height="56" loading="lazy" class="size-12 flex-none object-cover pc:size-14" />
+                : <span class="size-12 flex-none bg-blue pc:size-14" aria-hidden="true"></span>}
               <div class="flex min-w-0 flex-col gap-1">
                 {track.url
-                  ? <a href={track.url} target="_blank" rel="noopener noreferrer" class="text-link font-medium hover:underline">{track.name}</a>
-                  : <span class="text-link font-medium">{track.name}</span>}
-                <span class="text-caption text-muted leading-[1.75]">{track.artists}</span>
+                  ? <a href={track.url} target="_blank" rel="noopener noreferrer" class="text-action font-medium hover:underline">{track.name}</a>
+                  : <span class="text-action font-medium">{track.name}</span>}
+                <span class="text-caption text-muted pc:leading-[1.75]">{track.artists}</span>
               </div>
             </li>
           ))}
@@ -58,26 +59,26 @@ const cell = 'flex h-9 w-16 items-center justify-center text-[16px] leading-[1.7
   ))}
 
   <section class="flex flex-col gap-6">
-    <h2 class="text-label font-medium text-muted">ARCHIVE</h2>
-    <div class="flex flex-col gap-3">
+    <h2 class="text-label font-medium text-muted max-pc:text-[22px] max-pc:text-ink">ARCHIVE</h2>
+    <div class="flex flex-col gap-6 pc:gap-3">
       {rows.map((row) =>
         row.type === 'gap' ? (
-          <p class="text-link w-24 text-center font-medium" aria-hidden="true">⋮</p>
+          <p class="w-16 text-center text-[22px] leading-[1.5] font-medium text-muted pc:w-24 pc:text-action pc:text-ink" aria-hidden="true">⋮</p>
         ) : (
-          <div class="flex items-center gap-6">
-            <p class="text-link w-24 text-center font-medium">{row.year}</p>
-            <div class="flex gap-3">
+          <div class="flex flex-col gap-3 pc:flex-row pc:items-center pc:gap-6">
+            <p class="w-16 text-center text-[14px] leading-[1.7] pc:w-24 pc:text-action pc:font-medium">{row.year}</p>
+            <div class="grid grid-cols-[repeat(6,44px)] justify-center gap-3 pc:flex">
               {row.months.map((m) =>
                 m.enabled ? (
                   <a
                     href={`/playlist/?month=${m.key}`}
                     data-month-link={m.key}
-                    class:list={[cell, 'text-muted hover:bg-paper aria-[current=true]:bg-blue aria-[current=true]:text-ink']}
+                    class:list={[cell, 'hover:bg-paper aria-[current=true]:bg-ink aria-[current=true]:text-paper pc:text-muted pc:aria-[current=true]:bg-blue pc:aria-[current=true]:text-ink']}
                     aria-current={m.key === latest ? 'true' : undefined}
                     aria-label={m.key}
                   >{m.label}</a>
                 ) : (
-                  <span class:list={[cell, 'text-muted opacity-35']} aria-hidden="true">{m.label}</span>
+                  <span class:list={[cell, 'opacity-30 pc:text-muted pc:opacity-35']} aria-hidden="true">{m.label}</span>
                 )
               )}
             </div>

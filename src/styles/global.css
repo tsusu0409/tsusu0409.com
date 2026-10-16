@@ -31,25 +31,44 @@
   --text-caption--line-height: 1.6;
   --text-small: 18px;
   --text-small--line-height: 1.75;
-  --text-link: 18px;
-  --text-link--line-height: 1.5;
+  /* Figma「link」。text-link だと --color-link の文字色になるため別名にする */
+  --text-action: 18px;
+  --text-action--line-height: 1.5;
   --text-body: 20px;
   --text-body--line-height: 1.8;
   --text-sub: 24px;
   --text-sub--line-height: 1.5;
   --text-heading: 36px;
   --text-heading--line-height: 1.5;
+
+  /* これ未満はスマホ版（Figma: 04 Mobile / 390px）。PC版の1120pxが余白付きで収まる幅で切り替える */
+  --breakpoint-pc: 75rem;
 }
 
 @layer base {
   /* サイト自身のUIは角丸0 */
   *, ::before, ::after { border-radius: 0; }
 
+  /* スマホ版の文字サイズ。PC版と同じクラス名のまま、役割ごとの値だけ差し替える */
+  @media (width < 75rem) {
+    :root {
+      --text-label: 11px;
+      --text-caption: 12px;
+      --text-caption--line-height: 1.6;
+      --text-small: 14px;
+      --text-small--line-height: 1.7;
+      --text-action: 14px;
+      --text-action--line-height: 1.6;
+      --text-body: 16px;
+      --text-sub: 22px;
+      --text-heading: 28px;
+    }
+  }
+
   /* メニュー表示中にスクロールを止めてもスクロールバー分ずれないよう幅を確保 */
   html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 
   body {
-    min-width: 1280px;
     background: var(--color-mist);
     color: var(--color-ink);
     font-family: var(--font-sans);
@@ -58,8 +77,14 @@
   :focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; }
 }
 
+/* スマホ版は左右24px。タブレット幅で1列が間延びしないよう本文幅は640pxまで */
 @utility container-page {
   width: 100%;
-  max-width: 1120px;
+  max-width: 688px;
   margin-inline: auto;
+  padding-inline: 24px;
+  @media (width >= 75rem) {
+    max-width: 1120px;
+    padding-inline: 0;
+  }
 }

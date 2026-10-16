@@ -12,35 +12,38 @@ const { page } = Astro.props;
 const numbers = Array.from({ length: page.pages }, (_, i) => i + 1);
 const prev = page.page > 1 ? pageHref(page.page - 1) : null;
 const next = page.page < page.pages ? pageHref(page.page + 1) : null;
-const cell = 'flex size-12 items-center justify-center border border-line text-link font-medium';
+// スマホ版は枠線なしの白いボタン、現在ページは濃色（Figma: Mobile / Pagination button）
+const cell = 'flex size-11 items-center justify-center text-action font-medium pc:size-12 pc:border pc:border-line';
+const plain = 'bg-paper pc:bg-transparent';
+const disabled = [plain, 'opacity-35 pc:text-muted pc:opacity-40'];
 ---
 
 <BaseLayout title={page.page === 1 ? 'POSTS' : `POSTS (${page.page}/${page.pages})`} description="自サイトと外部サイトに投稿した記事の一覧です。">
-  <section class="flex flex-col gap-6">
-    <h1 class="text-sub font-medium">POSTS</h1>
-    <p class="text-body">自サイトと外部サイトに投稿した記事をまとめています。</p>
-    <div class="text-small flex justify-between text-muted">
+  <section class="flex flex-col gap-4 pc:gap-6">
+    <h1 class="text-sub font-medium max-pc:text-[28px]">POSTS</h1>
+    <p class="text-body max-pc:text-muted">自サイトと外部サイトに投稿した記事をまとめています。</p>
+    <div class="text-small flex justify-between text-muted max-pc:text-[12px] max-pc:leading-[1.6]">
       <p>{page.from}–{page.to} / {page.total}</p>
       <p>新しい順</p>
     </div>
   </section>
 
-  <div class="grid grid-cols-3 gap-8">
+  <div class="grid gap-6 pc:grid-cols-3 pc:gap-8">
     {page.items.map((post) => <PostCard post={post} />)}
   </div>
 
   {page.pages > 1 && (
-    <nav class="flex flex-col items-center gap-4" aria-label="ページ送り">
-      <div class="flex gap-3">
-        {prev ? <a href={prev} class={cell} aria-label="前のページ">←</a> : <span class:list={[cell, 'text-muted opacity-40']} aria-hidden="true">←</span>}
+    <nav class="flex flex-col items-center gap-3 pc:gap-4" aria-label="ページ送り">
+      <div class="flex flex-wrap justify-center gap-2 pc:gap-3">
+        {prev ? <a href={prev} class:list={[cell, plain]} aria-label="前のページ">←</a> : <span class:list={[cell, disabled]} aria-hidden="true">←</span>}
         {numbers.map((n) =>
           n === page.page
-            ? <span class:list={[cell, 'bg-blue']} aria-current="page">{n}</span>
-            : <a href={pageHref(n)} class:list={[cell, 'hover:bg-paper']}>{n}</a>
+            ? <span class:list={[cell, 'bg-ink text-paper pc:bg-blue pc:text-ink']} aria-current="page">{n}</span>
+            : <a href={pageHref(n)} class:list={[cell, plain, 'pc:hover:bg-paper']}>{n}</a>
         )}
-        {next ? <a href={next} class={cell} aria-label="次のページ">→</a> : <span class:list={[cell, 'text-muted opacity-40']} aria-hidden="true">→</span>}
+        {next ? <a href={next} class:list={[cell, plain]} aria-label="次のページ">→</a> : <span class:list={[cell, disabled]} aria-hidden="true">→</span>}
       </div>
-      <p class="text-label font-medium text-muted">{page.page} / {page.pages}</p>
+      <p class="text-label font-medium text-muted max-pc:text-[12px] max-pc:leading-[1.6] max-pc:font-normal">{page.page} / {page.pages}</p>
     </nav>
   )}
 </BaseLayout>

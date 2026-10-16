@@ -3,6 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/common/Header.astro';
 import PostCard from '../components/posts/PostCard.astro';
+import PortraitReveal from '../components/common/PortraitReveal.astro';
 import { getAllPosts } from '../lib/getPosts';
 
 const latest = (await getAllPosts()).slice(0, 3);
@@ -33,54 +34,62 @@ const contents = [
 ];
 ---
 
-<BaseLayout header={false} gap="gap-[72px]">
-  <!-- First view: 名刺 -->
-  <section class="flex min-h-[calc(100svh-48px)] flex-col">
+<BaseLayout header={false} gap="gap-16 pc:gap-[72px]">
+  <!-- First view: 名刺。スマホ版は写真の横に氏名を置く（Figma: Mobile / Business card） -->
+  <section class="flex min-h-[calc(100svh-64px)] flex-col pc:min-h-[calc(100svh-48px)]">
     <Header />
-    <div class="mt-[23px] flex min-h-[640px] bg-paper shadow-[0_16px_20px_rgba(31,56,66,0.08)]">
-      <div class="flex w-[360px] flex-none items-center justify-center bg-blue p-8">
-        <img src="/images/v4/portrait.jpg" alt="川岸 翼" width="296" height="446" class="h-[446px] w-[296px] object-cover" />
+    <div class="mt-6 flex flex-col bg-paper pc:mt-[23px] pc:min-h-[640px] pc:flex-row pc:shadow-[0_16px_20px_rgba(31,56,66,0.08)]">
+      <div class="flex items-center gap-5 bg-blue p-5 pc:w-[360px] pc:flex-none pc:justify-center pc:p-8">
+        <PortraitReveal />
+        <div class="flex min-w-0 flex-col gap-2 pc:hidden">
+          <h1 class="text-[32px] leading-[1.5] font-medium">川岸 翼</h1>
+          <p class="text-[14px] leading-[1.7] text-muted">KAWAGISHI Tsubasa</p>
+        </div>
       </div>
-      <div class="flex flex-1 flex-col gap-[22px] p-[60px]">
-        <h1 class="text-[64px] leading-[1.5] font-medium">川岸 翼</h1>
-        <p class="text-[22px] leading-[1.5] text-muted">KAWAGISHI Tsubasa</p>
-        <hr class="border-line" />
-        <p class="text-label font-medium text-muted">AFFILIATION</p>
-        <p class="text-[22px] leading-[1.5]">
-          筑波大学 理工学群 応用理工学類<br />電子・量子工学主専攻<br />超ワイドギャップ半導体研究室B4
-        </p>
-        <p class="text-label font-medium text-muted">COMMUNITY</p>
-        <p class="text-[22px] leading-[1.5]">INVERHOUSE #24<br />jsys23, 24</p>
+      <div class="flex flex-1 flex-col gap-6 p-6 pc:gap-[22px] pc:p-[60px]">
+        <h1 class="text-[64px] leading-[1.5] font-medium max-pc:hidden">川岸 翼</h1>
+        <p class="text-[22px] leading-[1.5] text-muted max-pc:hidden">KAWAGISHI Tsubasa</p>
+        <hr class="border-line max-pc:hidden" />
+        <div class="flex flex-col gap-2 pc:gap-[22px]">
+          <p class="text-label font-medium text-muted">AFFILIATION</p>
+          <p class="text-[16px] leading-[1.8] pc:text-[22px] pc:leading-[1.5]">
+            筑波大学 理工学群 応用理工学類<br />電子・量子工学主専攻<br />超ワイドギャップ半導体研究室B4
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 pc:gap-[22px]">
+          <p class="text-label font-medium text-muted">COMMUNITY</p>
+          <p class="text-[16px] leading-[1.8] pc:text-[22px] pc:leading-[1.5]">INVERHOUSE #24<br />jsys23, 24</p>
+        </div>
       </div>
     </div>
-    <div class="flex min-h-24 flex-1 items-center justify-center">
-      <a href="#about" class="p-2" aria-label="ABOUTへ移動">
-        <img src="/images/v4/chevron-down.svg" width="32" height="32" alt="" />
+    <div class="flex min-h-24 flex-1 items-end justify-center pc:items-center">
+      <a href="#about" class="p-2.5 pc:p-2" aria-label="ABOUTへ移動">
+        <img src="/images/v4/chevron-down.svg" width="32" height="32" alt="" class="size-6 pc:size-8" />
       </a>
     </div>
   </section>
 
-  <section id="about" class="flex scroll-mt-12 flex-col gap-8">
+  <section id="about" class="flex scroll-mt-12 flex-col gap-6 pc:gap-8">
     <h2 class="text-sub font-medium">ABOUT</h2>
-    <div class="flex items-start gap-16">
-      <div class="flex w-[296px] flex-none flex-col gap-4 bg-paper p-8">
-        <p class="text-sub font-medium">川岸翼 / Tsusu</p>
+    <div class="flex flex-col gap-6 pc:flex-row pc:items-start pc:gap-16">
+      <div class="flex flex-col gap-2 bg-paper p-6 pc:w-[296px] pc:flex-none pc:gap-4 pc:p-8">
+        <p class="text-sub font-medium max-pc:text-[18px]">川岸翼 / Tsusu</p>
         <p class="text-small text-muted">@tsusu0409</p>
       </div>
-      <div class="flex w-[760px] flex-col gap-8">
-        <div class="text-body flex flex-col gap-6">
+      <div class="flex flex-col gap-6 pc:w-[760px] pc:gap-8">
+        <div class="text-body flex flex-col gap-4 pc:gap-6">
           <p>筑波大学の学生です。</p>
-          <p>アルティメットが好きで、<br />サークルでもアルティメットをしています。</p>
+          <p>アルティメットというマイナースポーツが好きです。</p>
           <p>趣味でパソコンを触っています。<br />最近は千葉ロッテマリーンズが好きです。</p>
         </div>
         <hr class="border-line" />
         {[{ label: 'WORK', items: work }, { label: 'EDUCATION', items: education }].map((group) => (
-          <dl class="flex flex-col gap-3">
+          <dl class="flex flex-col gap-4 pc:gap-3">
             <dt class="text-label font-medium text-muted">{group.label}</dt>
             {group.items.map((item) => (
-              <dd class="flex flex-col gap-2 leading-[1.75]">
-                <span class="text-[18px] font-medium">{item.name}</span>
-                <span class="text-[16px] text-muted">{item.period}</span>
+              <dd class="flex flex-col gap-1 pc:gap-2 pc:leading-[1.75]">
+                <span class="text-[16px] leading-[1.8] pc:text-[18px] pc:leading-[1.75] pc:font-medium">{item.name}</span>
+                <span class="text-[12px] leading-[1.6] text-muted pc:text-[16px] pc:leading-[1.75]">{item.period}</span>
               </dd>
             ))}
           </dl>
@@ -89,31 +98,30 @@ const contents = [
     </div>
   </section>
 
-  <section class="flex flex-col gap-8">
-    <div class="flex items-end justify-between">
-      <h2 class="text-sub font-medium">POSTS</h2>
-      <a href="/blog/" class="text-link font-medium hover:underline">ブログ一覧へ →</a>
-    </div>
-    <div class="grid grid-cols-3 gap-8">
+  <!-- スマホ版は「ブログ一覧へ」をカードの下に置く -->
+  <section class="grid gap-6 pc:grid-cols-[1fr_auto] pc:items-end pc:gap-8">
+    <h2 class="text-sub font-medium">POSTS</h2>
+    <a href="/blog/" class="text-action w-fit font-medium hover:underline max-pc:order-last">ブログ一覧へ →</a>
+    <div class="grid gap-6 pc:col-span-2 pc:grid-cols-3 pc:gap-8">
       {latest.map((post) => <PostCard post={post} />)}
     </div>
   </section>
 
-  <section class="flex flex-col gap-8">
+  <section class="flex flex-col gap-4 pc:gap-8">
     <h2 class="text-sub font-medium">CONTENTS</h2>
-    <div class="grid grid-cols-2 gap-8">
+    <div class="grid gap-4 pc:grid-cols-2 pc:gap-8">
       {contents.map((item) => (
-        <div class="flex flex-col gap-6 bg-paper p-8">
-          <div class="flex items-center gap-6">
-            <img src={item.icon} width="40" height="40" alt="" class="size-10 object-contain" />
-            <div class="flex flex-col gap-2 font-medium">
+        <div class="flex flex-col gap-5 bg-paper p-6 pc:gap-6 pc:p-8">
+          <div class="flex items-center gap-4 pc:gap-6">
+            <img src={item.icon} width="40" height="40" alt="" class="size-8 object-contain pc:size-10" />
+            <div class="flex flex-col gap-1 font-medium pc:gap-2">
               <p class="text-label text-muted">{item.label}</p>
-              <h3 class="text-sub">{item.title}</h3>
+              <h3 class="text-sub max-pc:text-[18px]">{item.title}</h3>
             </div>
           </div>
-          <p class="text-small min-h-16 text-muted">{item.text}</p>
+          <p class="text-small pc:min-h-16 pc:text-muted">{item.text}</p>
           <hr class="border-line" />
-          <a href={item.href} class="text-link w-fit font-medium hover:underline">{item.cta}</a>
+          <a href={item.href} class="text-action w-fit font-medium hover:underline">{item.cta}</a>
         </div>
       ))}
     </div>

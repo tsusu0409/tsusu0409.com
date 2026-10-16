@@ -107,5 +107,12 @@
     & .callout-caution { --callout-color: #A24B5A; }
 
     & .mermaid-diagram { background: var(--color-paper); padding: 24px; display: flex; justify-content: center; }
+
+    /* スマホ版（Figma: MOBILE / POST DETAIL）: 本文16pxはそのまま、見出しだけ一段小さく */
+    @media (width < 75rem) {
+      & h1 { font-size: 24px; }
+      & h2 { font-size: 20px; }
+      & :is(.katex-display, .mermaid-diagram) { padding: 16px; }
+    }
   }
 }

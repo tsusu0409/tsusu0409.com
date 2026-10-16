@@ -7,12 +7,12 @@ const items = [
 ];
 ---
 
-<header class="flex h-16 items-center justify-between">
-  <a href="/" class="text-link font-medium">Tsusu</a>
+<header class="flex h-14 items-center justify-between pc:h-16">
+  <a href="/" class="text-[18px] leading-[1.5] font-medium">Tsusu</a>
   <button
     type="button"
     id="menu-open"
-    class="flex size-12 cursor-pointer items-center justify-center"
+    class="flex size-11 cursor-pointer items-center justify-center pc:size-12"
     aria-haspopup="dialog"
     aria-controls="site-menu"
     aria-expanded="false"
@@ -52,16 +52,19 @@ const items = [
   }
   .menu::backdrop { background: rgb(32 52 60 / 0.7); }
 
-  /* 白い円の中心 = 開閉ボタンの実中心（JSで --cx / --cy を設定）。円は clip-path で描く。 */
+  /* 白い円の中心 = 開閉ボタンの実中心（JSで --cx / --cy を設定）。円は clip-path で描く。
+     PC: 円の半径280px・ラベル半径200px・24px、スマホ: 260px・184px・18px */
   .menu-circle {
+    --radius: 280px;
+    --orbit: 200px;
     position: absolute;
     left: var(--cx, calc(100vw - 184px));
     top: var(--cy, 80px);
-    width: 560px;
-    height: 560px;
+    width: calc(var(--radius) * 2);
+    height: calc(var(--radius) * 2);
     translate: -50% -50%;
     background: var(--color-paper);
-    clip-path: circle(280px at 50% 50%);
+    clip-path: circle(var(--radius) at 50% 50%);
   }
 
   .menu-close,
@@ -79,10 +82,10 @@ const items = [
     justify-content: center;
     cursor: pointer;
   }
-  /* ラベルの文字列中心を半径200pxの円周上（150°・120°・90°）に置く。y軸は下向き。 */
+  /* ラベルの文字列中心を半径 --orbit の円周上（150°・120°・90°）に置く。y軸は下向き。 */
   .menu-link {
-    left: calc(50% + 200px * cos(var(--angle)));
-    top: calc(50% + 200px * sin(var(--angle)));
+    left: calc(50% + var(--orbit) * cos(var(--angle)));
+    top: calc(50% + var(--orbit) * sin(var(--angle)));
     white-space: nowrap;
     font-size: 24px;
     line-height: 1.5;
@@ -90,6 +93,12 @@ const items = [
     color: var(--color-ink);
   }
   .menu-link:hover { color: var(--color-link); text-decoration: underline; text-underline-offset: 4px; }
+
+  @media (width < 75rem) {
+    .menu-circle { --radius: 260px; --orbit: 184px; }
+    .menu-close { width: 44px; height: 44px; }
+    .menu-link { font-size: 18px; }
+  }
 </style>
 
 <script>

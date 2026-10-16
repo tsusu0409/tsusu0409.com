@@ -2,21 +2,21 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="flex flex-col gap-8">
+<footer class="flex flex-col gap-6 pc:gap-8">
   <hr class="border-line" />
-  <div class="flex gap-16">
-    <div class="flex w-[360px] flex-col gap-3">
-      <p class="text-sub font-medium">Tsusu / 川岸 翼</p>
+  <div class="flex flex-col gap-6 pc:flex-row pc:gap-16">
+    <div class="flex flex-col gap-2 pc:w-[360px] pc:gap-3">
+      <p class="text-sub font-medium max-pc:text-[18px]">Tsusu / 川岸 翼</p>
       <p class="text-small text-muted">@tsusu0409</p>
     </div>
-    <div class="flex flex-1 flex-col gap-6">
-      <p class="text-sub font-medium">CONTACT</p>
+    <div class="flex flex-col gap-3 pc:flex-1 pc:gap-6">
+      <p class="text-sub font-medium max-pc:text-label max-pc:text-muted">CONTACT</p>
       <a href="mailto:tsusu0409@gmail.com" class="text-body w-fit hover:underline">tsusu0409@gmail.com</a>
-      <div class="text-link flex gap-8 font-medium">
-        <a href="https://github.com/tsusu0409" target="_blank" rel="noopener noreferrer" class="hover:underline">GitHub ↗</a>
-        <a href="https://x.com/tsusu0409" target="_blank" rel="noopener noreferrer" class="hover:underline">X ↗</a>
+      <div class="text-action flex gap-6 font-medium max-pc:mt-3 pc:gap-8">
+        <a href="https://github.com/tsusu0409" target="_blank" rel="noopener noreferrer" class="hover:underline max-pc:flex max-pc:h-11 max-pc:w-[90px] max-pc:items-center">GitHub ↗</a>
+        <a href="https://x.com/tsusu0409" target="_blank" rel="noopener noreferrer" class="hover:underline max-pc:flex max-pc:h-11 max-pc:w-[90px] max-pc:items-center">X ↗</a>
       </div>
     </div>
   </div>
-  <p class="text-label text-muted self-end font-medium">© {year} Tsusu</p>
+  <p class="text-label text-muted self-end font-medium max-pc:text-[12px] max-pc:leading-[1.6] max-pc:font-normal">© {year} Tsusu</p>
 </footer>

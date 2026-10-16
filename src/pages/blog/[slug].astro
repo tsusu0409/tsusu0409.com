@@ -18,10 +18,10 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 <BaseLayout title={data.title} description={data.description || undefined} image={data.thumb} type="article" gap="gap-8">
-  <a href="/blog/" class="w-fit text-[12px] leading-[1.6] text-muted hover:underline">POSTS / ARTICLE</a>
+  <a href="/blog/" class="w-fit text-[11px] leading-[1.5] font-medium text-muted hover:underline pc:text-[12px] pc:leading-[1.6] pc:font-normal">POSTS / ARTICLE</a>
 
   <header class="flex flex-col gap-3">
-    <h1 class="text-[30px] leading-[1.5] font-bold">{data.title}</h1>
+    <h1 class="text-[24px] leading-[1.5] font-bold pc:text-[30px]">{data.title}</h1>
     <time class="text-[12px] leading-[1.6] text-muted" datetime={data.date}>{formatDate(data.date)}</time>
     {data.tags.length > 0 && (
       <ul class="flex flex-wrap gap-x-4 text-[12px] leading-[1.6] text-link">
@@ -30,8 +30,26 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     )}
   </header>
 
+  <!-- スマホ版の目次は本文の前に折りたたみで置く（Figma: Mobile / TOC closed） -->
+  {toc.length > 0 && (
+    <details class="toc-mobile bg-paper pc:hidden">
+      <summary class="flex h-[59px] cursor-pointer list-none items-center justify-between px-4 font-medium">
+        <span class="text-[11px] leading-[1.5]">ON THIS PAGE</span>
+        <span class="toc-mark text-[18px] leading-[1.5]" aria-hidden="true">⌄</span>
+      </summary>
+      <nav class="flex flex-col gap-3 border-t border-line p-4" aria-label="目次">
+        {toc.map((h) => (
+          <a
+            href={`#${h.slug}`}
+            class:list={['leading-[1.7] text-link hover:underline', h.depth === 3 ? 'pl-3 text-[13px]' : 'text-[14px]']}
+          >{h.text}</a>
+        ))}
+      </nav>
+    </details>
+  )}
+
   <div class="flex items-start gap-16">
-    <article class="flex w-[800px] flex-none flex-col gap-8">
+    <article class="flex w-full min-w-0 flex-col gap-8 pc:w-[800px] pc:flex-none">
       <div class="markdown">
         <Content />
       </div>
@@ -42,7 +60,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     </article>
 
     {toc.length > 0 && (
-      <nav class="sticky top-6 flex w-64 flex-col gap-3" aria-label="目次">
+      <nav class="sticky top-6 flex w-64 flex-col gap-3 max-pc:hidden" aria-label="目次">
         <p class="text-[11px] leading-[1.5] font-medium text-muted">ON THIS PAGE</p>
         {toc.map((h) => (
           <a
@@ -56,3 +74,8 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
   <MarkdownEnhance />
 </BaseLayout>
+
+<style>
+  .toc-mobile summary::-webkit-details-marker { display: none; }
+  .toc-mobile[open] .toc-mark { rotate: 180deg; }
+</style>
