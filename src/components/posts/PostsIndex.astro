@@ -22,7 +22,7 @@ const disabled = [plain, 'opacity-35 pc:text-muted pc:opacity-40'];
 ---
 
 <!-- 古い順は新しい順と内容が重複するので検索結果には出さない -->
-<BaseLayout title={`POSTS${year ? ` ${year}` : ''}${page.page === 1 ? '' : ` (${page.page}/${page.pages})`}`} description="自サイトと外部サイトに投稿した記事の一覧です。" noindex={oldest}>
+<BaseLayout title={`POSTS${year ? ` ${year}` : ''}${page.page === 1 ? '' : ` (${page.page}/${page.pages})`}`} description="自サイトと外部サイトに投稿した記事の一覧です。" image="/og/blog.png" noindex={oldest}>
   <section class="flex flex-col gap-4 pc:gap-6">
     <h1 class="text-sub font-medium max-pc:text-[28px]">POSTS</h1>
     <p class="text-body max-pc:text-muted">自サイトと外部サイトに投稿した記事をまとめています。</p>

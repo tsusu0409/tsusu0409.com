@@ -16,7 +16,7 @@ const { Content } = await render(entry);
 const hasNotes = entry.body?.trim();
 ---
 
-<BaseLayout title={data.title} description={data.description} image={data.image} type="article">
+<BaseLayout title={data.title} description={data.description} image={`/og/recipes/${entry.id}.png`} type="article">
   <p class="text-caption text-muted max-pc:text-[11px] max-pc:leading-[1.5] max-pc:font-medium">
     <a href="/recipes/" class="hover:underline">RECIPES</a> / {data.title}
   </p>

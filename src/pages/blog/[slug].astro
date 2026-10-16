@@ -17,7 +17,7 @@ const { Content, headings } = await render(entry);
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={data.title} description={data.description || undefined} image={data.thumb} type="article" gap="gap-8">
+<BaseLayout title={data.title} description={data.description || undefined} image={`/og/blog/${entry.id}.png`} type="article" gap="gap-8">
   <a href="/blog/" class="w-fit text-[11px] leading-[1.5] font-medium text-muted hover:underline pc:text-[12px] pc:leading-[1.6] pc:font-normal">POSTS / ARTICLE</a>
 
   <header class="flex flex-col gap-3">

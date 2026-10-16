@@ -1,0 +1,23 @@
+---
+// OGP画像の一覧（/dev/og/）。開発サーバーでのみ生成し、本番ビルドには出さない。
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getStaticPaths as ogPaths } from '../../og/[...path].png';
+
+export function getStaticPaths() {
+  return import.meta.env.DEV ? [{ params: { index: undefined } }] : [];
+}
+
+const paths = (await ogPaths()).map(({ params }) => `/og/${params.path}.png`);
+---
+
+<BaseLayout title="OGP" noindex gap="gap-8">
+  <h1 class="text-sub font-medium">OGP / {paths.length}</h1>
+  <div class="grid gap-8 pc:grid-cols-2">
+    {paths.map((src) => (
+      <a href={src} class="flex flex-col gap-2 hover:underline">
+        <img src={src} alt="" width="1200" height="630" loading="lazy" class="h-auto w-full border border-line" />
+        <span class="text-caption text-muted">{src}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
