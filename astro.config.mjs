@@ -22,6 +22,8 @@ export default defineConfig({
   ],
   redirects: {
     '/about': '/#about',
+    // Activityは廃止。旧URLからのリンクはTOPへ
+    '/activity': '/',
   },
   markdown: {
     gfm: true,

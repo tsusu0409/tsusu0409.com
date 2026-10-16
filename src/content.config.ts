@@ -48,20 +48,10 @@ const recipes = defineCollection({
   }),
 });
 
-const activity = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/activity', generateId: fileId }),
-  schema: z.object({
-    title: z.string(),
-    startDate: z.string(), // "YYYY.MM"
-    endDate: z.string().nullable(),
-    description: z.string(),
-  }),
-});
-
 // 表示検証用（開発時のみ /dev/[id]/ で表示。本番では生成しない）
 const fixtures = defineCollection({
   loader: glob({ pattern: '*.md', base: './tests/fixtures/markdown', generateId: fileId }),
   schema: z.object({ title: z.string() }),
 });
 
-export const collections = { blog, recipes, activity, fixtures };
+export const collections = { blog, recipes, fixtures };

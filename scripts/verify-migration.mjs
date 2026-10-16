@@ -38,11 +38,6 @@ for (const file of baseline.public) {
   if (buf.length !== file.bytes || sha256(buf) !== file.sha256) fail(`public changed: ${file.file}`);
 }
 
-// Activity: 元データ保持
-for (const file of baseline.activity) {
-  if (!fs.existsSync(file.file) || sha256(fs.readFileSync(file.file)) !== file.sha256) fail(`activity changed: ${file.file}`);
-}
-
 // Spotify: 基準の月がすべて残り、曲数が減っていない
 const playlists = JSON.parse(fs.readFileSync("src/data/spotify-playlists.json", "utf8"));
 const trackCount = playlists.reduce((n, p) => n + p.tracks.items.length, 0);
@@ -56,4 +51,4 @@ if (errors.length) {
   console.error(`\n✗ ${errors.length} problem(s)`);
   process.exit(1);
 }
-console.log(`✓ ${baseline.articles.length} articles, ${baseline.public.length} public files, ${baseline.activity.length} activities, ${trackCount} tracks verified`);
+console.log(`✓ ${baseline.articles.length} articles, ${baseline.public.length} public files, ${trackCount} tracks verified`);
