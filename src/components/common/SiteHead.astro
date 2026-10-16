@@ -13,7 +13,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description = 'Tsusu（川岸 翼）の個人サイト', image, type = 'website', noindex = false } = Astro.props;
+const { title, description = 'Tsusuの個人サイト', image, type = 'website', noindex = false } = Astro.props;
 const fullTitle = title ? `${title} | Tsusu` : 'Tsusu';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(image || '/images/ogp.png', Astro.site).href;

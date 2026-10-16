@@ -8,6 +8,13 @@ export async function getLocalPosts() {
   return (await getCollection('blog', isPublished)).sort((a, b) => b.data.date.localeCompare(a.data.date));
 }
 
+/** 公開中のレシピ。新しい順、同日はタイトル順 */
+export async function getRecipes() {
+  return (await getCollection('recipes', isPublished)).sort((a, b) =>
+    b.data.publishedDate.localeCompare(a.data.publishedDate) || a.data.title.localeCompare(b.data.title, 'ja'),
+  );
+}
+
 let cache: Promise<Post[]> | undefined;
 
 /** TOP・一覧・ページ送りで同じ記事集合を使う（ビルド中に再取得しない） */

@@ -1,13 +1,10 @@
 ---
 // Recipes一覧（A案）。?category=rice 等で絞り込み状態を復元する。Figma: RECIPES / Index · Selected A
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { RECIPE_CATEGORIES } from '../../content.config';
-import { isPublished } from '../../lib/getPosts';
+import { getRecipes } from '../../lib/getPosts';
 
-const recipes = (await getCollection('recipes', isPublished)).sort((a, b) =>
-  b.data.publishedDate.localeCompare(a.data.publishedDate) || a.data.title.localeCompare(b.data.title, 'ja'),
-);
+const recipes = await getRecipes();
 const categories = [
   { key: 'all', label: 'ALL', count: recipes.length },
   ...Object.entries(RECIPE_CATEGORIES).map(([key, label]) => ({
@@ -18,7 +15,7 @@ const categories = [
 ];
 ---
 
-<BaseLayout title="Recipes" description="自炊で作っている料理のレシピをまとめています。">
+<BaseLayout title="Recipes" description="自炊で作っている料理のレシピをまとめています。" image="/og/recipes.png">
   <section class="flex flex-col gap-4 pc:gap-6">
     <h1 class="text-sub font-medium max-pc:text-[28px]">RECIPES</h1>
     <p class="text-body text-muted">僕の自炊レシピ群です。</p>

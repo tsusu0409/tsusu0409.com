@@ -11,6 +11,7 @@ interface RawTrack {
 export interface RawPlaylist {
   name: string;
   external_urls?: { spotify?: string };
+  images?: { url: string }[];
   tracks: { total: number; items: { track: RawTrack | null }[] };
 }
 
@@ -28,6 +29,8 @@ export interface Month {
   duration: string;
   spotifyUrl?: string;
   covers: string[];
+  /** プレイリスト自体のジャケット画像 */
+  image?: string;
 }
 
 /** 一覧用には小さい画像、カバー用には中サイズを選ぶ */
@@ -59,6 +62,7 @@ export function toMonths(playlists: RawPlaylist[]): Month[] {
         duration: formatDuration(valid.reduce((sum, t) => sum + (t.duration_ms ?? 0), 0)),
         spotifyUrl: p.external_urls?.spotify,
         covers: covers.slice(0, 4),
+        image: p.images?.[0]?.url,
       };
     })
     .sort((a, b) => b.key.localeCompare(a.key));

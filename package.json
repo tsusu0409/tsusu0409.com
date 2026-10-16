@@ -1,7 +1,7 @@
 {
   "name": "tsusu0409.com",
   "type": "module",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -29,6 +29,7 @@
     "mermaid": "^12.2.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
+    "satori": "^0.62.0",
     "sharp": "^0.34.4",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.20.6"
