@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatDate, mergePosts, paginate, pageCount, toPlainText, type Post } from '../src/lib/posts';
+import { formatDate, mergePosts, pageHref, paginate, pageCount, postYear, toPlainText, type Post } from '../src/lib/posts';
 import { archiveRows, toMonths } from '../src/lib/playlist';
 import { parseMeta } from '../src/lib/markdown/code.mjs';
 
@@ -29,6 +29,18 @@ test('paginate: 12件単位、境界と範囲表示', () => {
   assert.deepEqual([last.items, last.from, last.to, last.total], [[24], 25, 25, 25]);
   const first = paginate(items, 1);
   assert.deepEqual([first.items.length, first.from, first.to], [12, 1, 12]);
+});
+
+test('pageHref: 年・並び順・ページを順に重ねる', () => {
+  assert.equal(pageHref(1), '/blog/');
+  assert.equal(pageHref(3), '/blog/page/3/');
+  assert.equal(pageHref(1, { oldest: true }), '/blog/oldest/');
+  assert.equal(pageHref(2, { year: '2025', oldest: true }), '/blog/year/2025/oldest/page/2/');
+});
+
+test('postYear: 外部記事のUTC日時は日本時間の年にする', () => {
+  assert.equal(postYear(post('a', '2025-12-31T16:00:00.000Z')), '2026');
+  assert.equal(postYear(post('b', '2025-12-31')), '2025');
 });
 
 test('toPlainText: RSSのHTMLをテキスト化', () => {

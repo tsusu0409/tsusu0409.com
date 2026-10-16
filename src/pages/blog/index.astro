@@ -1,9 +1,0 @@
----
-import PostsIndex from '../../components/posts/PostsIndex.astro';
-import { getAllPosts } from '../../lib/getPosts';
-import { paginate } from '../../lib/posts';
-
-const page = paginate(await getAllPosts(), 1);
----
-
-<PostsIndex page={page} />

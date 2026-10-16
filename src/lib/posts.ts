@@ -70,7 +70,20 @@ export function paginate<T>(items: T[], page: number, size = PAGE_SIZE) {
   };
 }
 
-export const pageHref = (page: number) => (page === 1 ? '/blog/' : `/blog/page/${page}/`);
+export interface ListQuery {
+  /** 西暦（日本時間の公開年）で絞り込む */
+  year?: string;
+  oldest?: boolean;
+}
+
+/** 記事の公開年（日本時間） */
+export const postYear = (post: Post) => formatDate(post.publishedAt).slice(0, 4);
+
+/** 一覧のURL。/blog/[year/YYYY/][oldest/][page/n/] */
+export function pageHref(page: number, { year, oldest }: ListQuery = {}) {
+  const base = `/blog/${year ? `year/${year}/` : ''}${oldest ? 'oldest/' : ''}`;
+  return page === 1 ? base : `${base}page/${page}/`;
+}
 
 /** RSS等のHTMLを一覧用のプレーンテキストにする */
 export function toPlainText(html: unknown, max = 120): string {

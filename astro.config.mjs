@@ -16,8 +16,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // 互換用ページはサイトマップに載せない
-      filter: (page) => !/\/(activity|about)\/?$/.test(page),
+      // 互換用ページと古い順の一覧（新しい順と重複）はサイトマップに載せない
+      filter: (page) => !/\/(activity|about)\/?$|\/oldest\//.test(page),
     }),
   ],
   redirects: {

@@ -1,0 +1,22 @@
+---
+// POSTS一覧の全ページ。/blog/[year/YYYY/][oldest/][page/n/]（すべての年 / 各年 × 新しい順 / 古い順）
+import PostsIndex from '../../components/posts/PostsIndex.astro';
+import { getAllPosts } from '../../lib/getPosts';
+import { pageCount, pageHref, paginate, postYear } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const years = [...new Set(posts.map(postYear))].sort().reverse();
+  return [undefined, ...years].flatMap((year) => [false, true].flatMap((oldest) => {
+    const matched = year ? posts.filter((p) => postYear(p) === year) : posts;
+    const items = oldest ? [...matched].reverse() : matched;
+    return Array.from({ length: pageCount(items.length) }, (_, i) => ({
+      // '/blog/' と末尾の '/' を除いた部分がパラメータ（1ページ目のすべての年・新しい順は空）
+      params: { list: pageHref(i + 1, { year, oldest }).slice('/blog/'.length, -1) || undefined },
+      props: { page: paginate(items, i + 1), year, oldest, years },
+    }));
+  }));
+}
+---
+
+<PostsIndex {...Astro.props} />
